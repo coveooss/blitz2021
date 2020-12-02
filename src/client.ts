@@ -1,6 +1,4 @@
 import WebSocket from 'ws'
-import { cli } from 'winston/lib/winston/config';
-
 const SOCKET_ADDR = "ws://localhost:3000";
 
 const startClient = () => {
@@ -31,9 +29,11 @@ const startClient = () => {
                             throw new Error('Colony received a tick before being registered');
                         }
 
+                        console.log(JSON.stringify(message));
+
                         setTimeout(() => {
                             client.send(JSON.stringify({ type: "COMMAND", tick: message.tick }));
-                        }, 999);
+                        }, 500);
                     }
                 }
             });

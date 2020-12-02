@@ -1,5 +1,5 @@
 export const timeoutAfter = async (timeout: number) =>
-    new Promise((resolve, reject) => setTimeout(() =>
+    new Promise<void>((resolve, reject) => setTimeout(() =>
         resolve(),
         timeout
     ));

@@ -3,7 +3,7 @@ import { Colony } from "../game/colonies/colony";
 import WebSocket from 'ws'
 import { SocketMessage } from "./socketMessage";
 import { Game } from "../game/game";
-import { FatalError, ColonyError } from "../error";
+import { FatalError, ColonyError } from "../game/error";
 import { logger } from "../logger";
 
 interface SocketTickCallack {
@@ -16,6 +16,10 @@ export class SocketedColony extends Colony {
     private socketCallbacks: SocketTickCallack;
 
     public async getNextCommand(tick: any): Promise<any> {
+        if (this.socket.readyState === this.socket.CLOSED) {
+            throw new ColonyError(this, `Socket connection lost`);
+        }
+
         if (this.socketCallbacks) {
             this.socketCallbacks = null;
         }
@@ -43,7 +47,7 @@ export class SocketedColony extends Colony {
                     }
                     case 'COMMAND': {
                         if (message.tick !== this.socketCallbacks.tick) {
-                           throw new ColonyError(this, `Invalid tick number received: ${message.tick}`);
+                            throw new ColonyError(this, `Invalid tick number received: ${message.tick}`);
                         }
 
                         this.socketCallbacks.resolve(message);
@@ -61,11 +65,17 @@ export class SocketedColony extends Colony {
                 }
 
                 if (ex instanceof ColonyError) {
-                    logger.info(`${this}. ${ex.message}`);
+                    logger.warn(`${this}. ${ex.message}`);
                     return;
                 }
 
                 throw ex;
+            }
+        });
+
+        this.socket.on('close', () => {
+            if (!this.game.isCompleted) {
+                logger.warn(`${this} disconnected`);
             }
         });
     }

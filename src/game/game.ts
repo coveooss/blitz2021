@@ -1,6 +1,9 @@
 import { Colony } from "./colonies/colony";
 import { logger } from "../logger";
 import { timeoutAfter } from "../utils";
+import { ColonyError } from "./error";
+import { Command } from "./types";
+import { GameMap } from "./map";
 
 export interface GameOptions {
     numberOfTicks: number,
@@ -16,6 +19,8 @@ export class Game {
         maxWaitTimeMsBeforeStartingGame: 0,
         expectedNumberOfColonies: 3
     }
+
+    public map: GameMap;
 
     private callbackOnGameCompleted: ((err?: Error) => any)[] = []
     private _isRunning = false;
@@ -54,11 +59,11 @@ export class Game {
 
     public registerColony(colony: Colony) {
         if (this.isRunning || this.isCompleted) {
-            throw new Error(`Game already running of completed, can't add ${colony}`);
+            throw new ColonyError(colony, `Game already running of completed, can't add Colony`);
         }
 
         if (this.colonies.indexOf(colony) !== -1) {
-            throw new Error(`Colony ${colony} already registed.`);
+            throw new ColonyError(colony, `Colony already registed.`);
         }
 
         logger.info(`Registering new ${colony} to the game.`);
@@ -89,11 +94,6 @@ export class Game {
         return this._isCompleted;
     }
 
-    public applyCommandForColony(colony: Colony, command: any) {
-        // TO DO: Insert game logic here
-    }
-
-
     public async play() {
         if (this.maxWaitTimeInterval) {
             clearTimeout(this.maxWaitTimeInterval);
@@ -110,7 +110,7 @@ export class Game {
 
             const allTickCommandsWaiting = this.colonies.map(async c => {
                 try {
-                    let command = null;
+                    let command: Command | void = null;
 
                     if (this.options.timeMsAllowedPerTicks !== 0) {
                         command = await Promise.race([
@@ -122,7 +122,7 @@ export class Game {
                     }
 
                     if (command) {
-                        this.applyCommandForColony(c, command);
+                        c.applyCommand(command);
                     } else {
                         logger.info(`No command was received in time for ${c} on tick ${tick}`);
                     }
