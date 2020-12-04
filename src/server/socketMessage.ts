@@ -1,3 +1,5 @@
+import { Command, Tick } from "game/types";
+
 export type SocketMessage = SocketRegisterMessage | SocketCommandMessage;
 
 export type SocketRegisterMessage = {
@@ -7,7 +9,8 @@ export type SocketRegisterMessage = {
 
 export type SocketCommandMessage = {
     type: "COMMAND",
-    tick: number
+    tick: number,
+    commands: Command
 }
 
 export type SocketRegisterAckMessage = {
@@ -16,9 +19,8 @@ export type SocketRegisterAckMessage = {
     colonyId: string
 }
 
-export type SocketTickMessage = {
+export type SocketTickMessage = Tick & {
     type: "TICK",
-    tick: number
 }
 
 export const socketRegisterMessage = (colonyName: string): string =>

@@ -81,6 +81,14 @@ export class Game {
         this.callbackOnGameCompleted.forEach(cb => cb(err));
     }
 
+    public getColony(colonyId: string) {
+        return this.colonies.find(c => c.id === colonyId);
+    }
+
+    public getUnit(unitId: string) {
+        return this.colonies.flatMap(c => c.getUnit(unitId))[0];
+    }
+
 
     public onGameCompleted(cb: (err?: Error) => any) {
         this.callbackOnGameCompleted.push(cb);

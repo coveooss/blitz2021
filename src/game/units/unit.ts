@@ -2,15 +2,16 @@ import { Position, isAdjacent } from "../position";
 import { v4 as uuid } from 'uuid';
 import { UnitError } from "game/error";
 import { Colony } from "game/colonies/colony";
+import { UnitType } from "game/types";
 
 
 export abstract class Unit {
-    protected id: string
+    public readonly id: string
 
-    private cargo = 0;
-    private path: Position[] = []
+    public cargo = 0;
+    public path: Position[] = []
 
-    constructor(private colony: Colony, protected position: Position, protected type: string) {
+    constructor(private colony: Colony, protected position: Position, protected type: UnitType) {
         this.id = uuid();
     }
 
