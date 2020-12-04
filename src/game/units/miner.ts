@@ -1,8 +1,8 @@
-import { Colony } from "game/colonies/colony";
+import { Colony } from "../colonies/colony";
 import { Unit } from "./unit";
-import { Position } from "game/position";
-import { UnitError } from "game/error";
-import { UNIT } from "game/config";
+import { Position } from "../position";
+import { UnitError } from "../error";
+import { UNIT } from "../config";
 
 
 export class Miner extends Unit {

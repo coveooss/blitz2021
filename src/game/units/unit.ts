@@ -1,8 +1,8 @@
 import { Position, isAdjacent } from "../position";
 import { v4 as uuid } from 'uuid';
-import { UnitError } from "game/error";
-import { Colony } from "game/colonies/colony";
-import { UnitType } from "game/types";
+import { UnitError } from "../error";
+import { Colony } from "../colonies/colony";
+import { UnitType } from "../types";
 
 
 export abstract class Unit {

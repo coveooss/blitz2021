@@ -1,7 +1,7 @@
-import { Colony } from "game/colonies/colony";
+import { Colony } from "../colonies/colony";
 import { Unit } from "./unit";
-import { Position } from "game/position";
-import { UnitError } from "game/error";
+import { Position } from "../position";
+import { UnitError } from "../error";
 
 
 export class Cart extends Unit {

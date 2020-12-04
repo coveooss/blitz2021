@@ -1,10 +1,10 @@
-import { UNIT } from 'game/config';
-import { ColonyError, UnitError } from 'game/error';
-import { Command, UnitType } from 'game/types';
-import { Cart } from 'game/units/cart';
-import { Cowboy } from 'game/units/cowboy';
-import { Miner } from 'game/units/miner';
-import { Unit } from 'game/units/unit';
+import { UNIT } from '../config';
+import { ColonyError, UnitError } from '../error';
+import { Command, UnitType } from '../types';
+import { Cart } from '../units/cart';
+import { Cowboy } from '../units/cowboy';
+import { Miner } from '../units/miner';
+import { Unit } from '../units/unit';
 import { v4 as uuid } from 'uuid';
 import { Game } from '../game';
 import { Position } from '../position';
