@@ -11,3 +11,7 @@ export const distanceBetween = (from: Position, to: Position) => {
 }
 
 export const hash = (position: Position) => `${position.x}|${position.y}`;
+
+export const equal = (a: Position, b: Position) => {
+    return a.x === b.x && a.y === b.y;
+}

@@ -6,6 +6,7 @@ import { Command } from "./types";
 import { GameMap } from "./map";
 
 export interface GameOptions {
+    map: GameMap,
     numberOfTicks: number,
     timeMsAllowedPerTicks: number,
     maxWaitTimeMsBeforeStartingGame: number,
@@ -14,6 +15,7 @@ export interface GameOptions {
 
 export class Game {
     public static readonly DEFAULT_GAME_OPTIONS: GameOptions = {
+        map: null,
         numberOfTicks: 5,
         timeMsAllowedPerTicks: 1000,
         maxWaitTimeMsBeforeStartingGame: 0,
@@ -35,6 +37,7 @@ export class Game {
             ...options
         }
 
+        this.map = this.options.map;
 
         if (this.options.maxWaitTimeMsBeforeStartingGame !== 0) {
             logger.info(`The game will start automaticly after ${this.options.maxWaitTimeMsBeforeStartingGame} ms or when ${this.options.expectedNumberOfColonies} colonies will have joined, whichever come first.`);
