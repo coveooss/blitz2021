@@ -1,4 +1,5 @@
-import { GameMap, TileType } from '../src/game/map';
+import { GameMap } from '../src/game/map';
+import { TileType } from '../src/game/types';
 
 describe("Map", () => {
     const SIMPLE_MAP: TileType[][] = [
@@ -55,5 +56,11 @@ describe("Map", () => {
         expect(result.path).toEqual(SIMPLE_MAP_PATH_FROM_0_4_TO_0_0);
         expect(result.cost).toBe(SIMPLE_MAP_PATH_FROM_0_4_TO_0_0.length - 1);
         expect(result.status).toBe("success");
+    });
+
+    it("should serialize the map correctly", () => {
+        const gameMap = GameMap.fromArray(SIMPLE_MAP);
+
+        expect(gameMap.serialize()).toEqual({ tiles: SIMPLE_MAP });
     });
 });
