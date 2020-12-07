@@ -1,4 +1,4 @@
-import { Unit } from "game/units/unit";
+import { Unit } from "./units/unit";
 import { Colony } from "./colonies/colony";
 
 export class FatalError extends Error {
