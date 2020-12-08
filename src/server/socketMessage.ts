@@ -1,4 +1,4 @@
-import { Command, Tick } from "game/types";
+import { Command, Tick } from "../game/types";
 
 export type SocketMessage = SocketRegisterMessage | SocketCommandMessage;
 
