@@ -1,0 +1,12 @@
+
+image: node:14
+cache:
+  paths:
+    - node_modules/
+
+build:
+  script:
+    - yarn install
+    - yarn build
+    - yarn test
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
