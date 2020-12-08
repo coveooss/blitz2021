@@ -10,11 +10,13 @@
         "outDir": "dist",
         "baseUrl": ".",
         "typeRoots": [
+            "../node_modules/@types",
             "./node_modules/@types",
             "./typings"
         ],
         "paths": {
             "*": [
+                "../node_modules/*",
                 "node_modules/*"
             ]
         }
