@@ -4,6 +4,9 @@ import { Game } from "../src/game/game";
 import { GameMap } from "../src/game/map";
 import { Unit } from "../src/game/units/unit";
 
+jest.mock('uuid',() => ({
+    v4: () => 'test-id'
+}));
 
 class TestUnit extends Unit { };
 
@@ -53,4 +56,17 @@ describe('Unit', () => {
         it.todo('should throw if the unit is full');
         it.todo('should only pick up the amount to fill its cargo');
     })
+
+    describe('serialize', () => {
+        it('should serialize its state', () => {
+            unit = new TestUnit(myColony, { x: 4, y: 3 }, 'MINER');
+
+            expect(unit.serialize()).toStrictEqual({
+                id: 'test-id',
+                type: 'MINER',
+                blitzium: 0,
+                position: {x: 4, y: 3},
+            });
+        });
+    });
 });

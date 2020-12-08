@@ -3,8 +3,9 @@ import { Colony } from "../game/colonies/colony";
 import WebSocket from 'ws'
 import { SocketMessage } from "./socketMessage";
 import { Game } from "../game/game";
-import { FatalError, ColonyError } from "../game/error";
+import { ColonyError } from "../game/error";
 import { logger } from "../logger";
+import { PlayerTick } from '../game/types';
 
 interface SocketTickCallack {
     tick: number,
@@ -15,7 +16,7 @@ interface SocketTickCallack {
 export class SocketedColony extends Colony {
     private socketCallbacks: SocketTickCallack;
 
-    public async getNextCommand(tick: any): Promise<any> {
+    public async getNextCommand(tick: PlayerTick): Promise<any> {
         if (this.socket.readyState === this.socket.CLOSED) {
             throw new ColonyError(this, `Socket connection lost`);
         }
@@ -25,7 +26,7 @@ export class SocketedColony extends Colony {
         }
 
         const command = await new Promise((resolve, reject) => {
-            this.socket.send(JSON.stringify({ type: "TICK", tick: tick.tick }));
+            this.socket.send(JSON.stringify({ type: "TICK", ...tick }));
             this.socketCallbacks = { tick: tick.tick, resolve, reject };
         });
 

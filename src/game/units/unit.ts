@@ -2,8 +2,7 @@ import { Position, isAdjacent, equal } from "../position";
 import { v4 as uuid } from 'uuid';
 import { UnitError } from "../error";
 import { Colony } from "../colonies/colony";
-import { UnitType } from "../types";
-
+import {TickColonyUnit, UnitType} from "../types";
 
 export abstract class Unit {
     public readonly id: string
@@ -42,5 +41,14 @@ export abstract class Unit {
 
     public pickUp(target: Position) {
         throw new UnitError(this, 'Action not supported');
+    }
+
+    public serialize(): TickColonyUnit {
+        return {
+            id: this.id,
+            type: this.type,
+            blitzium: this.cargo,
+            position: this.position,
+        }
     }
 }

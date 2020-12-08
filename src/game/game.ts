@@ -2,7 +2,7 @@ import { Colony } from "./colonies/colony";
 import { logger } from "../logger";
 import { timeoutAfter } from "../utils";
 import { ColonyError } from "./error";
-import { Command } from "./types";
+import { Command, Tick } from "./types";
 import { GameMap } from "./map";
 
 export interface GameOptions {
@@ -24,9 +24,12 @@ export class Game {
 
     public map: GameMap;
 
-    private callbackOnGameCompleted: ((err?: Error) => any)[] = []
+    private callbackOnGameCompleted: ((err?: Error) => any)[] = [];
+    private callbackOnTick: (() => any)[] = [];
+    private callbackOnCommand: (() => any)[] = [];
     private _isRunning = false;
     private _isCompleted = false;
+    private _currentTick: number = 0;
     private maxWaitTimeInterval: NodeJS.Timeout;
 
     public readonly colonies: Colony[] = [];
@@ -40,7 +43,7 @@ export class Game {
         this.map = this.options.map;
 
         if (this.options.maxWaitTimeMsBeforeStartingGame !== 0) {
-            logger.info(`The game will start automaticly after ${this.options.maxWaitTimeMsBeforeStartingGame} ms or when ${this.options.expectedNumberOfColonies} colonies will have joined, whichever come first.`);
+            logger.info(`The game will start automatically after ${this.options.maxWaitTimeMsBeforeStartingGame} ms or when ${this.options.expectedNumberOfColonies} colonies will have joined, whichever come first.`);
 
             this.maxWaitTimeInterval = setTimeout(() => {
                 if (!this.isRunning && !this.isCompleted) {
@@ -84,6 +87,14 @@ export class Game {
         this.callbackOnGameCompleted.forEach(cb => cb(err));
     }
 
+    private notifyCommandApplied() {
+        this.callbackOnCommand.forEach(cb => cb());
+    }
+
+    private notifyTickApplied() {
+        this.callbackOnTick.forEach(cb => cb());
+    }
+
     public getColony(colonyId: string) {
         return this.colonies.find(c => c.id === colonyId);
     }
@@ -92,9 +103,16 @@ export class Game {
         return this.colonies.flatMap(c => c.getUnit(unitId))[0];
     }
 
-
     public onGameCompleted(cb: (err?: Error) => any) {
         this.callbackOnGameCompleted.push(cb);
+    }
+
+    public onTick(cb: () => any) {
+        this.callbackOnTick.push(cb);
+    }
+
+    public onCommand(cb: () => any) {
+        this.callbackOnCommand.push(cb);
     }
 
     get isRunning(): boolean {
@@ -117,7 +135,9 @@ export class Game {
         this._isRunning = true;
 
         for (let tick = 0; tick < this.options.numberOfTicks; tick++) {
+            this._currentTick = tick;
             logger.info(`Playing tick ${tick} of ${this.options.numberOfTicks}`);
+            const startingState = this.serialize();
 
             const allTickCommandsWaiting = this.colonies.map(async c => {
                 try {
@@ -126,14 +146,15 @@ export class Game {
                     if (this.options.timeMsAllowedPerTicks !== 0) {
                         command = await Promise.race([
                             timeoutAfter(this.options.timeMsAllowedPerTicks),
-                            c.getNextCommand({ tick })
+                            c.getNextCommand({ colonyId: c.id, ...startingState })
                         ]);
                     } else {
-                        command = await c.getNextCommand({ tick });
+                        command = await c.getNextCommand({ colonyId: c.id, ...this.serialize() });
                     }
 
                     if (command) {
                         c.applyCommand(command);
+                        this.notifyCommandApplied();
                     } else {
                         logger.info(`No command was received in time for ${c} on tick ${tick}`);
                     }
@@ -144,6 +165,7 @@ export class Game {
 
             try {
                 await Promise.allSettled(allTickCommandsWaiting)
+                this.notifyTickApplied();
             } catch (ex) {
                 logger.error(`An unhandled error occured`, ex);
 
@@ -153,10 +175,20 @@ export class Game {
                 throw ex;
             }
         }
+        this._currentTick++;
 
         this._isCompleted = true;
         this._isRunning = false;
 
         this.notifyGameCompleted();
     };
+
+    public serialize(): Tick {
+        return {
+            colonies: this.colonies.map(c => c.serialize()),
+            tick: this._currentTick,
+            totalTick: this.options.numberOfTicks,
+            map: this.map?.serialize?.() ?? {tiles: []}
+        }
+    }
 }

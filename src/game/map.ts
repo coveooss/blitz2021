@@ -3,8 +3,7 @@ import { Position, hash, distanceBetween } from './position'
 import bmp from 'bmp-js'
 import aStar from 'a-star';
 import fs from 'fs';
-
-export type TileType = "EMPTY" | "WALL" | "BASE" | "DEPOT";
+import { TickMap, TileType } from './types';
 
 export interface Tile {
     type: TileType,
@@ -85,5 +84,17 @@ export class GameMap {
             hash: hash,
             heuristic: (node) => 1
         });
+    }
+
+    public serialize(): TickMap {
+        const tiles: TileType[][] = [];
+        for (let x = 0; x < this._height; x++) {
+            const row: TileType[] = [];
+            for (let y = 0; y < this._width; y++) {
+                row.push(this.getTile({x, y}).type);
+            }
+            tiles.push(row);
+        }
+        return { tiles };
     }
 }

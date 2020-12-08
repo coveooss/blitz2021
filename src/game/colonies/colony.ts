@@ -1,6 +1,6 @@
 import { UNIT } from '../config';
 import { ColonyError, UnitError } from '../error';
-import { Command, UnitType } from '../types';
+import {Command, PlayerTick, TickColony, UnitType} from '../types';
 import { Cart } from '../units/cart';
 import { Cowboy } from '../units/cowboy';
 import { Miner } from '../units/miner';
@@ -17,7 +17,7 @@ export abstract class Colony {
     protected _name: string;
 
     private units: Unit[];
-    private errors: string[];
+    private errors: string[] = [];
 
     public homeBase: Position;
     public spawnPoint: Position;
@@ -74,7 +74,11 @@ export abstract class Colony {
         let alreadyHasBuyCommand = false;
         this.errors = [];
 
-        command.actions.forEach(action => {
+        if (command.actions === undefined) {
+            this.errors.push(`No actions received`);
+        }
+
+        command.actions?.forEach(action => {
             try {
                 if (action.type === "BUY") {
                     if (alreadyHasBuyCommand) {
@@ -114,9 +118,21 @@ export abstract class Colony {
         });
     }
 
-    public abstract async getNextCommand(tick: any): Promise<Command>;
+    public abstract async getNextCommand(tick: PlayerTick): Promise<Command>;
 
     public toString() {
         return `([Colony] ${this.id} - ${this.name})`;
+    }
+
+    public serialize(): TickColony {
+        return {
+            id: this.id,
+            name: this._name,
+            errors: this.errors,
+            homeBase: this.homeBase,
+            spawnPoint: this.spawnPoint,
+            blitzium: this.blitzium,
+            units: this.units.map(u => u.serialize())
+        }
     }
 }

@@ -1,5 +1,6 @@
 import { Server } from './server/server'
 import { Game } from './game/game';
+import {Recorder, RecorderMode} from './recorder/recorder';
 import yargs from 'yargs';
 
 const splash = ` ______   _       __________________ _______      _______  _______  _______  __   
@@ -19,7 +20,8 @@ const args = yargs(process.argv.slice(2))
         'timePerTickMs': { type: 'number', default: 1000 },
         'nbOfTicks': { type: 'number', default: 1000 },
         'gameStartTimoutMs': { type: 'number', default: 500000 },
-        'nbOfColonies': { type: 'number', default: 3 }
+        'nbOfColonies': { type: 'number', default: 3 },
+        'recordPath': { type: 'string' }
     }).argv;
 
 (async () => {
@@ -30,6 +32,12 @@ const args = yargs(process.argv.slice(2))
         expectedNumberOfColonies: args.nbOfColonies
     });
 
+    const recorder = new Recorder(game, RecorderMode.Command);
+
     const server = new Server(3000, game);
     await server.listen();
+
+    if (args.recordPath) {
+        Recorder.saveToFile(args.recordPath, recorder.buffer);
+    }
 })();

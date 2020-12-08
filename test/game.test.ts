@@ -1,6 +1,5 @@
 import { Game } from "../src/game/game";
 import { NoopColony } from "../src/game/colonies/noopColony";
-import { waitForPromiseResolution } from "./testUtils";
 
 jest.useFakeTimers('legacy');
 
@@ -99,5 +98,81 @@ describe("Game", () => {
 
         expect(firstOnGameCompleted).toHaveBeenCalledTimes(1);
         expect(secondOnGameCompleted).toHaveBeenCalledTimes(1);
+    });
+
+    it('should notify tick handlers when a tick occur', async () => {
+        const firstOnTick = jest.fn();
+        const secondOnTick = jest.fn();
+
+        game.onTick(firstOnTick);
+        game.onTick(secondOnTick);
+
+
+        expect(firstOnTick).not.toHaveBeenCalled();
+        expect(secondOnTick).not.toHaveBeenCalled();
+
+        new NoopColony(game);
+        await game.play();
+
+        expect(firstOnTick).toHaveBeenCalledTimes(NUMBER_OF_TICKS);
+        expect(secondOnTick).toHaveBeenCalledTimes(NUMBER_OF_TICKS);
+    });
+
+    it('should notify command handlers when a command occur', async () => {
+        const firstOnCommand = jest.fn();
+        const secondOnCommand = jest.fn();
+
+        game.onCommand(firstOnCommand);
+        game.onCommand(secondOnCommand);
+
+
+        expect(firstOnCommand).not.toHaveBeenCalled();
+        expect(secondOnCommand).not.toHaveBeenCalled();
+
+        new NoopColony(game);
+        new NoopColony(game);
+        new NoopColony(game);
+
+        await game.play();
+
+        expect(firstOnCommand).toHaveBeenCalledTimes(NUMBER_OF_TICKS * 3);
+        expect(secondOnCommand).toHaveBeenCalledTimes(NUMBER_OF_TICKS * 3);
+    });
+
+    describe('serialize', () => {
+        it('serialize its state', () => {
+            expect(game.serialize()).toStrictEqual({
+                colonies: [],
+                tick: 0,
+                totalTick: NUMBER_OF_TICKS,
+                map: {tiles: []},
+            });
+        });
+
+        it('serialize its colonies', async () => {
+            new NoopColony(game);
+            new NoopColony(game);
+            new NoopColony(game);
+
+            expect(game.serialize()).toStrictEqual({
+                colonies: [expect.any(Object), expect.any(Object), expect.any(Object)],
+                tick: 0,
+                totalTick: NUMBER_OF_TICKS,
+                map: {tiles: []},
+            });
+        });
+
+        it('serialize its tick value', async () => {
+            new NoopColony(game);
+
+            await game.play();
+
+            expect(game.serialize()).toStrictEqual({
+                colonies: [expect.any(Object)],
+                tick: NUMBER_OF_TICKS,
+                totalTick: NUMBER_OF_TICKS,
+                map: {tiles: []},
+            });
+        });
     });
 })
