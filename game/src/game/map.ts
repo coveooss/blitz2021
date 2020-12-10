@@ -10,6 +10,12 @@ export interface Tile {
     position: Position
 }
 
+export interface Path {
+    status: 'success' | 'noPath' | 'timeout';
+    path: Position[];
+    cost: number;
+}
+
 export class GameMap {
     public static fromArray(array: TileType[][]) {
         const tiles = new Map(array.flatMap((row, x) => row.map((type: TileType, y) => [hash({ x, y }), { position: { x, y }, type }])));
@@ -41,6 +47,7 @@ export class GameMap {
             }
         }
         console.log(tiles.values());
+        return new GameMap(tiles, bmpData.height, bmpData.width);
     }
 
     constructor(private tiles: Map<String, Tile>, private _height: number, private _width: number) { }
@@ -75,7 +82,7 @@ export class GameMap {
         return from.x >= 0 && from.y >= 0 && from.x < this.height && from.y < this.width;
     }
 
-    public computePath(from: Position, to: Position) {
+    public computePath(from: Position, to: Position): Path {
         return aStar<Position>({
             start: from,
             isEnd: (node) => hash(node) === hash(to),

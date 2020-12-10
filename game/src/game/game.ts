@@ -1,3 +1,4 @@
+import path from "path";
 import { Colony } from "./colonies/colony";
 import { logger } from "../logger";
 import { timeoutAfter } from "../utils";
@@ -40,7 +41,7 @@ export class Game {
             ...options
         }
 
-        this.map = this.options.map;
+        this.map = this.options.map || GameMap.fromFile(path.join(__dirname, "..", "..", "maps", "test.bmp"));
 
         if (this.options.maxWaitTimeMsBeforeStartingGame !== 0) {
             logger.info(`The game will start automatically after ${this.options.maxWaitTimeMsBeforeStartingGame} ms or when ${this.options.expectedNumberOfColonies} colonies will have joined, whichever come first.`);
