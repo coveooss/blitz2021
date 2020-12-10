@@ -41,7 +41,7 @@ export class Game {
             ...options
         }
 
-        this.map = this.options.map || GameMap.fromFile(path.join(__dirname, "..", "..", "maps", "test.bmp"));
+        this.map = this.options.map;
 
         if (this.options.maxWaitTimeMsBeforeStartingGame !== 0) {
             logger.info(`The game will start automatically after ${this.options.maxWaitTimeMsBeforeStartingGame} ms or when ${this.options.expectedNumberOfColonies} colonies will have joined, whichever come first.`);

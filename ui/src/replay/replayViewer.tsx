@@ -23,7 +23,6 @@ const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, heigh
     const boardSize = Math.min(height, Math.min(width - 250));
 
     Size.Tile = boardSize / numberOfTile;
-    console.log(Size.Tile);
 
     const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         const gameStart = 0;

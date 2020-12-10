@@ -46,7 +46,6 @@ export class GameMap {
                     });
             }
         }
-        console.log(tiles.values());
         return new GameMap(tiles, bmpData.height, bmpData.width);
     }
 
