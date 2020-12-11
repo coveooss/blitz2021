@@ -1,8 +1,8 @@
-import { Position, isAdjacent, equal } from "../position";
+import { Position, isAdjacent, equal, toString } from "../position";
 import { v4 as uuid } from 'uuid';
 import { UnitError } from "../error";
 import { Colony } from "../colonies/colony";
-import {TickColonyUnit, UnitType} from "../types";
+import { TickColonyUnit, UnitType } from "../types";
 
 export abstract class Unit {
     public readonly id: string
@@ -25,10 +25,9 @@ export abstract class Unit {
         }
 
         const map = this.colony.game.map;
-
         const result = map.computePath(this.position, target);
         if (result.status === "noPath" || result.status === "timeout") {
-            throw new UnitError(this, `No path to ${target}`);
+            throw new UnitError(this, `No path to ${toString(target)}`);
         }
 
         this.position = result.path[1];
@@ -36,11 +35,16 @@ export abstract class Unit {
     }
 
     public attack(target: Position) {
-        throw new UnitError(this, 'Action not supported');
+        if (isAdjacent(target, this.position)) {
+
+        }
     }
 
-    public pickUp(target: Position) {
-        throw new UnitError(this, 'Action not supported');
+    public mine(target: Position) {
+
+        if (isAdjacent(target, this.position)) {
+
+        }
     }
 
     public serialize(): TickColonyUnit {

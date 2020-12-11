@@ -12,7 +12,7 @@ export interface Tile {
 
 export class GameMap {
     public static fromArray(array: TileType[][]) {
-        const tiles = new Map(array.flatMap((row, x) => row.map((type: TileType, y) => [hash({ x, y }), { position: { x, y }, type }])));
+        const tiles = array.map((row, x) => row.map((tile, y) => ({ position: { x, y }, type: tile })));
 
         const height = array.length;
         const width = array[0]?.length | 0;
@@ -20,6 +20,7 @@ export class GameMap {
         return new GameMap(tiles, height, width);
     }
 
+    // TO DO
     public static fromFile(mapFile: string) {
         const COLOR_TO_TYLE = new Map<number, TileType>([
             [0, "WALL"],
@@ -43,7 +44,38 @@ export class GameMap {
         console.log(tiles.values());
     }
 
-    constructor(private tiles: Map<String, Tile>, private _height: number, private _width: number) { }
+    public static empty(size: number) {
+        const tiles = [];
+        for (let i = 0; i < size; i++) {
+            tiles[i] = Array(size).fill('EMPTY');
+        }
+
+        tiles[0][0] = 'BASE';
+        tiles[size - 1][0] = 'BASE';
+        tiles[0][size - 1] = 'BASE';
+        tiles[size - 1][size - 1] = 'BASE';
+
+        tiles[size / 2][size / 2] = 'DEPOT';
+
+        return GameMap.fromArray(tiles);
+    }
+
+    public bases: Tile[] = [];
+    public depots: Tile[] = [];
+
+    constructor(private tiles: Tile[][], private _height: number, private _width: number) {
+        tiles.forEach(row => {
+            row.forEach(tile => {
+                if (tile.type === 'BASE') {
+                    this.bases.push(tile);
+                }
+
+                if (tile.type === 'DEPOT') {
+                    this.depots.push(tile);
+                }
+            });
+        });
+    }
 
     get width() {
         return this._width;
@@ -54,7 +86,7 @@ export class GameMap {
     }
 
     public getTile(from: Position) {
-        return this.tiles.get(hash(from));
+        return this.tiles[from.x][from.y];
     }
 
     public getNeighbors(from: Position): Tile[] {
@@ -91,7 +123,7 @@ export class GameMap {
         for (let x = 0; x < this._height; x++) {
             const row: TileType[] = [];
             for (let y = 0; y < this._width; y++) {
-                row.push(this.getTile({x, y}).type);
+                row.push(this.getTile({ x, y }).type);
             }
             tiles.push(row);
         }

@@ -1,4 +1,4 @@
-import WebSocket from 'ws'
+const WebSocket = require('ws');
 const SOCKET_ADDR = "ws://localhost:3000";
 
 const startClient = () => {
@@ -6,8 +6,8 @@ const startClient = () => {
         const client = new WebSocket(SOCKET_ADDR);
 
         client.on('open', () => {
-            let isRegistered: boolean = false;
-            let colonyId: string = null;
+            let isRegistered = false;
+            let colonyId = null;
 
             client.send(JSON.stringify({ type: "REGISTER", colonyName: "TestClient" }));
 
@@ -29,10 +29,21 @@ const startClient = () => {
                             throw new Error('Colony received a tick before being registered');
                         }
 
-                        console.log(JSON.stringify(message));
+
+
+                        const colonyId = message.colonyId;
+                        const myColony = message.colonies.find(c => c.id === colonyId);
+
+                        console.log(JSON.stringify(myColony));
+
+                        const randomPosition = () => {
+                            return { x: Math.round(Math.random() * 50), y: Math.round(Math.random() * 50) }
+                        }
+
+                        const actions = myColony.units.map(u => ({ type: 'UNIT', action: 'MOVE', unitId: u.id, target: randomPosition() }));
 
                         setTimeout(() => {
-                            client.send(JSON.stringify({ type: "COMMAND", tick: message.tick }));
+                            client.send(JSON.stringify({ type: "COMMAND", tick: message.tick, actions }));
                         }, 500);
                     }
                 }

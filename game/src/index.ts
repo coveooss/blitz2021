@@ -20,7 +20,7 @@ const args = yargs(process.argv.slice(2))
         'timePerTickMs': { type: 'number', default: 1000 },
         'nbOfTicks': { type: 'number', default: 1000 },
         'gameStartTimoutMs': { type: 'number', default: 500000 },
-        'nbOfColonies': { type: 'number', default: 3 },
+        'nbOfColonies': { type: 'number', default: 1 },
         'recordPath': { type: 'string' }
     }).argv;
 

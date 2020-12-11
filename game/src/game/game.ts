@@ -4,6 +4,8 @@ import { timeoutAfter } from "../utils";
 import { ColonyError } from "./error";
 import { Command, Tick } from "./types";
 import { GameMap } from "./map";
+import { Position } from './position'
+import { Miner } from "./units/miner";
 
 export interface GameOptions {
     map: GameMap,
@@ -40,7 +42,7 @@ export class Game {
             ...options
         }
 
-        this.map = this.options.map;
+        this.map = this.options.map || GameMap.empty(50);
 
         if (this.options.maxWaitTimeMsBeforeStartingGame !== 0) {
             logger.info(`The game will start automatically after ${this.options.maxWaitTimeMsBeforeStartingGame} ms or when ${this.options.expectedNumberOfColonies} colonies will have joined, whichever come first.`);
@@ -103,6 +105,10 @@ export class Game {
         return this.colonies.flatMap(c => c.getUnit(unitId))[0];
     }
 
+    public getUnitAtPosition(position: Position) {
+        return this.colonies.flatMap(c => c.getUnitAtPosition(position))
+    }
+
     public onGameCompleted(cb: (err?: Error) => any) {
         this.callbackOnGameCompleted.push(cb);
     }
@@ -131,6 +137,11 @@ export class Game {
         if (this.isRunning) {
             throw new Error(`Game is already running.`);
         }
+
+        this.colonies.forEach((c, i) => {
+            c.homeBase = this.map.bases[i].position;
+            c.units.push(new Miner(c, c.homeBase));
+        });
 
         this._isRunning = true;
 
@@ -188,7 +199,7 @@ export class Game {
             colonies: this.colonies.map(c => c.serialize()),
             tick: this._currentTick,
             totalTick: this.options.numberOfTicks,
-            map: this.map?.serialize?.() ?? {tiles: []}
+            map: this.map?.serialize?.() ?? { tiles: [] }
         }
     }
 }

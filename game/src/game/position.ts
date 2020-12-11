@@ -15,3 +15,7 @@ export const hash = (position: Position) => `${position.x}|${position.y}`;
 export const equal = (a: Position, b: Position) => {
     return a.x === b.x && a.y === b.y;
 }
+
+export const toString = (a: Position) => {
+    return `[x: ${a.x}, y: ${a.y}]`;
+}

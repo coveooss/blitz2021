@@ -1,13 +1,13 @@
 import { UNIT } from '../config';
 import { ColonyError, UnitError } from '../error';
-import {Command, PlayerTick, TickColony, UnitType} from '../types';
+import { Command, PlayerTick, TickColony, UnitType } from '../types';
 import { Cart } from '../units/cart';
 import { Cowboy } from '../units/cowboy';
 import { Miner } from '../units/miner';
 import { Unit } from '../units/unit';
 import { v4 as uuid } from 'uuid';
 import { Game } from '../game';
-import { Position } from '../position';
+import { equal, Position } from '../position';
 
 export abstract class Colony {
     public readonly id: string;
@@ -16,7 +16,7 @@ export abstract class Colony {
 
     protected _name: string;
 
-    private units: Unit[];
+    public units: Unit[];
     private errors: string[] = [];
 
     public homeBase: Position;
@@ -70,6 +70,10 @@ export abstract class Colony {
         return this.units.find(u => u.id === unitId);
     }
 
+    public getUnitAtPosition(position: Position): Unit {
+        return this.units.find(u => equal(u.position, position));
+    }
+
     public applyCommand(command: Command) {
         let alreadyHasBuyCommand = false;
         this.errors = [];
@@ -102,7 +106,7 @@ export abstract class Colony {
                     }
 
                     if (action.action === "PICKUP") {
-                        unit.pickUp(action.target);
+                        unit.mine(action.target);
                         return;
                     }
 
