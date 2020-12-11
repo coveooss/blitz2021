@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Rect} from 'react-konva';
 
-import {Size} from '../constants';
+import {Size} from '../../constants';
 import {TileProps} from './tileProps';
 
 const Wall: React.FunctionComponent<TileProps> = ({x, y}) => {

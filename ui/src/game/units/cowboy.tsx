@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {Rect} from 'react-konva';
 
-import {GAP_RATIO, Size} from '../constants';
-import {TileProps} from './tileProps';
+import {GAP_RATIO, Size} from '../../constants';
+import {TickColonyUnit} from 'blitz2021/dist/game/types';
 
-const Empty: React.FunctionComponent<TileProps> = ({x, y}) => {
+const Cowboy: React.FunctionComponent<TickColonyUnit> = ({position}) => {
+    const {x, y} = position;
     return (
         <Rect
-            fill="#F2F2F2"
+            fill="green"
             opacity={0.2}
             width={Size.InnerTile}
             height={Size.InnerTile}
@@ -19,4 +20,4 @@ const Empty: React.FunctionComponent<TileProps> = ({x, y}) => {
         />
     );
 };
-export default Empty;
+export default Cowboy;

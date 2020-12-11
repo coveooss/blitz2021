@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Path} from 'react-konva';
 
-import {Size} from '../constants';
+import {Size} from '../../constants';
 import {TileProps} from './tileProps';
 
 const shapes = ['M14,33L41,21L14,42Z', 'M14,9L41,21L14,33Z', 'M14,0V27L41,21Z'];

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Group} from 'react-konva';
-import {Size, VisualizationContext} from '../constants';
+import {Size, VisualizationContext} from '../../constants';
 import {TileType, Position} from 'blitz2021/dist/game/types';
-import {TilesUtils} from '../utils/tilesUtils';
+import {TilesUtils} from '../../utils/tilesUtils';
 import Wall from './wall';
 import Blitzium from './blitzium';
 import Empty from './empty';

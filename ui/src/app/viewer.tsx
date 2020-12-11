@@ -1,83 +1,50 @@
 import * as React from 'react'
 
+import {Tick} from 'blitz2021/dist/game/types';
+import useWindowSize from '../hooks/useWindowSize';
+import {Size, VisualizationContext} from '../constants';
+import {Stage} from 'react-konva';
+import Game from '../game/game';
+import Infos from '../infos/infos';
+
 const Viewer: React.FC = () => {
-    return (
-        <>
-            <PoorMansViewerToDelete />
-        </>
-    );
-};
+    const [currentTick, setCurrentTick] = React.useState<Tick | null>(null);
+    const {width, height} = useWindowSize();
 
-const PoorMansViewerToDelete: React.FC = () => {
-    const canvas = React.useRef<HTMLCanvasElement>(null);
-    const [tick, setTick] = React.useState(null);
+    const retry = () => window.setTimeout(start, 1000);
 
-    React.useEffect(() => {
-        let socket = new WebSocket('ws://localhost:3000');
+    function start() {
+        const ws = new WebSocket('ws://' + window.location.hostname + ':3000');
 
-        socket.onopen = () => {
-            socket.send(JSON.stringify({ type: 'VIEWER' }));
-
-            socket.onmessage = (ev) => {
-                setTick(JSON.parse(ev.data));
-            }
-        }
-
-        return () => {
-            socket.close();
-        }
-    }, []);
-
-
-    const context = canvas.current?.getContext('2d');
-
-    if (context) {
-        tick.map.tiles.forEach((row, x) => {
-            row.forEach((tile, y) => {
-                if (tile === "EMPTY") {
-                    context.fillStyle = "yellow";
-                }
-
-                if (tile === "BASE") {
-                    context.fillStyle = "red";
-                }
-
-                if (tile === "MINE") {
-                    context.fillStyle = "gold";
-                }
-
-                context.fillRect(x * 10, y * 10, 10, 10);
-            });
-        });
-
-        let colors = [
-            'blue',
-            'red',
-            'green',
-            'back'
-        ];
-
-        tick.colonies.forEach((c, i) => {
-
-            c.units.forEach(u => {
-                context.fillStyle = colors[i];
-                context.fillRect(u.position.x * 10, u.position.y * 10, 10, 10);
-
-                u.path.forEach(p => {
-                    context.fillStyle = 'rgba(0, 0, 0, 0.1)';
-                    context.fillRect(p.x * 10, p.y * 10, 10, 10);
-                })
-            });
-        })
+        ws.onerror = retry;
+        ws.onclose = retry;
+        ws.onopen = () => {
+            ws.send(JSON.stringify({type: 'VIEWER'}));
+        };
+        ws.onmessage = (event) => {
+            setCurrentTick(JSON.parse(event.data));
+        };
     }
 
+    React.useEffect(start, []);
+
+    if (!currentTick) {
+        return null;
+    }
+
+    const numberOfTile: number = currentTick?.map?.tiles?.[0]?.length ?? 0;
+    const boardSize = Math.min(height, Math.min(width - 250));
+
+    Size.Tile = boardSize / numberOfTile;
+
     return (
-        <>
-            <canvas width={500} height={500} ref={canvas}></canvas>
-            {tick !== null && tick.colonies.map(c => <h3>{c.name} - {c.blitzium}</h3>)}
-            {JSON.stringify(tick)}
-        </>
-    )
-}
+        <Stage width={width} height={height}>
+            <VisualizationContext.Provider value={{tick: currentTick.tick, boardSize, currentTick}}>
+                <Game />
+                <Infos />
+            </VisualizationContext.Provider>
+        </Stage>
+    );
+};
 
 export default Viewer;
