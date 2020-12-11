@@ -3,5 +3,10 @@ module.exports = {
     transform: {
         "^.+\\.(ts|tsx)$": "ts-jest"
     },
-    testEnvironment: "jsdom"
+    testRegex: [
+        "^.+\\.test\.(ts|tsx)$"
+    ],
+    testEnvironment: "jsdom",
+    coveragePathIgnorePatterns: ["/node_modules/", "/dist/"],
+    collectCoverageFrom: ["**/*.{ts,tsx}"]
 };

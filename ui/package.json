@@ -13,10 +13,13 @@
     "build": "parcel build src/*.html && tsc"
   },
   "dependencies": {
+    "konva": "^7.2.1",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-konva": "^17.0.0-0"
   },
   "devDependencies": {
+    "blitz2021": "^1.0.0",
     "@testing-library/react": "^11.2.2",
     "@types/jest": "^26.0.9",
     "@types/react": "^17.0.0",

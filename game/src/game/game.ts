@@ -1,3 +1,4 @@
+import path from "path";
 import { Colony } from "./colonies/colony";
 import { logger } from "../logger";
 import { timeoutAfter } from "../utils";
