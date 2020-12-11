@@ -11,10 +11,8 @@ import { equal, Position } from '../position';
 
 export abstract class Colony {
     public readonly id: string;
-    public readonly blitzium: number;
-    public readonly totalBlitzium: number;
-
-    protected _name: string;
+    public blitzium: number;
+    public totalBlitzium: number;
 
     public units: Unit[];
     private errors: string[] = [];
@@ -22,19 +20,17 @@ export abstract class Colony {
     public homeBase: Position;
     public spawnPoint: Position;
 
-    constructor(public game: Game) {
+    constructor(public game: Game, public name: string) {
         this.blitzium = 0;
         this.units = [];
         this.id = uuid();
-    }
 
-    get name(): string {
-        return this._name;
-    }
-
-    public init(name: string) {
-        this._name = name;
         this.game.registerColony(this);
+    }
+
+    public dropBlitzium(blitzium:number) {
+        this.blitzium = this.blitzium + blitzium;
+        this.totalBlitzium = this.totalBlitzium + blitzium;
     }
 
     private buyUnit(type: UnitType) {
@@ -105,8 +101,13 @@ export abstract class Colony {
                         return;
                     }
 
-                    if (action.action === "PICKUP") {
+                    if (action.action === "MINE") {
                         unit.mine(action.target);
+                        return;
+                    }
+
+                    if (action.action === "DROP") {
+                        unit.drop(action.target);
                         return;
                     }
 
@@ -131,7 +132,7 @@ export abstract class Colony {
     public serialize(): TickColony {
         return {
             id: this.id,
-            name: this._name,
+            name: this.name,
             errors: this.errors,
             homeBase: this.homeBase,
             spawnPoint: this.spawnPoint,

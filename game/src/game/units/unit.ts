@@ -14,6 +14,13 @@ export abstract class Unit {
         this.id = uuid();
     }
 
+    public kill() {
+        this.colony.units.splice(this.colony.units.indexOf(this), 1);
+        if (this.cargo !== 0) {
+            this.colony.game.map.depot.push
+        }
+    }
+
     public toString() {
         return `([${this.type}] ${this.id} ${JSON.stringify(this.position)})`
     }
@@ -35,15 +42,29 @@ export abstract class Unit {
     }
 
     public attack(target: Position) {
-        if (isAdjacent(target, this.position)) {
-
+        const enemy = this.colony.game.getUnitAtPosition(this.position);
+        if (isAdjacent(target, this.position) && enemy) {
+            enemy.kill();
         }
     }
 
     public mine(target: Position) {
+        const depot = this.colony.game.map.mines.find(m => equal(target, m.position));
+        console.log(depot)
+        if (isAdjacent(target, this.position) && depot) {
+            this.cargo = this.cargo + 1;
+            return;
+        }
 
+        throw new UnitError(this, `There's no depots near by to mine from!`);
+    }
+
+    public drop(target: Position) {
         if (isAdjacent(target, this.position)) {
-
+            if (equal(target, this.colony.homeBase)) {
+                this.colony.dropBlitzium(this.cargo);
+                this.cargo = 0;
+            }
         }
     }
 
@@ -53,6 +74,7 @@ export abstract class Unit {
             type: this.type,
             blitzium: this.cargo,
             position: this.position,
+            path: this.path
         }
     }
 }

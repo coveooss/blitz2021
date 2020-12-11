@@ -2,6 +2,8 @@ import WebSocket from 'ws';
 import { Game } from '../game/game';
 import { SocketedColony } from './socketedColony';
 import { logger } from '../logger';
+import { SocketMessage } from './socketMessage';
+import { SocketedViewer } from './socketedViewer';
 
 export class Server {
     private webSocketServer: WebSocket.Server;
@@ -25,8 +27,19 @@ export class Server {
             try {
                 this.webSocketServer = new WebSocket.Server({ port: this.port });
                 this.webSocketServer.on('connection', socket => {
-                    const colony = new SocketedColony(socket, this.game);
-                    logger.debug(`New socket connection for ${colony}`, socket);
+                    socket.on('message', (data) => {
+                        const message = JSON.parse(data.toString()) as SocketMessage
+                      
+                        if (message.type === 'VIEWER') {
+                            const viewer = new SocketedViewer(socket, this.game);
+                            logger.debug(`New Viewer connection for ${viewer}`, socket);
+                        }
+
+                        if (message.type === 'REGISTER') {
+                            const colony = new SocketedColony(socket, this.game, message.colonyName);
+                            logger.debug(`New socket connection for ${colony}`, socket);
+                        }
+                    });
                 });
 
                 logger.info(`Game server listening on port ${this.port}`);

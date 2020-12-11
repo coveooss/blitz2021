@@ -1,5 +1,5 @@
 export type UnitType = 'MINER' | 'CART' | 'COWBOY';
-export type TileType = "EMPTY" | "WALL" | "BASE" | "DEPOT";
+export type TileType = "EMPTY" | "WALL" | "BASE" | "MINE";
 
 export type Position = { x: number, y: number }
 
@@ -18,6 +18,7 @@ export interface TickColonyUnit {
     type: UnitType;
     blitzium: number;
     position: Position;
+    path: Position[];
 }
 
 export interface TickMap {
@@ -40,7 +41,7 @@ export interface CommandActionBuy {
 
 export interface CommandActionUnit {
     type: 'UNIT';
-    action: 'MOVE' | 'ATTACK' | 'PICKUP' | 'NONE';
+    action: 'MOVE' | 'ATTACK' | 'PICKUP' | 'MINE' | 'DROP' | 'NONE';
     unitId: string;
     target: Position;
 }

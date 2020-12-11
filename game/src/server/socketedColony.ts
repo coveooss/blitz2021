@@ -6,6 +6,7 @@ import { Game } from "../game/game";
 import { ColonyError } from "../game/error";
 import { logger } from "../logger";
 import { PlayerTick } from '../game/types';
+import { SocketedViewer } from "./socketedViewer";
 
 interface SocketTickCallack {
     tick: number,
@@ -33,19 +34,14 @@ export class SocketedColony extends Colony {
         return command;
     }
 
-    constructor(private socket: WebSocket, game: Game) {
-        super(game);
+    constructor(private socket: WebSocket, game: Game, name: string) {
+        super(game, name);
 
         this.socket.on('message', (data) => {
             try {
                 const message = JSON.parse(data.toString()) as SocketMessage;
 
                 switch (message.type) {
-                    case 'REGISTER': {
-                        this.init(message.colonyName);
-                        this.socket.send(JSON.stringify({ type: "REGISTER_ACK", colonyId: this.id, colonyName: this.name }));
-                        break;
-                    }
                     case 'COMMAND': {
                         if (message.tick !== this.socketCallbacks.tick) {
                             throw new ColonyError(this, `Invalid tick number received: ${message.tick}`);

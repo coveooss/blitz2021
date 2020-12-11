@@ -47,7 +47,7 @@ export class GameMap {
                     });
             }
         }
-        return new GameMap(tiles, bmpData.height, bmpData.width);
+        //return new GameMap(tiles, bmpData.height, bmpData.width);
     }
 
     public static empty(size: number) {
@@ -61,13 +61,14 @@ export class GameMap {
         tiles[0][size - 1] = 'BASE';
         tiles[size - 1][size - 1] = 'BASE';
 
-        tiles[size / 2][size / 2] = 'DEPOT';
+        tiles[size / 2][size / 2] = 'MINE';
 
         return GameMap.fromArray(tiles);
     }
 
     public bases: Tile[] = [];
-    public depots: Tile[] = [];
+    public mines: Tile[] = [];
+    public depot: Position[] = [];
 
     constructor(private tiles: Tile[][], private _height: number, private _width: number) {
         tiles.forEach(row => {
@@ -76,8 +77,8 @@ export class GameMap {
                     this.bases.push(tile);
                 }
 
-                if (tile.type === 'DEPOT') {
-                    this.depots.push(tile);
+                if (tile.type === 'MINE') {
+                    this.mines.push(tile);
                 }
             });
         });
@@ -106,7 +107,7 @@ export class GameMap {
     }
 
     public getWalkableNeighbors(from: Position) {
-        return this.getNeighbors(from).filter(tile => tile.type === 'EMPTY');
+        return this.getNeighbors(from).filter(tile => tile.type !== 'WALL');
     }
 
     public isInBound(from: Position) {

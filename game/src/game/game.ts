@@ -7,6 +7,7 @@ import { Command, Tick } from "./types";
 import { GameMap } from "./map";
 import { Position } from './position'
 import { Miner } from "./units/miner";
+import { Viewer } from "./viewer";
 
 export interface GameOptions {
     map: GameMap,
@@ -20,7 +21,7 @@ export class Game {
     public static readonly DEFAULT_GAME_OPTIONS: GameOptions = {
         map: null,
         numberOfTicks: 5,
-        timeMsAllowedPerTicks: 1000,
+        timeMsAllowedPerTicks: 0,
         maxWaitTimeMsBeforeStartingGame: 0,
         expectedNumberOfColonies: 3
     }
@@ -36,8 +37,10 @@ export class Game {
     private maxWaitTimeInterval: NodeJS.Timeout;
 
     public readonly colonies: Colony[] = [];
+    public readonly viewers: Viewer[] = [];
 
     constructor(private options?: Partial<GameOptions>) {
+
         this.options = {
             ...Game.DEFAULT_GAME_OPTIONS,
             ...options
@@ -63,7 +66,6 @@ export class Game {
         } else if (this.options.expectedNumberOfColonies) {
             logger.info(`The game will start as soon as ${this.options.expectedNumberOfColonies} colony(ies) will join.`);
         }
-
     }
 
     public registerColony(colony: Colony) {
@@ -84,6 +86,14 @@ export class Game {
                 this.play();
             });
         }
+    }
+
+    public registerViewer(v: Viewer) {
+        this.viewers.push(v);
+    }
+
+    public deregisterViewer(v: Viewer) {
+        this.viewers.splice(this.viewers.indexOf(v), 1);
     }
 
     private notifyGameCompleted(err?: Error) {
@@ -107,7 +117,7 @@ export class Game {
     }
 
     public getUnitAtPosition(position: Position) {
-        return this.colonies.flatMap(c => c.getUnitAtPosition(position))
+        return this.colonies.flatMap(c => c.getUnitAtPosition(position))[0];
     }
 
     public onGameCompleted(cb: (err?: Error) => any) {
@@ -161,7 +171,7 @@ export class Game {
                             c.getNextCommand({ colonyId: c.id, ...startingState })
                         ]);
                     } else {
-                        command = await c.getNextCommand({ colonyId: c.id, ...this.serialize() });
+                        command = await c.getNextCommand({ colonyId: c.id, ...startingState });
                     }
 
                     if (command) {
@@ -176,7 +186,10 @@ export class Game {
             });
 
             try {
-                await Promise.allSettled(allTickCommandsWaiting)
+                await Promise.allSettled(allTickCommandsWaiting);
+
+                this.viewers.forEach(v => v.onTick(this.serialize()));
+
                 this.notifyTickApplied();
             } catch (ex) {
                 logger.error(`An unhandled error occured`, ex);
