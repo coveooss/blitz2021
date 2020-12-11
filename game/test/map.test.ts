@@ -8,7 +8,7 @@ describe("Map", () => {
         ['EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY'],
         ['EMPTY', 'WALL', 'WALL', 'WALL', 'WALL'],
         ['EMPTY', 'EMPTY', 'EMPTY', 'EMPTY', 'EMPTY'],
-        ['WALL', 'WALL', 'WALL', 'DEPOT', 'WALL'],
+        ['WALL', 'WALL', 'WALL', 'MINE', 'WALL'],
     ]
 
     const SIMPLE_MAP_HEIGHT = 6;

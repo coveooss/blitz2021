@@ -145,7 +145,7 @@ describe("Game", () => {
                 colonies: [],
                 tick: 0,
                 totalTick: NUMBER_OF_TICKS,
-                map: {tiles: []},
+                map: {tiles: expect.any(Array)},
             });
         });
 
@@ -158,7 +158,7 @@ describe("Game", () => {
                 colonies: [expect.any(Object), expect.any(Object), expect.any(Object)],
                 tick: 0,
                 totalTick: NUMBER_OF_TICKS,
-                map: {tiles: []},
+                map: {tiles: expect.any(Array)},
             });
         });
 
@@ -171,7 +171,7 @@ describe("Game", () => {
                 colonies: [expect.any(Object)],
                 tick: NUMBER_OF_TICKS,
                 totalTick: NUMBER_OF_TICKS,
-                map: {tiles: []},
+                map: {tiles: expect.any(Array)},
             });
         });
     });

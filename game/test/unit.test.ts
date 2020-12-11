@@ -64,8 +64,9 @@ describe('Unit', () => {
             expect(unit.serialize()).toStrictEqual({
                 id: 'test-id',
                 type: 'MINER',
+                path: [],
                 blitzium: 0,
-                position: {x: 4, y: 3},
+                position: {x: 4, y: 3}
             });
         });
     });

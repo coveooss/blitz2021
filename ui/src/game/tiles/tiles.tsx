@@ -17,10 +17,9 @@ const Tiles: React.FunctionComponent = () => {
                 return <Wall {...defaultProps} />;
             } else if (TilesUtils.isBlitzium(tile)) {
                 return <Blitzium {...defaultProps} />;
-            } else if (TilesUtils.isBase(tile)) {
-                return <Blitzium {...defaultProps} />;
+            } else {
+                return <Empty {...defaultProps} />;
             }
-            return <Empty {...defaultProps} />;
         })
     );
 

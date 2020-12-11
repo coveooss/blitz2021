@@ -12,9 +12,8 @@ jest.mock('uuid',() => ({
 
 class TestColony extends Colony {
     constructor(public game: Game) {
-        super(game);
+        super(game, EXPECTED_COLONY_NAME);
 
-        this._name = EXPECTED_COLONY_NAME;
         this.spawnPoint = { x: 12, y: 24 };
         this.homeBase = { x: 11, y: 24 };
     }
