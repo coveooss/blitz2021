@@ -22,7 +22,7 @@ docker:
   stage: dockerise
   image: docker
   services:
-    - docker
+    - docker:dind
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTR
   script:
