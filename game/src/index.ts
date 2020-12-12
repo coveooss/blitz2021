@@ -1,6 +1,6 @@
 import { Server } from './server/server'
 import { Game } from './game/game';
-import {Recorder, RecorderMode} from './recorder/recorder';
+import { Recorder, RecorderMode } from './recorder/recorder';
 import yargs from 'yargs';
 
 const splash = ` ______   _       __________________ _______      _______  _______  _______  __   
@@ -21,7 +21,9 @@ const args = yargs(process.argv.slice(2))
         'nbOfTicks': { type: 'number', default: 1000 },
         'gameStartTimoutMs': { type: 'number', default: 500000 },
         'nbOfColonies': { type: 'number', default: 1 },
-        'recordPath': { type: 'string' }
+        'recordPath': { type: 'string' },
+        's3_bucket': { type: 'string' },
+        's3_path': { type: 'string' },
     }).argv;
 
 (async () => {
@@ -35,9 +37,15 @@ const args = yargs(process.argv.slice(2))
     const recorder = new Recorder(game, RecorderMode.Command);
 
     const server = new Server(3000, game, true);
+
+    process.on('')
     await server.listen();
 
     if (args.recordPath) {
         Recorder.saveToFile(args.recordPath, recorder.buffer);
+    }
+
+    if (args.s3_bucket && args.s3_path) {
+        Recorder.saveToS3(args.s3_bucket, args.s3_path, recorder.buffer);
     }
 })();
