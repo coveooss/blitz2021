@@ -14,9 +14,9 @@ build:
     - yarn build
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   artifacts:
-  paths:
-    - game/dist
-    - ui/dist
+    paths:
+      - game/dist
+      - ui/dist
 
 docker:
   stage: dockerise
