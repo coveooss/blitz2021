@@ -21,6 +21,8 @@ build:
 docker:
   stage: dockerise
   image: docker
+  service:
+    - docker
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTR
   script:
