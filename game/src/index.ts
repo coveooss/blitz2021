@@ -24,28 +24,29 @@ const args = yargs(process.argv.slice(2))
         'recordPath': { type: 'string' },
         's3_bucket': { type: 'string' },
         's3_path': { type: 'string' },
+        'keepAlive': { type: 'boolean', default: true },
     }).argv;
 
 (async () => {
-    const game = new Game({
-        timeMsAllowedPerTicks: args.timePerTickMs,
-        numberOfTicks: args.nbOfTicks,
-        maxWaitTimeMsBeforeStartingGame: args.gameStartTimoutMs,
-        expectedNumberOfColonies: args.nbOfColonies
-    });
+    do {
+        const game = new Game({
+            timeMsAllowedPerTicks: args.timePerTickMs,
+            numberOfTicks: args.nbOfTicks,
+            maxWaitTimeMsBeforeStartingGame: args.gameStartTimoutMs,
+            expectedNumberOfColonies: args.nbOfColonies
+        });
 
-    const recorder = new Recorder(game, RecorderMode.Command);
+        const recorder = new Recorder(game, RecorderMode.Command);
+        const server = new Server(3000, game, true);
+        
+        await server.listen();
 
-    const server = new Server(3000, game, true);
+        if (args.recordPath) {
+            Recorder.saveToFile(args.recordPath, recorder.buffer);
+        }
 
-    process.on('')
-    await server.listen();
-
-    if (args.recordPath) {
-        Recorder.saveToFile(args.recordPath, recorder.buffer);
-    }
-
-    if (args.s3_bucket && args.s3_path) {
-        Recorder.saveToS3(args.s3_bucket, args.s3_path, recorder.buffer);
-    }
+        if (args.s3_bucket && args.s3_path) {
+            Recorder.saveToS3(args.s3_bucket, args.s3_path, recorder.buffer);
+        }
+    } while (args.keepAlive);
 })();

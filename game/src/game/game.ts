@@ -199,6 +199,12 @@ export class Game {
 
                 throw ex;
             }
+
+
+            if (this.colonies.length === 0 || this.colonies.every(c => c.isDead)) {
+                logger.info('Closing game as no more colonies are responding');
+                break;
+            }
         }
         this._currentTick++;
 

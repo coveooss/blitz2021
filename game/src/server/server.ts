@@ -30,9 +30,15 @@ export class Server {
 
             this.webSocketServer.close((err) => {
                 if (err) {
-                    logger.error(`An error occured while closing the server. ${err}`, err);
+                    logger.error(`An error occured while closing the websocket. ${err}`, err);
                 }
             })
+
+            this.server.close((err) => {
+                if (err) {
+                    logger.error(`An error occured while closing the server. ${err}`, err);
+                }
+            });
         });
     }
 

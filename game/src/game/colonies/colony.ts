@@ -20,6 +20,8 @@ export abstract class Colony {
     public homeBase: Position;
     public spawnPoint: Position;
 
+    public isDead: boolean = false;
+
     constructor(public game: Game, public name: string) {
         this.blitzium = 0;
         this.units = [];
@@ -28,7 +30,7 @@ export abstract class Colony {
         this.game.registerColony(this);
     }
 
-    public dropBlitzium(blitzium:number) {
+    public dropBlitzium(blitzium: number) {
         this.blitzium = this.blitzium + blitzium;
         this.totalBlitzium = this.totalBlitzium + blitzium;
     }
