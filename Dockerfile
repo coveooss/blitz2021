@@ -10,3 +10,4 @@ RUN yarn install --production
 EXPOSE 3000
 
 ENTRYPOINT [ "node", "index.js" ]
+CMD [ "--help" ]
