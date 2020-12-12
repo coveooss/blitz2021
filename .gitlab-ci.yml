@@ -1,12 +1,31 @@
+stages:
+  - build
+  - dockerise
 
-image: node:14
 cache:
   paths:
     - node_modules/
 
 build:
+  image: node:14
+  stage: build
   script:
     - yarn install
     - yarn build
-    - yarn test
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  artifacts:
+  paths:
+    - game/dist
+    - ui/dist
+
+docker:
+  stage: dockerise
+  image: docker
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTR
+  script:
+    - docker build -t blitz2021/game .
+    - docker tag blitz2021/game:latest $CI_REGISTRY/$CI_PROJECT_PATH/game:latest
+    - docker tag blitz2021/game:latest $CI_REGISTRY/$CI_PROJECT_PATH/game:$CI_PIPELINE_ID
+    - docker push $CI_REGISTRY/$CI_PROJECT_PATH/$DOCKER_IMAGE_NAME:latest
+    - docker push $CI_REGISTRY/$CI_PROJECT_PATH/$DOCKER_IMAGE_NAME:$CI_PIPELINE_ID

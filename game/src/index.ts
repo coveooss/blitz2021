@@ -34,7 +34,7 @@ const args = yargs(process.argv.slice(2))
 
     const recorder = new Recorder(game, RecorderMode.Command);
 
-    const server = new Server(3000, game);
+    const server = new Server(3000, game, true);
     await server.listen();
 
     if (args.recordPath) {

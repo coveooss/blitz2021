@@ -1,4 +1,7 @@
 import WebSocket from 'ws';
+import serveStatic from 'serve-static';
+import finalhandler from 'finalhandler';
+import { createServer, Server as HttpServer } from 'http';
 import { Game } from '../game/game';
 import { SocketedColony } from './socketedColony';
 import { logger } from '../logger';
@@ -6,9 +9,20 @@ import { SocketMessage } from './socketMessage';
 import { SocketedViewer } from './socketedViewer';
 
 export class Server {
+    private server: HttpServer;
     private webSocketServer: WebSocket.Server;
 
-    constructor(private port: number = 3000, private game: Game) {
+    constructor(private port: number = 3000, private game: Game, private serveUi: boolean) {
+        if (this.serveUi) {
+            let serve = serveStatic('./ui/');
+            this.server = createServer(function (req, res) {
+                var done = finalhandler(req, res);
+                serve(req, res, () => done(null));
+            });
+        } else {
+            this.server = createServer();
+        }
+
         this.game.onGameCompleted((err) => {
             if (err) {
                 logger.error(`An error occured while playing the game.`, err);
@@ -25,11 +39,11 @@ export class Server {
     public async listen() {
         return new Promise((resolve, reject) => {
             try {
-                this.webSocketServer = new WebSocket.Server({ port: this.port });
+                this.webSocketServer = new WebSocket.Server({ server: this.server });
                 this.webSocketServer.on('connection', socket => {
                     socket.on('message', (data) => {
                         const message = JSON.parse(data.toString()) as SocketMessage
-                      
+
                         if (message.type === 'VIEWER') {
                             const viewer = new SocketedViewer(socket, this.game);
                             logger.debug(`New Viewer connection for ${viewer}`, socket);
@@ -41,6 +55,8 @@ export class Server {
                         }
                     });
                 });
+
+                this.server.listen({ port: this.port })
 
                 logger.info(`Game server listening on port ${this.port}`);
 
