@@ -12,6 +12,7 @@ build:
   script:
     - yarn install
     - yarn build
+    - yarn test
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   artifacts:
     paths:
