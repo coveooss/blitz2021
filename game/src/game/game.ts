@@ -117,7 +117,7 @@ export class Game {
     }
 
     public getUnitAtPosition(position: Position) {
-        return this.colonies.flatMap(c => c.getUnitAtPosition(position))[0];
+        return this.colonies.flatMap(c => c.getUnitAtPosition(position)).filter(c => c !== undefined)[0];
     }
 
     public onGameCompleted(cb: (err?: Error) => any) {

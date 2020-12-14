@@ -13,6 +13,7 @@ export abstract class Unit {
 
     constructor(private colony: Colony, public position: Position, protected type: UnitType) {
         this.id = uuid();
+        this.colony.units.push(this);
     }
 
     public kill() {
@@ -49,19 +50,22 @@ export abstract class Unit {
     }
 
     public attack(target: Position) {
-        const enemy = this.colony.game.getUnitAtPosition(this.position);
+        const enemy = this.colony.game.getUnitAtPosition(target);
 
-        if (isAdjacent(target, this.position) && enemy) {
+        if (isAdjacent(target, this.position) && enemy && enemy.colony !== this.colony) {
             enemy.kill();
             return;
         }
 
-        throw new UnitError(this, `There's no enemy near by to attach!`);
+        throw new UnitError(this, `There's no enemy near by to attack!`);
     }
 
     public mine(target: Position) {
         const mine = this.colony.game.map.mines.find(m => equal(target, m.position));
 
+        if (this.blitzium + 1 > this.maxBlitzium) {
+            throw new UnitError(this, `This unit is full already and can't take more blitzium!`);
+        }
 
         if (isAdjacent(target, this.position) && mine) {
             this.blitzium = this.blitzium + 1;
