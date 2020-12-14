@@ -10,6 +10,11 @@ export interface Tile {
     position: Position
 }
 
+export interface Depot {
+    position: Position,
+    blitzium: number
+}
+
 export interface Path {
     status: 'success' | 'noPath' | 'timeout';
     path: Position[];
@@ -68,7 +73,7 @@ export class GameMap {
 
     public bases: Tile[] = [];
     public mines: Tile[] = [];
-    public depot: Position[] = [];
+    public depots: Depot[] = [];
 
     constructor(private tiles: Tile[][], private _height: number, private _width: number) {
         tiles.forEach(row => {
@@ -107,7 +112,7 @@ export class GameMap {
     }
 
     public getWalkableNeighbors(from: Position) {
-        return this.getNeighbors(from).filter(tile => tile.type !== 'WALL');
+        return this.getNeighbors(from).filter(tile => tile.type === 'EMPTY');
     }
 
     public isInBound(from: Position) {

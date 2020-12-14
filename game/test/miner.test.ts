@@ -22,7 +22,7 @@ describe("Miner", () => {
     describe('move', () => {
 
         it('should throw if cargo is too large', () => {
-            unit.cargo = UNIT.MAX_MINER_MOVE_CARGO + 1;
+            unit.blitzium = UNIT.MAX_MINER_MOVE_CARGO + 1;
 
             expect(() => unit.move({ x: 0, y: 2 })).toThrowError();
         });

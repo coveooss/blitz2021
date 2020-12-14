@@ -4,11 +4,11 @@ import { Game } from "../src/game/game";
 import { GameMap } from "../src/game/map";
 import { Unit } from "../src/game/units/unit";
 
-jest.mock('uuid',() => ({
+jest.mock('uuid', () => ({
     v4: () => 'test-id'
 }));
 
-class TestUnit extends Unit { };
+class TestUnit extends Unit { }
 
 describe('Unit', () => {
     let game: Game;
@@ -16,7 +16,7 @@ describe('Unit', () => {
     let unit: Unit;
     let map: GameMap;
 
-    describe('move', () => {
+    describe.only('move', () => {
         beforeEach(() => {
             map = GameMap.fromArray([['EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY']]);
             game = new Game({ map });
@@ -66,7 +66,7 @@ describe('Unit', () => {
                 type: 'MINER',
                 path: [],
                 blitzium: 0,
-                position: {x: 4, y: 3}
+                position: { x: 4, y: 3 }
             });
         });
     });

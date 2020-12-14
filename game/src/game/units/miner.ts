@@ -11,8 +11,8 @@ export class Miner extends Unit {
     }
 
     public move(target: Position) {
-        if (this.cargo >= UNIT.MAX_MINER_MOVE_CARGO) {
-            throw new UnitError(this, `Miner can't move because it has too much cargo ${this.cargo} > ${UNIT.MAX_MINER_MOVE_CARGO}`);
+        if (this.blitzium >= UNIT.MAX_MINER_MOVE_CARGO) {
+            throw new UnitError(this, `Miner can't move because it has too much cargo ${this.blitzium} > ${UNIT.MAX_MINER_MOVE_CARGO}`);
         }
 
         super.move(target);
