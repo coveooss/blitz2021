@@ -10,7 +10,7 @@ import { Game } from '../game';
 import { equal, Position } from '../position';
 
 export abstract class Colony {
-    public readonly id: string;
+    public id: string;
     public blitzium: number;
     public totalBlitzium: number;
 
@@ -64,7 +64,7 @@ export abstract class Colony {
         }
     }
 
-    public getUnit(unitId: string): Unit {
+    public getUnit(unitId: string): Unit | undefined {
         return this.units.find(u => u.id === unitId);
     }
 
@@ -89,6 +89,11 @@ export abstract class Colony {
                     this.buyUnit(action.unitType);
                 } else {
                     const unit = this.getUnit(action.unitId);
+
+                    if (!unit) {
+                        throw new ColonyError(this, `Unit ${action.unitId} doesn't exists!`);
+                    }
+
                     if (action.action === "NONE") {
                         return;
                     }
@@ -100,6 +105,11 @@ export abstract class Colony {
 
                     if (action.action === "ATTACK") {
                         unit.attack(action.target);
+                        return;
+                    }
+
+                    if (action.action === "PICKUP") {
+                        unit.pickup(action.target, 5);
                         return;
                     }
 
