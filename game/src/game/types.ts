@@ -1,3 +1,5 @@
+import { Depot } from "./map";
+
 export type UnitType = 'MINER' | 'CART' | 'COWBOY';
 export type TileType = "EMPTY" | "WALL" | "BASE" | "MINE";
 
@@ -23,6 +25,7 @@ export interface TickColonyUnit {
 
 export interface TickMap {
     tiles: TileType[][]
+    depots: Depot[]
 }
 
 export interface Tick {

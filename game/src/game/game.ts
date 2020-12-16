@@ -8,6 +8,7 @@ import { GameMap } from "./map";
 import { Position } from './position'
 import { Miner } from "./units/miner";
 import { Viewer } from "./viewer";
+import { COLONY } from "./config";
 
 export interface GameOptions {
     map: GameMap,
@@ -151,6 +152,7 @@ export class Game {
 
         this.colonies.forEach((c, i) => {
             c.homeBase = this.map.bases[i].position;
+            c.blitzium = COLONY.START_BALANCE;
             new Miner(c, c.homeBase);
         });
 
@@ -225,7 +227,7 @@ export class Game {
             colonies: this.colonies.map(c => c.serialize()),
             tick: this._currentTick,
             totalTick: this.options.numberOfTicks,
-            map: this.map?.serialize?.() ?? { tiles: [] }
+            map: this.map?.serialize?.() ?? { tiles: [], depots: [] }
         }
     }
 }

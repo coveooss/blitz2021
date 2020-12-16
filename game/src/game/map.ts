@@ -139,6 +139,6 @@ export class GameMap {
             }
             tiles.push(row);
         }
-        return { tiles };
+        return { tiles, depots: this.depots };
     }
 }

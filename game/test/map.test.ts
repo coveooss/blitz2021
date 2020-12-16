@@ -61,6 +61,6 @@ describe("Map", () => {
     it("should serialize the map correctly", () => {
         const gameMap = GameMap.fromArray(SIMPLE_MAP);
 
-        expect(gameMap.serialize()).toEqual({ tiles: SIMPLE_MAP });
+        expect(gameMap.serialize()).toEqual({ tiles: SIMPLE_MAP, depots: [] });
     });
 });

@@ -16,6 +16,7 @@ const splash = ` ______   _       __________________ _______      _______  _____
 console.log(splash);
 
 const args = yargs(process.argv.slice(2))
+
     .options({
         'timePerTickMs': { type: 'number', default: 1000 },
         'nbOfTicks': { type: 'number', default: 1000 },
@@ -25,8 +26,11 @@ const args = yargs(process.argv.slice(2))
         's3_bucket': { type: 'string' },
         's3_path': { type: 'string' },
         'keepAlive': { type: 'boolean', default: true },
-    }).argv;
+    })
+    .env('BLITZ')
+    .argv;
 
+console.log(args.test);
 (async () => {
     do {
         const game = new Game({
@@ -38,7 +42,7 @@ const args = yargs(process.argv.slice(2))
 
         const recorder = new Recorder(game, RecorderMode.Command);
         const server = new Server(3000, game, true);
-        
+
         await server.listen();
 
         if (args.recordPath) {

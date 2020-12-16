@@ -74,7 +74,7 @@ describe("Game", () => {
         expect(game.colonies.length).toBe(EXPECTED_NUMBER_OF_COLONIES - 1);
         expect(game.isRunning).toBe(false);
 
-        new NoopColony(game); 
+        new NoopColony(game);
 
         jest.runAllImmediates();
         expect(game.colonies.length).toBe(EXPECTED_NUMBER_OF_COLONIES);
@@ -145,7 +145,7 @@ describe("Game", () => {
                 colonies: [],
                 tick: 0,
                 totalTick: NUMBER_OF_TICKS,
-                map: {tiles: expect.any(Array)},
+                map: { tiles: expect.any(Array), depots: [] },
             });
         });
 
@@ -158,7 +158,7 @@ describe("Game", () => {
                 colonies: [expect.any(Object), expect.any(Object), expect.any(Object)],
                 tick: 0,
                 totalTick: NUMBER_OF_TICKS,
-                map: {tiles: expect.any(Array)},
+                map: { tiles: expect.any(Array), depots: [] },
             });
         });
 
@@ -171,7 +171,7 @@ describe("Game", () => {
                 colonies: [expect.any(Object)],
                 tick: NUMBER_OF_TICKS,
                 totalTick: NUMBER_OF_TICKS,
-                map: {tiles: expect.any(Array)},
+                map: { tiles: expect.any(Array), depots: [] },
             });
         });
     });
