@@ -30,12 +30,13 @@ docker:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - $(aws ecr get-login --no-include-email --region us-east-1)
   script:
-    - docker build -t blitz2021/game .
-    - docker tag blitz2021/game:latest $CI_REGISTRY/$CI_PROJECT_PATH/play:latest
-    - docker tag blitz2021/game:latest $CI_REGISTRY/$CI_PROJECT_PATH/play:$CI_PIPELINE_ID
-    - docker tag blitz2021/game 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:latest
-    - docker tag blitz2021/game 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:$CI_PIPELINE_ID
+    - docker build -t blitz2021/local -f local.Dockerfile .
+    - docker tag blitz2021/local:latest $CI_REGISTRY/$CI_PROJECT_PATH/play:latest
+    - docker tag blitz2021/local:latest $CI_REGISTRY/$CI_PROJECT_PATH/play:$CI_PIPELINE_ID
     - docker push $CI_REGISTRY/$CI_PROJECT_PATH/play:latest
     - docker push $CI_REGISTRY/$CI_PROJECT_PATH/play:$CI_PIPELINE_ID
+    - docker build -t blitz2021/server -f server.Dockerfile .
+    - docker tag blitz2021/server 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:latest
+    - docker tag blitz2021/server 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:$CI_PIPELINE_ID
     - docker push 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:latest
     - docker push 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:$CI_PIPELINE_ID

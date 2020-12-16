@@ -26,8 +26,10 @@ const args = yargs(process.argv.slice(2))
         's3_bucket': { type: 'string' },
         's3_path': { type: 'string' },
         'keepAlive': { type: 'boolean', default: true },
+        'teamNamesByToken': { type: 'string' },
+        'serveUi': { type: 'boolean', default: true }
     })
-    .env('BLITZ')
+    .env(true)
     .argv;
 
 console.log(args.test);
@@ -40,8 +42,9 @@ console.log(args.test);
             expectedNumberOfColonies: args.nbOfColonies
         });
 
+        const teamNamesByToken = args.teamNamesByToken ? JSON.parse(args.teamNamesByToken) : null;
         const recorder = new Recorder(game, RecorderMode.Command);
-        const server = new Server(8765, game, true);
+        const server = new Server(8765, game, args.serveUi, teamNamesByToken);
 
         await server.listen();
 

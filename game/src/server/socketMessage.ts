@@ -1,10 +1,15 @@
 import { Command, Tick } from "../game/types";
 
-export type SocketMessage = SocketRegisterMessage | SocketCommandMessage | SocketViewerMessage;
+export type SocketMessage = SocketRegisterNameMessage | SocketRegisterTokenMessage | SocketCommandMessage | SocketViewerMessage;
 
-export type SocketRegisterMessage = {
+export type SocketRegisterNameMessage = {
     type: "REGISTER",
     colonyName: string
+}
+
+export type SocketRegisterTokenMessage = {
+    type: "REGISTER",
+    token: string
 }
 
 export type SocketViewerMessage = {

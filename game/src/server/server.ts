@@ -7,12 +7,13 @@ import { SocketedColony } from './socketedColony';
 import { logger } from '../logger';
 import { SocketMessage } from './socketMessage';
 import { SocketedViewer } from './socketedViewer';
+import { SocketRegisteringError } from '../game/error';
 
 export class Server {
     private server: HttpServer;
     private webSocketServer: WebSocket.Server;
 
-    constructor(private port: number = 8765, private game: Game, private serveUi: boolean) {
+    constructor(private port: number = 8765, private game: Game, private serveUi: boolean = true, private teamNamesByToken: { [token: string]: string } = null) {
         if (this.serveUi) {
             let serve = serveStatic('./ui/');
             this.server = createServer(function (req, res) {
@@ -47,17 +48,54 @@ export class Server {
             try {
                 this.webSocketServer = new WebSocket.Server({ server: this.server });
                 this.webSocketServer.on('connection', socket => {
+                    let registerTimeout = setTimeout(() => {
+                        logger.warn(`Client didn't registered in time, closing the connection.`);
+                        socket.close()
+                    }, 5000);
+
+                    socket.on('close', () => {
+                        clearTimeout(registerTimeout);
+                    });
+
                     socket.on('message', (data) => {
-                        const message = JSON.parse(data.toString()) as SocketMessage
+                        try {
+                            const message = JSON.parse(data.toString()) as SocketMessage
 
-                        if (message.type === 'VIEWER') {
-                            const viewer = new SocketedViewer(socket, this.game);
-                            logger.debug(`New Viewer connection for ${viewer}`, socket);
-                        }
+                            if (message.type === 'VIEWER') {
+                                const viewer = new SocketedViewer(socket, this.game);
+                                logger.debug(`New Viewer connection for ${viewer}`, socket);
+                            }
 
-                        if (message.type === 'REGISTER') {
-                            const colony = new SocketedColony(socket, this.game, message.colonyName);
-                            logger.debug(`New socket connection for ${colony}`, socket);
+                            if (message.type === 'REGISTER') {
+                                let colonyName;
+
+                                if ("colonyName" in message) {
+                                    if (this.teamNamesByToken) {
+                                        throw new SocketRegisteringError('You need to register using your secret token');
+                                    }
+
+                                    colonyName = message.colonyName;
+                                } else if (message.token !== null) {
+                                    colonyName = this.teamNamesByToken[message.token];
+                                }
+
+                                if (!colonyName || colonyName === "") {
+                                    throw new SocketRegisteringError(`You need to specify a colony name`);
+                                }
+
+                                const colony = new SocketedColony(socket, this.game, colonyName);
+                                logger.debug(`New socket connection for ${colony}`, socket);
+
+                                clearTimeout(registerTimeout);
+                            }
+                        } catch (ex) {
+                            if (ex instanceof SocketRegisteringError) {
+                                logger.warn(ex.message);
+                            } else {
+                                throw ex;
+                            }
+
+                            socket.close();
                         }
                     });
                 });

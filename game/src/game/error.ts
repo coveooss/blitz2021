@@ -1,7 +1,14 @@
 import { Unit } from "./units/unit";
 import { Colony } from "./colonies/colony";
+import WebSocket from 'ws';
 
 export class FatalError extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}
+
+export class SocketRegisteringError extends Error {
     constructor(message: string) {
         super(message);
     }
