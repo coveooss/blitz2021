@@ -74,6 +74,7 @@ export abstract class Colony {
 
     public applyCommand(command: Command) {
         let alreadyHasBuyCommand = false;
+        let alreadyReceivedCommand: Unit[] = [];
         this.errors = [];
 
         if (command.actions === undefined) {
@@ -93,6 +94,12 @@ export abstract class Colony {
                     if (!unit) {
                         throw new ColonyError(this, `Unit ${action.unitId} doesn't exists!`);
                     }
+
+                    if (alreadyReceivedCommand.includes(unit)) {
+                        throw new ColonyError(this, `Unit ${unit} already received a command!`);
+                    }
+
+                    alreadyReceivedCommand.push(unit);
 
                     if (action.action === "NONE") {
                         return;

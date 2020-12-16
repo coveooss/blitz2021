@@ -41,11 +41,12 @@ export abstract class Unit {
             }
 
             this.path = result.path;
-        }
 
-        if (this.path) {
             this.position = this.path[1];
             this.path.splice(0, 2);
+        } else {
+            this.position = this.path[0];
+            this.path.splice(0, 1);
         }
     }
 

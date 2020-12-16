@@ -151,15 +151,18 @@ export class Game {
 
         this.colonies.forEach((c, i) => {
             c.homeBase = this.map.bases[i].position;
-            c.units.push(new Miner(c, c.homeBase));
+            new Miner(c, c.homeBase);
         });
 
         this._isRunning = true;
 
         for (let tick = 0; tick < this.options.numberOfTicks; tick++) {
-            this._currentTick = tick;
             logger.info(`Playing tick ${tick} of ${this.options.numberOfTicks}`);
+
+            this._currentTick = tick;
             const startingState = this.serialize();
+
+            logger.debug(`Sending Tick ${tick}: ${startingState}`);
 
             const allTickCommandsWaiting = this.colonies.map(async c => {
                 try {
@@ -175,7 +178,10 @@ export class Game {
                     }
 
                     if (command) {
+                        logger.debug(`Command received for ${c}`, command);
+
                         c.applyCommand(command);
+
                         this.notifyCommandApplied();
                     } else {
                         logger.info(`No command was received in time for ${c} on tick ${tick}`);

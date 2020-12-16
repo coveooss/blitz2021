@@ -36,6 +36,29 @@ describe('Unit', () => {
             expect(unit.path).toEqual([{ x: 0, y: 2 }]);
         });
 
+        it('should use the precalculated path towards the target on next move', () => {
+            expect(unit.position).toEqual({ x: 0, y: 0 });
+
+            unit.move({ x: 0, y: 2 });
+
+            expect(unit.position).toEqual({ x: 0, y: 1 });
+            expect(unit.path).toEqual([{ x: 0, y: 2 }]);
+
+            unit.move({ x: 0, y: 2 });
+
+            expect(unit.position).toEqual({ x: 0, y: 2 });
+            expect(unit.path).toEqual([]);
+        });
+
+        it('should move to the target if adjacent node', () => {
+            expect(unit.position).toEqual({ x: 0, y: 0 });
+
+            unit.move({ x: 0, y: 1 });
+
+            expect(unit.position).toEqual({ x: 0, y: 1 });
+            expect(unit.path).toEqual([]);
+        });
+
         it('should stay in place if the target is the current position', () => {
             expect(unit.position).toEqual({ x: 0, y: 0 });
 
@@ -75,7 +98,7 @@ describe('Unit', () => {
 
     describe('mine', () => {
         let mine: Tile;
-        
+
         beforeEach(() => {
             mine = { type: 'MINE', position: { x: 0, y: 1 } };
             map.mines = [mine];
@@ -103,7 +126,7 @@ describe('Unit', () => {
     });
 
     describe('pickup', () => {
-        it.todo('should pick up the blitzium from the target');
+        it.todo('should pick up the blitzium from the target if they are allied');
         it.todo('should throw if target is not adjacent');
         it.todo('should throw if the unit is full');
         it.todo('should only pick up the amount to fill its cargo');

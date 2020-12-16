@@ -1,6 +1,6 @@
 import { Game } from '../src/game/game';
 import { Colony } from '../src/game/colonies/colony';
-import { Command, PlayerTick } from '../src/game/types';
+import { Command, CommandAction, PlayerTick } from '../src/game/types';
 import { Unit } from '../src/game/units/unit';
 import { NoopColony } from '../src/game/colonies/noopColony';
 
@@ -44,6 +44,25 @@ describe('Colony', () => {
     });
 
     describe('apply command', () => {
+        it('shoud throw if more than one command was for a single unit', () => {
+            let targetUnit = units[1];
+            let target = { x: 0, y: 2 };
+            let action: CommandAction = {
+                type: 'UNIT',
+                action: 'MOVE',
+                target: target,
+                unitId: targetUnit.id
+            }
+
+            targetUnit.move = jest.fn();
+
+            expect(() => myColony.applyCommand({
+                actions: [action, action]
+            })).toThrowError();
+            
+            expect(targetUnit.move).toHaveBeenCalledTimes(1);
+            expect(targetUnit.move).toHaveBeenCalledWith(target);
+        });
         it('should throw if the unit id is not found', () => {
             expect(() => {
                 myColony.applyCommand({
@@ -131,7 +150,7 @@ describe('Colony', () => {
                         target: target,
                         unitId: targetUnit.id
                     }
-                ] 
+                ]
             });
 
             expect(targetUnit.mine).toHaveBeenCalledWith(target);
