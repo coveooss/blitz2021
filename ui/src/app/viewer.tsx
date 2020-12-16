@@ -12,7 +12,7 @@ const Viewer: React.FC = () => {
     const {width, height} = useWindowSize();
 
     function start() {
-        const ws = new WebSocket('ws://' + window.location.hostname + ':3000');
+        const ws = new WebSocket('ws://' + window.location.hostname + ':8765');
 
         ws.onopen = () => {
             ws.send(JSON.stringify({type: 'VIEWER'}));

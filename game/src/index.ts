@@ -41,7 +41,7 @@ console.log(args.test);
         });
 
         const recorder = new Recorder(game, RecorderMode.Command);
-        const server = new Server(3000, game, true);
+        const server = new Server(8765, game, true);
 
         await server.listen();
 

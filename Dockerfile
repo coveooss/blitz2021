@@ -7,6 +7,6 @@ COPY ./ui/dist/ ./ui
 
 RUN yarn install --production
 
-EXPOSE 3000
+EXPOSE 8765
 
 ENTRYPOINT [ "/usr/local/bin/node", "index.js" ]

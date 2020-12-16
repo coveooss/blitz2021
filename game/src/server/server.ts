@@ -12,7 +12,7 @@ export class Server {
     private server: HttpServer;
     private webSocketServer: WebSocket.Server;
 
-    constructor(private port: number = 3000, private game: Game, private serveUi: boolean) {
+    constructor(private port: number = 8765, private game: Game, private serveUi: boolean) {
         if (this.serveUi) {
             let serve = serveStatic('./ui/');
             this.server = createServer(function (req, res) {

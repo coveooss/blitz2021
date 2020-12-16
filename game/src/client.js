@@ -1,5 +1,5 @@
 const WebSocket = require('ws');
-const SOCKET_ADDR = "ws://localhost:3000";
+const SOCKET_ADDR = "ws://localhost:8765";
 
 const startClient = () => {
     try {
