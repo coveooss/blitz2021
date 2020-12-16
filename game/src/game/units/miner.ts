@@ -8,6 +8,8 @@ import { UNIT } from "../config";
 export class Miner extends Unit {
     constructor(colony: Colony, position: Position) {
         super(colony, position, "MINER");
+
+        this.maxBlitzium = UNIT.MAX_MINER_CARGO;
     }
 
     public move(target: Position) {
