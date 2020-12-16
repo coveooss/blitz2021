@@ -11,13 +11,9 @@ const Viewer: React.FC = () => {
     const [currentTick, setCurrentTick] = React.useState<Tick | null>(null);
     const {width, height} = useWindowSize();
 
-    const retry = () => window.setTimeout(start, 1000);
-
     function start() {
         const ws = new WebSocket('ws://' + window.location.hostname + ':3000');
 
-        ws.onerror = retry;
-        ws.onclose = retry;
         ws.onopen = () => {
             ws.send(JSON.stringify({type: 'VIEWER'}));
         };
