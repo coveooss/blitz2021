@@ -157,7 +157,6 @@ export abstract class Colony {
     }
 
     public serialize(): TickColony {
-        console.log(this.totalBlitzium)
         return {
             id: this.id,
             name: this.name,
