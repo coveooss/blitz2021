@@ -49,15 +49,15 @@ const args = yargs(process.argv.slice(2))
         await server.listen();
 
         logger.info('Game finished, saving state');
-        
+
         if (args.recordPath) {
             logger.info(`Saving state file to ${args.recordPath}`);
-            Recorder.saveToFile(args.recordPath, recorder.buffer);
+            recorder.saveToFile(args.recordPath);
         }
 
         if (args.s3Bucket && args.s3Path) {
             logger.info(`Saving state file to S3 ${args.s3Bucket}/${args.s3Path}`);
-            Recorder.saveToS3(args.s3Bucket, args.s3Path, recorder.buffer);
+            recorder.saveToS3(args.s3Bucket, args.s3Path);
         }
     } while (args.keepAlive);
 })();

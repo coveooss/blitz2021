@@ -21,7 +21,7 @@ describe("Recorder", () => {
             myFirstColony.getNextCommand = jest.fn(() => Promise.resolve({}));
             mySecondColony.getNextCommand = jest.fn(() => Promise.resolve({}));
 
-           setImmediate(() => resolve());
+            setImmediate(() => resolve());
         });
     };
 
@@ -90,23 +90,29 @@ describe("Recorder", () => {
     });
 
     describe('saveToFile', () => {
+        let recorder: Recorder;
+
+        beforeEach(() => {
+            recorder = new Recorder(new Game(), RecorderMode.Command);
+        });
+
         it('should save an object to a file', () => {
-            Recorder.saveToFile('path/to/file', {});
+            recorder.saveToFile('path/to/file');
 
             expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
         });
 
         it('should save on the expected path', () => {
-            Recorder.saveToFile('path/to/file', {});
+            recorder.saveToFile('path/to/file');
 
-            expect(fs.writeFileSync).toHaveBeenCalledWith('path/to/file', "{}");
+            expect(fs.writeFileSync).toHaveBeenCalledWith('path/to/file', "[]");
         });
 
         it('should stringify the object', () => {
-            const object = {"a": "b", "c": [null, true, false]};
-            Recorder.saveToFile('path/to/file', object);
+            recorder.buffer = [{ colonies: [], map: { tiles: [[]], depots: [] }, tick: 0, totalTick: 10 }];
+            recorder.saveToFile('path/to/file');
 
-            expect(fs.writeFileSync).toHaveBeenCalledWith('path/to/file', JSON.stringify(object, null, 2));
+            expect(fs.writeFileSync).toHaveBeenCalledWith('path/to/file', JSON.stringify(recorder.buffer, null, 2));
         });
     });
 });

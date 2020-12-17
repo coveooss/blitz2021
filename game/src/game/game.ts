@@ -18,6 +18,12 @@ export interface GameOptions {
     expectedNumberOfColonies: number
 }
 
+export interface GameResult {
+    teamName: string,
+    rank: number,
+    score: number
+}
+
 export class Game {
     public static readonly DEFAULT_GAME_OPTIONS: GameOptions = {
         map: null,
@@ -29,7 +35,7 @@ export class Game {
 
     public map: GameMap;
 
-    private callbackOnGameCompleted: ((err?: Error) => any)[] = [];
+    private callbackOnGameCompleted: ((gameResults: GameResult[], err?: Error) => any)[] = [];
     private callbackOnTick: (() => any)[] = [];
     private callbackOnCommand: (() => any)[] = [];
     private _isRunning = false;
@@ -55,7 +61,7 @@ export class Game {
             this.maxWaitTimeInterval = setTimeout(() => {
                 if (!this.isRunning && !this.isCompleted) {
                     if (this.colonies.length === 0) {
-                        this.notifyGameCompleted(new Error(`Max wait time for the game to start of ${this.options.maxWaitTimeMsBeforeStartingGame} ms exceeded but no colonies were registered.`));
+                        this.notifyGameCompleted([], new Error(`Max wait time for the game to start of ${this.options.maxWaitTimeMsBeforeStartingGame} ms exceeded but no colonies were registered.`));
                     } else {
                         logger.info(`Starting the game automaticly after waiting for ${this.options.maxWaitTimeMsBeforeStartingGame} ms with ${this.colonies.length} colonies.`);
 
@@ -97,8 +103,8 @@ export class Game {
         this.viewers.splice(this.viewers.indexOf(v), 1);
     }
 
-    private notifyGameCompleted(err?: Error) {
-        this.callbackOnGameCompleted.forEach(cb => cb(err));
+    private notifyGameCompleted(gameResults: GameResult[], err?: Error) {
+        this.callbackOnGameCompleted.forEach(cb => cb(gameResults, err));
     }
 
     private notifyCommandApplied() {
@@ -121,7 +127,7 @@ export class Game {
         return this.colonies.flatMap(c => c.getUnitAtPosition(position)).filter(c => c !== undefined)[0];
     }
 
-    public onGameCompleted(cb: (err?: Error) => any) {
+    public onGameCompleted(cb: (gameResults: GameResult[], err?: Error) => any) {
         this.callbackOnGameCompleted.push(cb);
     }
 
@@ -203,7 +209,7 @@ export class Game {
                 logger.error(`An unhandled error occured`, ex);
 
                 this._isRunning = false;
-                this.notifyGameCompleted(ex);
+                this.notifyGameCompleted([], ex);
 
                 throw ex;
             }
@@ -219,7 +225,14 @@ export class Game {
         this._isCompleted = true;
         this._isRunning = false;
 
-        this.notifyGameCompleted();
+        this.notifyGameCompleted(
+            this.colonies
+                .sort((a, b) => a.blitzium - b.blitzium)
+                .map((c, i) => ({
+                    rank: i + 1,
+                    teamName: c.name,
+                    score: c.blitzium
+                })));
     };
 
     public serialize(): Tick {
