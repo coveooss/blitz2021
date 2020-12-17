@@ -1,3 +1,4 @@
+import { Game } from '../src/game/game';
 import { GameMap } from '../src/game/map';
 import { TileType } from '../src/game/types';
 
@@ -46,13 +47,13 @@ describe("Map", () => {
     it('should compute a path correctly', () => {
         const gameMap = GameMap.fromArray(SIMPLE_MAP);
 
-        let result = gameMap.computePath({ x: 0, y: 0 }, { x: 4, y: 4 });
+        let result = gameMap.computePath({ x: 0, y: 0 }, { x: 4, y: 4 }, new Game());
         expect(result.path).toEqual(SIMPLE_MAP_PATH_FROM_0_0_TO_5_4);
         expect(result.cost).toBe(SIMPLE_MAP_PATH_FROM_0_0_TO_5_4.length - 1);
         expect(result.status).toBe("success");
 
 
-        result = gameMap.computePath({ x: 0, y: 4 }, { x: 0, y: 0 });
+        result = gameMap.computePath({ x: 0, y: 4 }, { x: 0, y: 0 }, new Game());
         expect(result.path).toEqual(SIMPLE_MAP_PATH_FROM_0_4_TO_0_0);
         expect(result.cost).toBe(SIMPLE_MAP_PATH_FROM_0_4_TO_0_0.length - 1);
         expect(result.status).toBe("success");

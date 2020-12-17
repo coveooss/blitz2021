@@ -83,6 +83,10 @@ export abstract class Colony {
 
         command.actions?.forEach(action => {
             try {
+                if (!action) {
+                    throw new ColonyError(this, `Invalid action was sent ${JSON.stringify(action)}`);
+                }
+
                 if (action.type === "BUY") {
                     if (alreadyHasBuyCommand) {
                         throw new ColonyError(this, `Buy action already processed`);

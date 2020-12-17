@@ -1,9 +1,10 @@
-import { Position, hash, distanceBetween } from './position'
+import { Position, hash, distanceBetween, equal } from './position'
 
 import bmp from 'bmp-js'
 import aStar from 'a-star';
 import fs from 'fs';
 import { TickMap, TileType } from './types';
+import { Game } from './game';
 
 export interface Tile {
     type: TileType,
@@ -112,18 +113,20 @@ export class GameMap {
     }
 
     public getWalkableNeighbors(from: Position) {
-        return this.getNeighbors(from).filter(tile => tile.type === 'EMPTY');
+        return this.getNeighbors(from)
+            .filter(tile => tile.type === 'EMPTY');
     }
 
     public isInBound(from: Position) {
         return from.x >= 0 && from.y >= 0 && from.x < this.height && from.y < this.width;
     }
 
-    public computePath(from: Position, to: Position): Path {
+    public computePath(from: Position, to: Position, game: Game): Path {
+        const units = game.colonies.flatMap(c => c.units.map(u => u.position));
         return aStar<Position>({
             start: from,
             isEnd: (node) => hash(node) === hash(to),
-            neighbor: (node) => this.getWalkableNeighbors(node).map(tile => tile.position),
+            neighbor: (node) => this.getWalkableNeighbors(node).map(tile => tile.position).filter(p => !units.some(other => equal(p, other))),
             distance: distanceBetween,
             hash: hash,
             heuristic: (node) => 1

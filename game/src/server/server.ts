@@ -7,7 +7,7 @@ import { SocketedColony } from './socketedColony';
 import { logger } from '../logger';
 import { SocketMessage } from './socketMessage';
 import { SocketedViewer } from './socketedViewer';
-import { SocketRegisteringError } from '../game/error';
+import { ColonyError, SocketRegisteringError } from '../game/error';
 
 export class Server {
     private server: HttpServer;
@@ -93,7 +93,7 @@ export class Server {
                                 clearTimeout(registerTimeout);
                             }
                         } catch (ex) {
-                            if (ex instanceof SocketRegisteringError || ex instanceof SyntaxError) {
+                            if (ex instanceof SocketRegisteringError || ex instanceof SyntaxError || ex instanceof ColonyError) {
                                 logger.warn(ex.message);
                             } else {
                                 throw ex;

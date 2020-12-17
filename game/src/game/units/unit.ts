@@ -33,21 +33,16 @@ export abstract class Unit {
             return;
         }
 
-        if (this.path.length === 0 || !equal(target, this.path[this.path.length - 1])) {
-            const map = this.colony.game.map;
-            const result = map.computePath(this.position, target);
-            if (result.status === "noPath" || result.status === "timeout") {
-                throw new UnitError(this, `No path to ${toString(target)}`);
-            }
 
-            this.path = result.path;
-
-            this.position = this.path[1];
-            this.path.splice(0, 2);
-        } else {
-            this.position = this.path[0];
-            this.path.splice(0, 1);
+        const map = this.colony.game.map;
+        const result = map.computePath(this.position, target, this.colony.game);
+        if (result.status === "noPath" || result.status === "timeout") {
+            throw new UnitError(this, `No path to ${toString(target)}`);
         }
+
+        this.path = result.path;
+        this.position = this.path[1];
+        this.path = this.path.slice(2);
     }
 
     public attack(target: Position) {

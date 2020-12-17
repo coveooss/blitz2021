@@ -8,8 +8,9 @@ const startClient = () => {
         client.on('open', () => {
             let isRegistered = false;
             let colonyId = null;
+            let randomBlitzium = 1 + Math.round(Math.random() * 3);
 
-            client.send(JSON.stringify({ type: "REGISTER", colonyName: "TestClient" }));
+            client.send(JSON.stringify({ type: "REGISTER", colonyName: "123" }));
 
             client.on('message', (data) => {
                 const message = JSON.parse(data.toString());
@@ -37,39 +38,46 @@ const startClient = () => {
                                     depotPoint = { x, y: y - 1 };
                                 }
                             })
-                        })
+                        });
+
+                        myColony.errors.forEach(c => console.log(c));
+
 
                         const actions = myColony.units.map(u => {
+                            console.log(JSON.stringify([u.blitzium, randomBlitzium]))
+
                             if (u.blitzium > 0 && u.position.x === homeBasePoint.x && u.position.y === homeBasePoint.y) {
                                 console.log('DROPING');
                                 return { type: 'UNIT', action: 'DROP', unitId: u.id, target: myColony.homeBase }
                             }
 
-                            if (u.blitzium === 4 && (u.position.x !== homeBasePoint.x || u.position.y !== homeBasePoint.y)) {
-                                console.log('GOING TO HOME');
-                                return { type: 'UNIT', action: 'MOVE', unitId: u.id, target: myColony.homeBase }
+                            if (u.blitzium == randomBlitzium && !(u.position.x == homeBasePoint.x && u.position.y == homeBasePoint.y)) {
+                                console.log('GOING TO HOME ' + JSON.stringify(homeBasePoint));
+                                return { type: 'UNIT', action: 'MOVE', unitId: u.id, target: homeBasePoint }
                             }
 
                             if (u.blitzium === 0 && (u.position.x !== depotPoint.x || u.position.y !== depotPoint.y)) {
                                 console.log('GOING TO DEPOT');
-                                return { type: 'UNIT', action: 'MOVE', unitId: u.id, target: depot }
+                                return { type: 'UNIT', action: 'MOVE', unitId: u.id, target: depotPoint }
                             }
 
-                            if (u.blitzium < 4 && u.position.x === depotPoint.x && u.position.y === depotPoint.y) {
+                            if (u.blitzium <= randomBlitzium && u.position.x === depotPoint.x && u.position.y === depotPoint.y) {
                                 console.log('MINING');
                                 return { type: 'UNIT', action: 'MINE', unitId: u.id, target: { ...depot, y: depot.y } }
                             }
+
+                            return { type: 'UNIT', action: 'NONE' };
                         });
 
                         setTimeout(() => {
                             client.send(JSON.stringify({ type: "COMMAND", tick: message.tick, actions }));
-                        }, 100);
+                        }, 1);
                     }
                 }
             });
 
             client.on('close', () => {
-                startClient();
+                setTimeout(startClient, 1000);
             });
         });
     } catch {
