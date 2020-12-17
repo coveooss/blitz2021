@@ -20,7 +20,7 @@ export class Recorder {
         const params = {
             Bucket: bucket,
             Key: `${path}/gameResults.json`,
-            Body: object
+            Body: JSON.stringify(object)
         };
 
         s3.upload(params, function (err: any, data: any) {

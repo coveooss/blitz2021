@@ -2,6 +2,7 @@ import { Server } from './server/server'
 import { Game } from './game/game';
 import { Recorder, RecorderMode } from './recorder/recorder';
 import yargs from 'yargs';
+import { logger } from './logger';
 
 const splash = ` ______   _       __________________ _______      _______  _______  _______  __   
 (  ___ \\ ( \\      \\__   __/\\__   __// ___   )    / ___   )(  __   )/ ___   )/  \\  
@@ -20,11 +21,11 @@ const args = yargs(process.argv.slice(2))
     .options({
         'timePerTickMs': { type: 'number', default: 1000 },
         'nbOfTicks': { type: 'number', default: 1000 },
-        'gameStartTimoutMs': { type: 'number', default: 500000 },
+        'gameStartTimeoutMs': { type: 'number', default: 500000 },
         'nbOfColonies': { type: 'number', default: 1 },
         'recordPath': { type: 'string' },
-        's3_bucket': { type: 'string' },
-        's3_path': { type: 'string' },
+        's3Bucket': { type: 'string' },
+        's3Path': { type: 'string' },
         'keepAlive': { type: 'boolean', default: true },
         'teamNamesByToken': { type: 'string' },
         'serveUi': { type: 'boolean', default: true }
@@ -32,13 +33,12 @@ const args = yargs(process.argv.slice(2))
     .env(true)
     .argv;
 
-console.log(args.test);
 (async () => {
     do {
         const game = new Game({
             timeMsAllowedPerTicks: args.timePerTickMs,
             numberOfTicks: args.nbOfTicks,
-            maxWaitTimeMsBeforeStartingGame: args.gameStartTimoutMs,
+            maxWaitTimeMsBeforeStartingGame: args.gameStartTimeoutMs,
             expectedNumberOfColonies: args.nbOfColonies
         });
 
@@ -48,12 +48,16 @@ console.log(args.test);
 
         await server.listen();
 
+        logger.info('Game finished, saving state');
+        
         if (args.recordPath) {
+            logger.info(`Saving state file to ${args.recordPath}`);
             Recorder.saveToFile(args.recordPath, recorder.buffer);
         }
 
-        if (args.s3_bucket && args.s3_path) {
-            Recorder.saveToS3(args.s3_bucket, args.s3_path, recorder.buffer);
+        if (args.s3Bucket && args.s3Path) {
+            logger.info(`Saving state file to S3 ${args.s3Bucket}/${args.s3Path}`);
+            Recorder.saveToS3(args.s3Bucket, args.s3Path, recorder.buffer);
         }
     } while (args.keepAlive);
 })();
