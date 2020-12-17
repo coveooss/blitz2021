@@ -40,6 +40,7 @@ public class GameCommand
             this.type = ActionType.UNIT;
             this.unitId = unitId;
             this.target = target;
+            this.action = action;
         }
     }
 
