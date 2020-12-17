@@ -19,7 +19,7 @@ export class Recorder {
 
         let params = {
             Bucket: bucket,
-            Key: `${path}/gameResults.json`,
+            Key: `${path}gameResults.json`,
             Body: JSON.stringify(this.gameResults)
         };
 
@@ -33,7 +33,7 @@ export class Recorder {
 
         params = {
             Bucket: bucket,
-            Key: `${path}/replay.json`,
+            Key: `${path}replay.json`,
             Body: JSON.stringify(this.buffer)
         };
 
