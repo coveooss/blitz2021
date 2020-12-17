@@ -1,5 +1,6 @@
 import fs from 'fs';
 import AWS from 'aws-sdk';
+import zlib from 'zlib';
 import { Game, GameResult } from '../game/game';
 import { logger } from '../logger';
 import { Tick } from '../game/types';
@@ -31,19 +32,26 @@ export class Recorder {
             logger.info(`Game results uploaded successfully. ${data.Location}`);
         });
 
-        params = {
-            Bucket: bucket,
-            Key: `${path}replay.json`,
-            Body: JSON.stringify(this.buffer)
-        };
-
-        s3.upload(params, function (err: any, data: any) {
+        zlib.gzip(Buffer.from(JSON.stringify(this.buffer), 'utf-8'), (err, result) => {
             if (err) {
-                throw err;
+                logger.error(err);
             }
 
-            logger.info(`Replay uploaded successfully. ${data.Location}`);
+            params = {
+                Bucket: bucket,
+                Key: `${path}replay.gz`,
+                Body: result.toString()
+            };
+
+            s3.upload(params, function (err: any, data: any) {
+                if (err) {
+                    logger.error(err);
+                }
+
+                logger.info(`Replay uploaded successfully. ${data.Location}`);
+            });
         });
+
     }
 
     public buffer: Tick[] = [];
