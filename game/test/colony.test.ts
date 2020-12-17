@@ -59,7 +59,7 @@ describe('Colony', () => {
             expect(() => myColony.applyCommand({
                 actions: [action, action]
             })).toThrowError();
-            
+
             expect(targetUnit.move).toHaveBeenCalledTimes(1);
             expect(targetUnit.move).toHaveBeenCalledWith(target);
         });
@@ -170,6 +170,7 @@ describe('Colony', () => {
                 spawnPoint: { x: 12, y: 24 },
                 blitzium: 0,
                 units: [],
+                totalBlitzium: 0
             });
         });
 

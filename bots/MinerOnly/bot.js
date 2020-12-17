@@ -10,7 +10,13 @@ const startClient = () => {
             let colonyId = null;
             let randomBlitzium = 1 + Math.round(Math.random() * 3);
 
-            client.send(JSON.stringify({ type: "REGISTER", colonyName: "123" }));
+            const token = process.env.TOKEN;
+
+            if (token) {
+                client.send(JSON.stringify({ type: "REGISTER", token: token }));
+            } else {
+                client.send(JSON.stringify({ type: "REGISTER", colonyName: "MinerSquared" }));
+            }
 
             client.on('message', (data) => {
                 const message = JSON.parse(data.toString());
@@ -36,13 +42,10 @@ const startClient = () => {
                             })
                         });
 
- 
+
                         myColony.errors.forEach(c => console.log(c));
 
-
                         const actions = myColony.units.map(u => {
-                            console.log(JSON.stringify([u.blitzium, randomBlitzium]))
-
                             if (u.blitzium > 0 && u.position.x === homeBasePoint.x && u.position.y === homeBasePoint.y) {
                                 console.log('DROPING');
                                 return { type: 'UNIT', action: 'DROP', unitId: u.id, target: myColony.homeBase }
