@@ -13,8 +13,8 @@ import codes.blitz.game.message.game.GameMessage;
 public class MessageDecoder implements Decoder.Text<GameMessage>
 {
 
-    private static Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                                                .create();
+//    private static Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+    private static Gson gson = new GsonBuilder().create();
 
     @Override
     public GameMessage decode(String message) throws DecodeException

@@ -3,29 +3,21 @@
  */
 package codes.blitz.game.message.game;
 
-public enum TileType
-{
-    EMPTY, ASTEROIDS, CONQUERED, BLITZIUM, PLANET, CONQUERED_PLANET, BLACK_HOLE;
+public enum TileType {
+    EMPTY, WALL, BASE, MINE;
 
-    public static TileType getTileTypeFromString(String rawTile)
-    {
+    //Probably easier to use the java stuff directly
+    public static TileType getTileTypeFromString(String rawTile) {
         switch (rawTile) {
-            case " ":
-                return EMPTY;
-            case "W":
-                return ASTEROIDS;
-            case "%":
-                return PLANET;
-            case "$":
-                return BLITZIUM;
-            case "!":
-                return BLACK_HOLE;
+            case "EMTPY":
+                return TileType.EMPTY;
+            case "WALL":
+                return TileType.WALL;
+            case "MINE":
+                return TileType.MINE;
+            case "BASE":
+                return TileType.BASE;
             default:
-                if (rawTile.startsWith("C-")) {
-                    return CONQUERED;
-                } else if (rawTile.startsWith("%-")) {
-                    return CONQUERED_PLANET;
-                }
                 throw new IllegalArgumentException(String.format("'%s' is not a valid tile", rawTile));
         }
     }

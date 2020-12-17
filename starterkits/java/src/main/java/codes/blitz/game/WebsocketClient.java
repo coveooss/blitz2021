@@ -38,7 +38,7 @@ public class WebsocketClient
             String token = System.getenv("TOKEN");
             message.setToken(token);
         } else {
-            message.setName("MyBot");
+            message.setColonyName("MyBot");
         }
 
         session.getBasicRemote().sendObject(message);
@@ -49,12 +49,12 @@ public class WebsocketClient
             throws IOException,
                 EncodeException
     {
-        System.out.println("\nTurn " + receivedMessage.getGame().getTick());
+        System.out.println("\nTurn " + receivedMessage.getTick());
         // Send back a move
         BotMessage botMessage = new BotMessage();
-        botMessage.setType(MessageType.MOVE);
-        botMessage.setTick(receivedMessage.getGame().getTick());
-        botMessage.setAction(bot.getNextMove(receivedMessage));
+        botMessage.setType(MessageType.COMMAND);
+        botMessage.setTick(receivedMessage.getTick());
+        botMessage.setActions(bot.getNextActions(receivedMessage));
 
         session.getBasicRemote().sendObject(botMessage);
 

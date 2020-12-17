@@ -1,12 +1,15 @@
 package codes.blitz.game.message.bot;
 
 import codes.blitz.game.message.MessageType;
+import codes.blitz.game.message.game.Action;
+
+import java.util.List;
 
 public class BotMessage
 {
     private MessageType type;
-    private Move action;
-    private String name;
+    private List<Action> actions;
+    private String colonyName;
     private String token;
     private Integer tick;
 
@@ -31,24 +34,24 @@ public class BotMessage
         this.type = type;
     }
 
-    public Move getAction()
+    public List<Action> getActions()
     {
-        return action;
+        return actions;
     }
 
-    public void setAction(Move action)
+    public void setActions(List<Action> action)
     {
-        this.action = action;
+        this.actions = action;
     }
 
-    public String getName()
+    public String getColonyName()
     {
-        return name;
+        return colonyName;
     }
 
-    public void setName(String name)
+    public void setColonyName(String colonyName)
     {
-        this.name = name;
+        this.colonyName = colonyName;
     }
 
     public String getToken()
@@ -66,8 +69,8 @@ public class BotMessage
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((action == null) ? 0 : action.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((actions == null) ? 0 : actions.hashCode());
+        result = prime * result + ((colonyName == null) ? 0 : colonyName.hashCode());
         result = prime * result + ((token == null) ? 0 : token.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
@@ -86,14 +89,14 @@ public class BotMessage
             return false;
         }
         BotMessage other = (BotMessage) obj;
-        if (action != other.action) {
+        if (actions != other.actions) {
             return false;
         }
-        if (name == null) {
-            if (other.name != null) {
+        if (colonyName == null) {
+            if (other.colonyName != null) {
                 return false;
             }
-        } else if (!name.equals(other.name)) {
+        } else if (!colonyName.equals(other.colonyName)) {
             return false;
         }
         if (token == null) {
@@ -112,6 +115,6 @@ public class BotMessage
     @Override
     public String toString()
     {
-        return "BotMessage [type=" + type + ", action=" + action + ", name=" + name + ", token=" + token + "]";
+        return "BotMessage [type=" + type + ", action=" + actions + ", name=" + colonyName + ", token=" + token + "]";
     }
 }
