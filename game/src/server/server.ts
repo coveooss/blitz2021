@@ -24,16 +24,20 @@ export class Server {
             this.server = createServer();
         }
 
-        this.game.onGameCompleted((err) => {
+        this.game.onGameCompleted((gameResults, err) => {
+            gameResults.forEach(r => logger.info(`Team ${r.teamName} finished #${r.rank} with ${r.score} blitzium!`));
+
             if (err) {
                 logger.error(`An error occured while playing the game.`, err);
             }
+
+            this.webSocketServer.clients.forEach(c => c.close());
 
             this.webSocketServer.close((err) => {
                 if (err) {
                     logger.error(`An error occured while closing the websocket. ${err}`, err);
                 }
-            })
+            });
 
             this.server.close((err) => {
                 if (err) {
@@ -89,7 +93,7 @@ export class Server {
                                 clearTimeout(registerTimeout);
                             }
                         } catch (ex) {
-                            if (ex instanceof SocketRegisteringError) {
+                            if (ex instanceof SocketRegisteringError || ex instanceof SyntaxError) {
                                 logger.warn(ex.message);
                             } else {
                                 throw ex;
