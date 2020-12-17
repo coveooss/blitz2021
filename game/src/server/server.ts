@@ -68,6 +68,8 @@ export class Server {
                             if (message.type === 'VIEWER') {
                                 const viewer = new SocketedViewer(socket, this.game);
                                 logger.debug(`New Viewer connection for ${viewer}`, socket);
+
+                                clearTimeout(registerTimeout);
                             }
 
                             if (message.type === 'REGISTER') {
