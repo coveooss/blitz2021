@@ -1,6 +1,6 @@
 import { Depot } from "./map";
 
-export type UnitType = 'MINER' | 'CART' | 'COWBOY';
+export type UnitType = 'MINER' | 'CART' | 'OUTLAW';
 export type TileType = "EMPTY" | "WALL" | "BASE" | "MINE";
 
 export type Position = { x: number, y: number }

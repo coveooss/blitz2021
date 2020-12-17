@@ -2,7 +2,7 @@ import { UNIT } from '../config';
 import { ColonyError, UnitError } from '../error';
 import { Command, PlayerTick, TickColony, UnitType } from '../types';
 import { Cart } from '../units/cart';
-import { Cowboy } from '../units/cowboy';
+import { Outlaw } from '../units/outlaw';
 import { Miner } from '../units/miner';
 import { Unit } from '../units/unit';
 import { v4 as uuid } from 'uuid';
@@ -54,11 +54,11 @@ export abstract class Colony {
                 break;
             }
             case "CART": {
-                if (this.blitzium < UNIT.COWBOY_COST) {
-                    throw new ColonyError(this, `Unit ${type} is too expensive ${UNIT.COWBOY_COST}`);
+                if (this.blitzium < UNIT.OUTLAW_COST) {
+                    throw new ColonyError(this, `Unit ${type} is too expensive ${UNIT.OUTLAW_COST}`);
                 }
 
-                this.units.push(new Cowboy(this, this.spawnPoint));
+                this.units.push(new Outlaw(this, this.spawnPoint));
                 break;
             }
         }

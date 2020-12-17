@@ -4,7 +4,7 @@ import {Rect} from 'react-konva';
 import {GAP_RATIO, Size} from '../../constants';
 import {UnitProps} from './unitProps';
 
-const Cowboy: React.FunctionComponent<UnitProps> = ({position, color}) => {
+const Outlaw: React.FunctionComponent<UnitProps> = ({position, color}) => {
     const {x, y} = position;
     return (
         <Rect
@@ -21,4 +21,4 @@ const Cowboy: React.FunctionComponent<UnitProps> = ({position, color}) => {
         />
     );
 };
-export default Cowboy;
+export default Outlaw;

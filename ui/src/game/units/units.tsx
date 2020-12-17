@@ -4,7 +4,7 @@ import {TickColonyUnit, TickColony} from 'blitz2021/dist/game/types';
 
 import {colors, Size, VisualizationContext} from '../../constants';
 import Cart from './cart';
-import Cowboy from './cowboy';
+import Outlaw from './outlaw';
 import Miner from './miner';
 import {UnitProps} from './unitProps';
 
@@ -20,8 +20,8 @@ const Units: React.FunctionComponent = () => {
             };
             if (unit.type === 'CART') {
                 return <Cart {...defaultProps} />;
-            } else if (unit.type === "COWBOY") {
-                return <Cowboy {...defaultProps} />;
+            } else if (unit.type === "OUTLAW") {
+                return <Outlaw {...defaultProps} />;
             } else if (unit.type === "MINER") {
                 return <Miner {...defaultProps} />;
             }

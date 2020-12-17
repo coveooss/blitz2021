@@ -17,7 +17,7 @@ public class Unit
 {
     public enum UnitType
     {
-        MINER, CART, COWBOY
+        MINER, CART, OUTLAW
     }
 
     public string id;
