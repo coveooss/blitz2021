@@ -24,6 +24,7 @@ export abstract class Colony {
 
     constructor(public game: Game, public name: string) {
         this.blitzium = 0;
+        this.totalBlitzium = 0;
         this.units = [];
         this.id = uuid();
 
@@ -42,7 +43,8 @@ export abstract class Colony {
                     throw new ColonyError(this, `Unit ${type} is too expensive ${UNIT.MINER_COST}`);
                 }
 
-                this.units.push(new Miner(this, this.spawnPoint));
+                this.blitzium = this.blitzium - UNIT.MINER_COST;
+                new Miner(this, this.spawnPoint);
                 break;
             }
             case "CART": {
@@ -50,7 +52,8 @@ export abstract class Colony {
                     throw new ColonyError(this, `Unit ${type} is too expensive ${UNIT.CART_COST}`);
                 }
 
-                this.units.push(new Cart(this, this.spawnPoint));
+                this.blitzium = this.blitzium - UNIT.CART_COST;
+                new Cart(this, this.spawnPoint);
                 break;
             }
             case "CART": {
@@ -58,7 +61,8 @@ export abstract class Colony {
                     throw new ColonyError(this, `Unit ${type} is too expensive ${UNIT.OUTLAW_COST}`);
                 }
 
-                this.units.push(new Outlaw(this, this.spawnPoint));
+                this.blitzium = this.blitzium - UNIT.OUTLAW_COST;
+                new Outlaw(this, this.spawnPoint);
                 break;
             }
         }
@@ -153,6 +157,7 @@ export abstract class Colony {
     }
 
     public serialize(): TickColony {
+        console.log(this.totalBlitzium)
         return {
             id: this.id,
             name: this.name,
@@ -160,6 +165,7 @@ export abstract class Colony {
             homeBase: this.homeBase,
             spawnPoint: this.spawnPoint,
             blitzium: this.blitzium,
+            totalBlitzium: this.totalBlitzium,
             units: this.units.map(u => u.serialize())
         }
     }

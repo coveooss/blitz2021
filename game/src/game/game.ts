@@ -158,6 +158,7 @@ export class Game {
 
         this.colonies.forEach((c, i) => {
             c.homeBase = this.map.bases[i].position;
+            c.spawnPoint = c.homeBase;
             c.blitzium = COLONY.START_BALANCE;
             new Miner(c, c.homeBase);
         });
@@ -231,7 +232,7 @@ export class Game {
                 .map((c, i) => ({
                     rank: i + 1,
                     teamName: c.name,
-                    score: c.blitzium
+                    score: c.totalBlitzium
                 })));
     };
 

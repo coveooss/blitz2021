@@ -11,6 +11,7 @@ export interface TickColony {
     homeBase: Position;
     spawnPoint: Position;
     blitzium: number;
+    totalBlitzium: number;
     units: TickColonyUnit[];
     errors: string[];
 }

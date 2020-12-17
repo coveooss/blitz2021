@@ -21,10 +21,6 @@ const startClient = () => {
                         const colonyId = message.colonyId;
                         const myColony = message.colonies.find(c => c.id === colonyId);
 
-                        const randomPosition = () => {
-                            return { x: Math.round(Math.random() * 50), y: Math.round(Math.random() * 50) }
-                        }
-
                         let depot = null;
                         let depotPoint = null;
 
@@ -40,6 +36,7 @@ const startClient = () => {
                             })
                         });
 
+ 
                         myColony.errors.forEach(c => console.log(c));
 
 
@@ -69,9 +66,13 @@ const startClient = () => {
                             return { type: 'UNIT', action: 'NONE' };
                         });
 
+                        if (myColony.blitzium >= 25) {
+                            actions.push({ type: 'BUY', unitType: 'MINER' });
+                        }
+
                         setTimeout(() => {
                             client.send(JSON.stringify({ type: "COMMAND", tick: message.tick, actions }));
-                        }, 1);
+                        }, 100);
                     }
                 }
             });
