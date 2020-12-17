@@ -23,7 +23,7 @@ public class Map
 
     public class Depot
     {
-        public Position position1;
+        public Position position;
         public int blitzium;
     }
 
