@@ -199,6 +199,8 @@ describe('Unit', () => {
             expect(myColony.blitzium).toBe(50);
             expect(myColony.totalBlitzium).toBe(50);
         });
+
+        it.todo('should not drop on a wall or mine or home base');
     });
 
     describe('serialize', () => {
