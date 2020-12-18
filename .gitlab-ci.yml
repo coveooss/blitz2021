@@ -1,8 +1,3 @@
-stages:
-  - build
-  - dockerise
-  - release
-
 cache:
   paths:
     - node_modules/
@@ -23,7 +18,7 @@ build:
     changes:
       - game/**/*
       - ui/**/*
-      - gitlab-ci.yml
+      - .gitlab-ci.yml
 
 docker:
   stage: dockerise
@@ -55,6 +50,7 @@ docker:
       - .gitlab-ci.yml
     refs:
       - master
+  needs: ["build"]
 
 upload_starterkits:
   image: python:latest
