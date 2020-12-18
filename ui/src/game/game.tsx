@@ -6,8 +6,10 @@ import Units from './units/units';
 import Paths from './units/paths/paths';
 import Bases from './bases';
 import SpawnPoints from './spawnPoints';
+import {keyCodes, KeyContext} from '../constants';
 
 const Game: React.FunctionComponent = () => {
+    const {pressedKey} = React.useContext(KeyContext);
     return (
         <>
             <Layer listening={false}>
@@ -18,7 +20,7 @@ const Game: React.FunctionComponent = () => {
             </Layer>
             {/* different layer to avoid repainting the first one if it doesn't change */}
             <Layer listening={false}>
-                <Paths />
+                {pressedKey === keyCodes.P && <Paths />}
                 <Units />
             </Layer>
         </>

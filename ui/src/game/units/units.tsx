@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Group} from 'react-konva';
 import {TickColonyUnit, TickColony} from 'blitz2021/dist/game/types';
 
-import {colors, Size, VisualizationContext} from '../../constants';
+import {colors, darkenColors, Size, VisualizationContext} from '../../constants';
 import Cart from './cart';
 import Outlaw from './outlaw';
 import Miner from './miner';
@@ -16,6 +16,7 @@ const Units: React.FunctionComponent = () => {
             const defaultProps: UnitProps & {key: string} = {
                 key: `unit-${i}-${j}`,
                 color: colors[i],
+                darkColor: darkenColors[i],
                 ...unit
             };
             if (unit.type === 'CART') {

@@ -7,16 +7,7 @@ const Background: React.FunctionComponent = () => {
 
     return (
         <Group x={0} y={0}>
-            <Rect fill="#212121" width={boardSize} height={boardSize} />
-            <Rect
-                width={boardSize}
-                height={boardSize}
-                fillRadialGradientStartPoint={{x: 1.5 * boardSize, y: -boardSize}}
-                fillRadialGradientStartRadius={0}
-                fillRadialGradientEndPoint={{x: 1.5 * boardSize, y: -boardSize}}
-                fillRadialGradientEndRadius={boardSize * 2}
-                fillRadialGradientColorStops={[0, 'rgba(87, 121, 153, 1)', 1, 'rgba(87,121,153,0)']}
-            />
+            <Rect fill="#0E251B" width={boardSize} height={boardSize} />
         </Group>
     );
 };

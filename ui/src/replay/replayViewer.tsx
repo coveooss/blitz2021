@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {keyCodes, Size, speeds, VisualizationContext} from '../constants';
+import {keyCodes, Size, speeds, VisualizationContext, KeyContext} from '../constants';
 import KeyHandler from './controls/keyHandler';
 import {Tick} from 'blitz2021/dist/game/types';
 import {Stage} from 'react-konva';
@@ -17,6 +17,7 @@ const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, heigh
     const [tick, setTick] = React.useState(0);
     const [speed, setSpeed] = React.useState(0);
     const [isPaused, setIsPaused] = React.useState(false);
+    const [key, setKey] = React.useState<string | null>(null);
 
     const currentTick = ticks[tick];
     const numberOfTile: number = ticks?.[0]?.map?.tiles?.[0]?.length ?? 0;
@@ -61,7 +62,12 @@ const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, heigh
             default:
                 break;
         }
+        setKey(e.key);
     };
+
+    const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        setKey(null);
+    }
 
     React.useEffect(() => {
         if (!isPaused) {
@@ -81,12 +87,14 @@ const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, heigh
     }, [tick, isPaused, speed]);
 
     return (
-        <KeyHandler onKeyDown={onKeyDown}>
+        <KeyHandler onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
             <Stage width={width} height={height} >
-                <VisualizationContext.Provider value={{tick, boardSize, currentTick}}>
-                    <Game />
-                    <Infos speed={speed} />
-                </VisualizationContext.Provider>
+                <KeyContext.Provider value={{pressedKey: key}}>
+                  <VisualizationContext.Provider value={{tick, boardSize, currentTick}}>
+                      <Game />
+                      <Infos speed={speed} />
+                  </VisualizationContext.Provider>
+                </KeyContext.Provider>
             </Stage>
         </KeyHandler>
     );

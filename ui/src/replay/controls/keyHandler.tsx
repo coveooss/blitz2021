@@ -2,9 +2,10 @@ import * as React from 'react';
 
 export interface IKeyHandlerProps {
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    onKeyUp: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const KeyHandler: React.FunctionComponent<IKeyHandlerProps> = ({onKeyDown, children}) => {
+const KeyHandler: React.FunctionComponent<IKeyHandlerProps> = ({onKeyDown, onKeyUp, children}) => {
     const ref = React.useRef<HTMLInputElement>(null);
     const onClick = () => ref!.current!.focus();
     return (
@@ -13,6 +14,7 @@ const KeyHandler: React.FunctionComponent<IKeyHandlerProps> = ({onKeyDown, child
             <input
                 ref={ref}
                 onKeyDown={onKeyDown}
+                onKeyUp={onKeyUp}
                 autoFocus={true}
                 defaultValue=""
                 style={{
