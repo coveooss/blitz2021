@@ -17,7 +17,7 @@ public class Map
 
         public override string ToString()
         {
-            return string.Format("P{{0},{1}}", this.x, this.y);
+            return string.Format("P({0},{1})", this.x, this.y);
         }
     }
 
