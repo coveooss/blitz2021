@@ -4,7 +4,7 @@ import codes.blitz.game.message.exception.PositionOutOfMapException;
 
 public class GameMap
 {
-    public String[][] tiles;
+    private String[][] tiles;
 
     public int getMapSize()
     {
