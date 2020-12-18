@@ -56,7 +56,7 @@ export abstract class Colony {
                 new Cart(this, this.spawnPoint);
                 break;
             }
-            case "CART": {
+            case "OUTLAW": {
                 if (this.blitzium < UNIT.OUTLAW_COST) {
                     throw new ColonyError(this, `Unit ${type} is too expensive ${UNIT.OUTLAW_COST}`);
                 }
