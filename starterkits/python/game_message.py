@@ -36,8 +36,7 @@ class Depot:
 
 
 @dataclass_json
-@dataclass
-class UnitType(str, Enum):
+class UnitType(Enum):
     MINER = "MINER"
     CART = "CART"
     OUTLAW = "OUTLAW"
