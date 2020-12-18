@@ -76,7 +76,7 @@ class Map:
 @dataclass
 class Unit:
     id: str
-    type: str
+    type: UnitType
     blitzium: int
     position: Position
     path: List[Position]
