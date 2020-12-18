@@ -26,6 +26,7 @@ webSocket.onmessage = (message: WebSocket.MessageEvent) => {
   webSocket.send(
     JSON.stringify({
       type: "COMMAND",
+      tick: gameMessage.tick,
       actions: bot.getNextMove(gameMessage)
     })
   );

@@ -49,7 +49,7 @@ export interface BuyAction {
 
 export interface UnitAction {
   type: 'UNIT',
-  target: Position,
+  target: IPosition,
   unitId: string,
   action: ActionType
 }
