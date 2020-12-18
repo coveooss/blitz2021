@@ -128,7 +128,7 @@ export abstract class Colony {
                     }
 
                     if (action.action === "PICKUP") {
-                        unit.pickup(action.target, 5);
+                        unit.pickup(action.target);
                         return;
                     }
 

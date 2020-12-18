@@ -126,7 +126,32 @@ describe('Unit', () => {
     });
 
     describe('pickup', () => {
-        it.todo('should pick up the blitzium from the target if they are allied');
+        it('should pick up the blitzium from the target unit if they are allied', () => {
+            let cart = new TestUnit(myColony, { x: 0, y: 1 }, 'CART');
+
+            cart.maxBlitzium = 50;
+            unit.blitzium = 25;
+
+            expect(cart.blitzium).toBe(0);
+            cart.pickup(unit.position);
+
+            expect(cart.blitzium).toBe(25);
+            expect(unit.blitzium).toBe(0);
+        });
+
+        it('should pick up the blitzium from the target depot', () => {
+            let cart = new TestUnit(myColony, { x: 0, y: 2 }, 'CART');
+            map.depots.push({ position: { x: 0, y: 1 }, blitzium: 75 });
+
+            cart.maxBlitzium = 50;
+
+            expect(cart.blitzium).toBe(0);
+            cart.pickup({ x: 0, y: 1 });
+
+            expect(cart.blitzium).toBe(50);
+            expect(unit.blitzium).toBe(0);
+        });
+
         it.todo('should throw if target is not adjacent');
         it.todo('should throw if the unit is full');
         it.todo('should only pick up the amount to fill its cargo');

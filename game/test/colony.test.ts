@@ -136,7 +136,7 @@ describe('Colony', () => {
                 ]
             });
 
-            expect(targetUnit.pickup).toHaveBeenCalledWith(target, 5);
+            expect(targetUnit.pickup).toHaveBeenCalledWith(target);
         });
 
         it('should send the mine command to the proper unit', () => {

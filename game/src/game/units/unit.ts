@@ -71,27 +71,24 @@ export abstract class Unit {
         throw new UnitError(this, `There's no mine near by to mine from!`);
     }
 
-    public pickup(target: Position, amount: number) {
-        const depot = this.colony.game.map.depots.find(d => equal(target, d.position));
+    public pickup(target: Position) {
+        if (!isAdjacent(target, this.position)) {
+            throw new UnitError(this, `Target is not near by`);
+        }
 
-        if (isAdjacent(target, this.position) && depot) {
-            this.blitzium = this.blitzium + 1;
+        const unit = this.colony.getUnitAtPosition(target) || this.colony.game.map.depots.find(d => equal(target, d.position));
+
+        if (unit) {
+            let availableCargo = this.maxBlitzium - this.blitzium;
+            let blitziumToTake = Math.min(unit.blitzium, availableCargo);
+
+            unit.blitzium = Math.max(unit.blitzium - blitziumToTake, 0);
+            this.blitzium = this.blitzium + blitziumToTake;
             return;
         }
 
-        if (this.blitzium + amount > this.maxBlitzium) {
-            throw new UnitError(this, `Not enough space for ${amount} blitzium!`);
-        }
-
-        if (depot.blitzium <= amount) {
-            throw new UnitError(this, `Depot isn't big enough to pickup ${amount} blitzium from!`);
-        }
-
-        depot.blitzium = depot.blitzium - amount;
-        this.blitzium = this.blitzium + amount;
-
-        if (depot.blitzium <= 0) {
-            this.colony.game.map.depots.splice(this.colony.game.map.depots.indexOf(depot), 1);
+        if (unit.blitzium <= 0 && this.colony.game.map.depots.includes(unit)) {
+            this.colony.game.map.depots.splice(this.colony.game.map.depots.indexOf(unit), 1);
         }
     }
 
