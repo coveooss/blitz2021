@@ -19,7 +19,7 @@ const ActionType = {
 
 // Here are some command exemple to get you started.
 let buyActionExemple = { type: ActionType.Buy, unitType: UnitType.Miner };
-let unitActionExemple = { type: ActionType.Unit, target: { x: 0, y: 0 }, unitId: 'ID', type: UnitActionType.Move }
+let unitActionExemple = { type: ActionType.Unit, target: { x: 0, y: 0 }, unitId: 'ID', action: UnitActionType.Move }
 
 class Bot {
     constructor() {

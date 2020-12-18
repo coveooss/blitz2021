@@ -52,7 +52,7 @@ docker:
     changes:
       - game/**/*
       - ui/**/*
-      - gitlab-ci.yml
+      - .gitlab-ci.yml
     refs:
       - master
 
@@ -68,6 +68,6 @@ upload_starterkits:
   only:
     changes:
       - starterkits/**/*
-      - gitlab-ci.yml
+      - .gitlab-ci.yml
     refs:
       - master
