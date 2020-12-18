@@ -5,8 +5,10 @@ import os
 import websockets
 
 from bot import Bot
-from bot_message import BotMessage, MessageType, Move
-from game_message import GameMessage
+from bot_message import BotMessage, MessageType
+from game_message import GameMessage, Colony
+from game_command import UnitActionType
+from typing import List, Dict
 
 
 async def run():
@@ -17,7 +19,7 @@ async def run():
         if "TOKEN" in os.environ:
             await websocket.send(BotMessage(type=MessageType.REGISTER, token=os.environ["TOKEN"]).to_json())
         else:
-            await websocket.send(BotMessage(type=MessageType.REGISTER, name="MyBot").to_json())
+            await websocket.send(BotMessage(type=MessageType.REGISTER, colonyName="MyBot").to_json())
 
         await game_loop(websocket=websocket, bot=bot)
 
@@ -31,10 +33,12 @@ async def game_loop(websocket: websockets.WebSocketServerProtocol, bot: Bot):
             break
         game_message: GameMessage = GameMessage.from_json(message)
 
-        print(f"\nTurn {game_message.game.tick}")
+        my_colony: Dict[str, Colony] = game_message.get_colonies_by_id()[game_message.colonyId]
+        print(f"\nTurn {game_message.tick}")
+        print(f"\nError? {' '.join(my_colony.errors)}")
 
-        next_move: Move = bot.get_next_move(game_message)
-        await websocket.send(BotMessage(type=MessageType.MOVE, action=next_move, tick=game_message.game.tick).to_json())
+        next_move: UnitActionType.MOVE = bot.get_next_move(game_message)
+        await websocket.send(BotMessage(type=MessageType.COMMAND, actions=next_move, tick=game_message.tick).to_json())
 
 
 if __name__ == "__main__":

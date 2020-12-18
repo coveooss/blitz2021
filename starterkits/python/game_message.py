@@ -19,22 +19,33 @@ class TileType(Enum):
         else:
             raise Exception(f"Tile '{raw_tile}'' is not a valid tile.")
 
-@dataclass
-class Depot:
-    position: Position
-    blitzium: int
-
+@dataclass_json
 @dataclass
 class Position:
     x: int
     y: int
 
+@dataclass_json
+@dataclass
+class Depot:
+    position: Position
+    blitzium: int
+
+
+@dataclass_json
+@dataclass
+class UnitType(str, Enum):
+    MINER = "MINER"
+    CART = "CART"
+    OUTLAW = "OUTLAW"
+
+@dataclass_json
 @dataclass 
 class Map:
     tiles: List[List[str]]
 
-    def get_map_size():
-        return len(tiles)
+    def get_map_size(self):
+        return len(self.tiles)
 
     def validate_tile_exists(self, position: Position):
         if(position.x < 0 or position.y < 0 or position.x >= self.get_map_size() or position.y >= self.get_map_size()):
@@ -45,31 +56,38 @@ class Map:
         return self.tiles[position.y][position.x]
 
     def get_tile_type_at(self, position: Position): 
-        raw_tile = 
+        raw_tile = self.get_raw_tile_value_at(position)
+        if raw_tile == "EMPTY":
+            return TileType.EMPTY
+        elif raw_tile == "WALL":
+            return TileType.WALL
+        elif raw_tile == "MINE":
+            return TileType.MINE
+        elif raw_tile == "BASE":
+            return TileType.BASE
+        else:
+            raise "Not a valid tile"
 
-class TileType(Enum):
-    MINER = "MINER"
-    CART = "CART"
-    OUTLAW = "OUTLAW"
-
+@dataclass_json
 @dataclass
 class Unit:
     id: str
-    type: UnitType
+    type: str
     blitzium: int
     position: Position
     path: List[Position]
 
+@dataclass_json
 @dataclass
 class Colony:
     id: str
     name: str
     spawnPoint: Position
+    homeBase: Position
     blitzium: int
     totalBlitzium: int
     units: List[Unit]
-    errors: str
-}
+    errors: List[str]
 
 @dataclass_json
 @dataclass
@@ -78,7 +96,7 @@ class GameMessage:
     totalTick: int
     colonyId: str
     colonies: List[Colony]
-    map: List[List[str]]
+    map: Map
 
-    def get_colonies_by_id_dict(self) -> Dict[str, Colony]:
+    def get_colonies_by_id(self) -> Dict[str, Colony]:
         return {colony.id: colony for colony in self.colonies}
