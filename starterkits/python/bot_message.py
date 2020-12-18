@@ -16,5 +16,3 @@ class BotMessage:
     type: MessageType
     actions: List[Action] = None
     tick: int = None
-    token: str = None
-    colonyName: str = None

@@ -3,6 +3,7 @@
 import asyncio
 import os
 import websockets
+import json
 
 from bot import Bot
 from bot_message import BotMessage, MessageType
@@ -16,9 +17,9 @@ async def run():
     async with websockets.connect(uri) as websocket:
         bot = Bot()
         if "TOKEN" in os.environ:
-            await websocket.send(BotMessage(type=MessageType.REGISTER, token=os.environ["TOKEN"]).to_json())
+            await websocket.send(json.dumps({"type": "REGISTER", "token": os.environ["TOKEN"]}))
         else:
-            await websocket.send(BotMessage(type=MessageType.REGISTER, colonyName="MyBot").to_json())
+            await websocket.send(json.dumps({"type": "REGISTER", "colonyName": "MyBot"}))
 
         await game_loop(websocket=websocket, bot=bot)
 
