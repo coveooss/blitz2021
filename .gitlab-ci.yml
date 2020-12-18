@@ -1,3 +1,8 @@
+stage:
+ - build
+ - docker
+ - release
+
 cache:
   paths:
     - node_modules/
