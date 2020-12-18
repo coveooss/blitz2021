@@ -40,3 +40,5 @@ docker:
     - docker tag blitz2021/server 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:$CI_PIPELINE_ID
     - docker push 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:latest
     - docker push 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:$CI_PIPELINE_ID
+    - docker tag blitz2021/local 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:local
+    - docker push 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:local
