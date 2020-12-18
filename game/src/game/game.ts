@@ -160,6 +160,7 @@ export class Game {
             c.homeBase = this.map.bases[i].position;
             c.spawnPoint = c.homeBase;
             c.blitzium = COLONY.START_BALANCE;
+            c.totalBlitzium = c.blitzium;
             new Miner(c, c.homeBase);
         });
 
