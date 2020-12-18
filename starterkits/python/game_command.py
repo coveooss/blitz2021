@@ -1,13 +1,15 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from enum import Enum
 from game_message import Position, UnitType
-from typing import List, Dict
+from typing import List
+
 
 @dataclass_json
 class ActionType(Enum):
     BUY = "BUY"
     UNIT = "UNIT"
+
 
 @dataclass_json
 class Action:
@@ -15,6 +17,7 @@ class Action:
     
     def __init__(self, type):
         self.type = type
+
 
 @dataclass_json
 class BuyAction(Action):
@@ -24,14 +27,16 @@ class BuyAction(Action):
         super().__init__(ActionType.BUY)
         self.unit_type: unit_type
 
+
 @dataclass_json
 class UnitActionType(Enum):
     MOVE = "MOVE"
     ATTACK = "ATTACK" 
     PICKUP = "PICKUP"
-    MINE= "MINE" 
+    MINE = "MINE"
     DROP = "DROP" 
     NONE = "NONE"
+
 
 @dataclass_json
 @dataclass
@@ -44,7 +49,8 @@ class UnitAction(Action):
         super().__init__(ActionType.UNIT)
         self.action = action
         self.unitId = unit_id
-        self.target= target
+        self.target = target
+
 
 @dataclass_json
 class GameCommand:

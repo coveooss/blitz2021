@@ -1,8 +1,9 @@
-from dataclasses import dataclass, field
+from __future__ import annotations
+
+from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from enum import Enum
 from typing import List, Dict
-
 
 
 class TileType(Enum):
@@ -12,18 +13,20 @@ class TileType(Enum):
     BASE = "BASE"
 
     @staticmethod
-    def get_tile_type(raw_tile: str) -> 'TileType':
+    def get_tile_type(raw_tile: str) -> TileType:
         for tile_type in TileType:
             if raw_tile == tile_type.value:
                 return tile_type
         else:
             raise Exception(f"Tile '{raw_tile}'' is not a valid tile.")
 
+
 @dataclass_json
 @dataclass
 class Position:
     x: int
     y: int
+
 
 @dataclass_json
 @dataclass
@@ -39,6 +42,7 @@ class UnitType(str, Enum):
     CART = "CART"
     OUTLAW = "OUTLAW"
 
+
 @dataclass_json
 @dataclass 
 class Map:
@@ -48,8 +52,8 @@ class Map:
         return len(self.tiles)
 
     def validate_tile_exists(self, position: Position):
-        if(position.x < 0 or position.y < 0 or position.x >= self.get_map_size() or position.y >= self.get_map_size()):
-            raise "Position out is of map"
+        if position.x < 0 or position.y < 0 or position.x >= self.get_map_size() or position.y >= self.get_map_size():
+            raise Exception("Position out is of map")
     
     def get_raw_tile_value_at(self, position: Position):
         self.validate_tile_exists(position)
@@ -66,7 +70,8 @@ class Map:
         elif raw_tile == "BASE":
             return TileType.BASE
         else:
-            raise "Not a valid tile"
+            raise Exception("Not a valid tile")
+
 
 @dataclass_json
 @dataclass
@@ -76,6 +81,7 @@ class Unit:
     blitzium: int
     position: Position
     path: List[Position]
+
 
 @dataclass_json
 @dataclass
@@ -88,6 +94,7 @@ class Colony:
     totalBlitzium: int
     units: List[Unit]
     errors: List[str]
+
 
 @dataclass_json
 @dataclass

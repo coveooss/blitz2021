@@ -1,9 +1,8 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 from enum import Enum
 from game_command import Action
 from typing import List
-
 
 
 class MessageType(Enum):
@@ -19,4 +18,3 @@ class BotMessage:
     tick: int = None
     token: str = None
     colonyName: str = None
-    

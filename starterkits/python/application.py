@@ -8,7 +8,6 @@ from bot import Bot
 from bot_message import BotMessage, MessageType
 from game_message import GameMessage, Colony
 from game_command import UnitActionType
-from typing import List, Dict
 
 
 async def run():
@@ -33,7 +32,7 @@ async def game_loop(websocket: websockets.WebSocketServerProtocol, bot: Bot):
             break
         game_message: GameMessage = GameMessage.from_json(message)
 
-        my_colony: Dict[str, Colony] = game_message.get_colonies_by_id()[game_message.colonyId]
+        my_colony: Colony = game_message.get_colonies_by_id()[game_message.colonyId]
         print(f"\nTurn {game_message.tick}")
         print(f"\nError? {' '.join(my_colony.errors)}")
 
