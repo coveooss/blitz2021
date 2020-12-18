@@ -27,7 +27,7 @@ class BuyAction(Action):
     def __init__(self, unit_type: UnitType):
         super().__init__(ActionType.BUY)
         self.type = ActionType.BUY
-        self.unitType: unit_type
+        self.unitType = unit_type
 
 
 @dataclass_json
