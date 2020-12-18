@@ -29,6 +29,10 @@ export class SocketedColony extends Colony {
         const command = await new Promise((resolve, reject) => {
             this.socket.send(JSON.stringify({ type: "TICK", ...tick }));
             this.socketCallbacks = { tick: tick.tick, resolve, reject };
+
+            this.socket.on('close', () => {
+                reject('Connection closed');
+            });
         });
 
         return command;
