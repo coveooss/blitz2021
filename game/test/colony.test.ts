@@ -44,7 +44,7 @@ describe('Colony', () => {
     });
 
     describe('apply command', () => {
-        it('shoud throw if more than one command was for a single unit', () => {
+        it('shoud add error if more than one command was for a single unit', () => {
             let targetUnit = units[1];
             let target = { x: 0, y: 2 };
             let action: CommandAction = {
@@ -56,26 +56,29 @@ describe('Colony', () => {
 
             targetUnit.move = jest.fn();
 
-            expect(() => myColony.applyCommand({
+            myColony.applyCommand({
                 actions: [action, action]
-            })).toThrowError();
+            });
 
+            expect(myColony.errors.length).toBe(1);
             expect(targetUnit.move).toHaveBeenCalledTimes(1);
             expect(targetUnit.move).toHaveBeenCalledWith(target);
         });
-        it('should throw if the unit id is not found', () => {
-            expect(() => {
-                myColony.applyCommand({
-                    actions: [
-                        {
-                            type: 'UNIT',
-                            action: 'MOVE',
-                            target: { x: 0, y: 0 },
-                            unitId: 'INVALID_ID_123'
-                        }
-                    ]
-                })
-            }).toThrowError();
+        it('should add error if the unit id is not found', () => {
+
+            myColony.applyCommand({
+                actions: [
+                    {
+                        type: 'UNIT',
+                        action: 'MOVE',
+                        target: { x: 0, y: 0 },
+                        unitId: 'INVALID_ID_123'
+                    }
+                ]
+            });
+
+
+            expect(myColony.errors.length).toBe(1);
         });
 
         it('should send the move command to the proper unit', () => {

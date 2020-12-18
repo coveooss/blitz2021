@@ -1,6 +1,6 @@
 import { Unit } from "./units/unit";
 import { Colony } from "./colonies/colony";
-import WebSocket from 'ws';
+import { CommandAction } from './types';
 
 export class FatalError extends Error {
     constructor(message: string) {
@@ -11,6 +11,12 @@ export class FatalError extends Error {
 export class SocketRegisteringError extends Error {
     constructor(message: string) {
         super(message);
+    }
+}
+
+export class CommandActionError extends Error {
+    constructor(action: CommandAction, message: string) {
+        super(`${action} ${message}`);
     }
 }
 

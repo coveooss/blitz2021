@@ -75,14 +75,19 @@ export class Server {
                             if (message.type === 'REGISTER') {
                                 let colonyName;
 
-                                if ("colonyName" in message) {
+
+                                if ("token" in message) {
+                                    if (!this.teamNamesByToken) {
+                                        throw new SocketRegisteringError('You need to register using a colonyName');
+                                    }
+
+                                    colonyName = this.teamNamesByToken[message.token];
+                                } else if (message.colonyName !== null) {
                                     if (this.teamNamesByToken) {
                                         throw new SocketRegisteringError('You need to register using your secret token');
                                     }
 
                                     colonyName = message.colonyName;
-                                } else if (message.token !== null) {
-                                    colonyName = this.teamNamesByToken[message.token];
                                 }
 
                                 if (!colonyName || colonyName === "") {

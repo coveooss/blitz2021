@@ -1,6 +1,6 @@
 import { UNIT } from '../config';
-import { ColonyError, UnitError } from '../error';
-import { Command, PlayerTick, TickColony, UnitType } from '../types';
+import { ColonyError, CommandActionError, UnitError } from '../error';
+import { Command, CommandActionBuy, PlayerTick, TickColony, UnitType } from '../types';
 import { Cart } from '../units/cart';
 import { Outlaw } from '../units/outlaw';
 import { Miner } from '../units/miner';
@@ -15,7 +15,7 @@ export abstract class Colony {
     public totalBlitzium: number;
 
     public units: Unit[];
-    private errors: string[] = [];
+    public errors: string[] = [];
 
     public homeBase: Position;
     public spawnPoint: Position;
@@ -36,11 +36,11 @@ export abstract class Colony {
         this.totalBlitzium = this.totalBlitzium + blitzium;
     }
 
-    private buyUnit(type: UnitType) {
-        switch (type) {
+    private buyUnit(action: CommandActionBuy) {
+        switch (action.unitType) {
             case "MINER": {
                 if (this.blitzium < UNIT.MINER_COST) {
-                    throw new ColonyError(this, `Unit ${type} is too expensive ${UNIT.MINER_COST}`);
+                    throw new CommandActionError(action, `Unit ${action.unitType} is too expensive ${UNIT.MINER_COST}`);
                 }
 
                 this.blitzium = this.blitzium - UNIT.MINER_COST;
@@ -49,7 +49,7 @@ export abstract class Colony {
             }
             case "CART": {
                 if (this.blitzium < UNIT.CART_COST) {
-                    throw new ColonyError(this, `Unit ${type} is too expensive ${UNIT.CART_COST}`);
+                    throw new CommandActionError(action, `Unit ${action.unitType} is too expensive ${UNIT.CART_COST}`);
                 }
 
                 this.blitzium = this.blitzium - UNIT.CART_COST;
@@ -58,12 +58,15 @@ export abstract class Colony {
             }
             case "OUTLAW": {
                 if (this.blitzium < UNIT.OUTLAW_COST) {
-                    throw new ColonyError(this, `Unit ${type} is too expensive ${UNIT.OUTLAW_COST}`);
+                    throw new CommandActionError(action, `Unit ${action.unitType} is too expensive ${UNIT.OUTLAW_COST}`);
                 }
 
                 this.blitzium = this.blitzium - UNIT.OUTLAW_COST;
                 new Outlaw(this, this.spawnPoint);
                 break;
+            }
+            default: {
+                new CommandActionError(action, `Invalid unitType ${action.unitType}`);
             }
         }
     }
@@ -88,23 +91,24 @@ export abstract class Colony {
         command.actions?.forEach(action => {
             try {
                 if (!action) {
-                    throw new ColonyError(this, `Invalid action was sent ${JSON.stringify(action)}`);
+                    throw new CommandActionError(action, `Invalid action was sent ${JSON.stringify(action)}`);
                 }
 
                 if (action.type === "BUY") {
                     if (alreadyHasBuyCommand) {
-                        throw new ColonyError(this, `Buy action already processed`);
+                        throw new CommandActionError(action, `Buy action already processed`);
                     }
-                    this.buyUnit(action.unitType);
+
+                    this.buyUnit(action);
                 } else {
                     const unit = this.getUnit(action.unitId);
 
                     if (!unit) {
-                        throw new ColonyError(this, `Unit ${action.unitId} doesn't exists!`);
+                        throw new CommandActionError(action, `Unit ${action.unitId} doesn't exists!`);
                     }
 
                     if (alreadyReceivedCommand.includes(unit)) {
-                        throw new ColonyError(this, `Unit ${unit} already received a command!`);
+                        throw new CommandActionError(action, `Unit ${unit} already received a command!`);
                     }
 
                     alreadyReceivedCommand.push(unit);
@@ -141,7 +145,7 @@ export abstract class Colony {
                     throw new UnitError(unit, `Invalid action ${action.action}`);
                 }
             } catch (ex) {
-                if (ex instanceof UnitError) {
+                if (ex instanceof UnitError || ex instanceof CommandActionError) {
                     this.errors.push(ex.message);
                 } else {
                     throw ex;
