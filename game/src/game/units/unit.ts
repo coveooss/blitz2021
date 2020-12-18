@@ -97,7 +97,20 @@ export abstract class Unit {
             if (equal(target, this.colony.homeBase)) {
                 this.colony.dropBlitzium(this.blitzium);
                 this.blitzium = 0;
+            } else {
+                const existingDepot = this.colony.game.map.depots.find(d => equal(target, d.position));
+                if (existingDepot) {
+                    existingDepot.blitzium = existingDepot.blitzium + this.blitzium;
+                    this.blitzium = 0;
+                } else if (this.colony.game.map.getTile(target).type === 'EMPTY') {
+                    this.colony.game.map.depots.push({ position: target, blitzium: this.blitzium });
+                    this.blitzium = 0;
+                } else {
+                    throw new UnitError(this, `Invalid location for a depot ${target}`);
+                }
             }
+        } else {
+            throw new UnitError(this, `Invalid location for a depot ${target}`);
         }
     }
 

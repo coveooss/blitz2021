@@ -157,6 +157,50 @@ describe('Unit', () => {
         it.todo('should only pick up the amount to fill its cargo');
     })
 
+    describe('drop', () => {
+        it('should create a new depot when a unit drops blitzium', () => {
+            unit.blitzium = 50;
+            myColony.homeBase = { x: 0, y: 2 };
+
+            let target = { x: 0, y: 1 };
+
+            unit.drop(target);
+
+            expect(unit.blitzium).toBe(0);
+            expect(map.depots[0].blitzium).toBe(50);
+            expect(map.depots[0].position).toBe(target);
+        });
+
+        it('should use the existing depot when a unit drops blitzium', () => {
+            unit.blitzium = 50;
+            myColony.homeBase = { x: 0, y: 2 };
+
+            let target = { x: 0, y: 1 };
+            map.depots.push({ position: target, blitzium: 50 });
+
+            unit.drop(target);
+
+            expect(unit.blitzium).toBe(0);
+            expect(map.depots.length).toBe(1);
+            expect(map.depots[0].blitzium).toBe(100);
+            expect(map.depots[0].position).toBe(target);
+        });
+
+        it('should drop in the home base colony', () => {
+            let target = { x: 0, y: 1 };
+            unit.blitzium = 50;
+            myColony.homeBase = target;
+            myColony.blitzium = 0;
+            myColony.totalBlitzium = 0;;
+
+            unit.drop(target);
+
+            expect(unit.blitzium).toBe(0);
+            expect(myColony.blitzium).toBe(50);
+            expect(myColony.totalBlitzium).toBe(50);
+        });
+    });
+
     describe('serialize', () => {
         it('should serialize its state', () => {
             unit = new TestUnit(myColony, { x: 4, y: 3 }, 'MINER');
