@@ -57,7 +57,7 @@ export interface IUnitAction {
 export type Action = IBuyAction | IUnitAction;
 
 export interface IGameCommand {
-  actions: Action;
+  actions: Action[];
 }
 
 export class PointOutOfMapException extends Error {
