@@ -52,7 +52,7 @@ public class Map
 
         switch (rawTile)
         {
-            case "EMTPY":
+            case "EMPTY":
                 return TileType.EMPTY;
             case "WALL":
                 return TileType.WALL;
