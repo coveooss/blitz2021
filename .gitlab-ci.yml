@@ -1,6 +1,7 @@
 stages:
   - build
   - dockerise
+  - release
 
 cache:
   paths:
@@ -42,3 +43,19 @@ docker:
     - docker push 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:$CI_PIPELINE_ID
     - docker tag blitz2021/local 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:local
     - docker push 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:local
+
+upload_starterkits:
+  image: python:latest
+  stage: release
+  before_script:
+    - pip install awscli
+  script:
+    - python -m zipfile -c starterpacks.zip starterpacks/
+    - aws s3 cp starterpacks.zip s3://blitz-2020/
+    - aws s3api put-object-acl --bucket blitz-2021 --key starterpacks.zip --acl public-read
+  only:
+    changes:
+      - starterkits/**/*
+      - gitlab-ci.yml
+    refs:
+      - master
