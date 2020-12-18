@@ -3,7 +3,7 @@ package codes.blitz.game.message.game;
 public class BuyAction extends Action {
     private UnitType unitType;
 
-    protected BuyAction(UnitType unitType) {
+    public BuyAction(UnitType unitType) {
         super(ActionType.BUY);
         this.unitType = unitType;
     }

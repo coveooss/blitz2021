@@ -9,7 +9,7 @@ public enum TileType {
     //Probably easier to use the java stuff directly
     public static TileType getTileTypeFromString(String rawTile) {
         switch (rawTile) {
-            case "EMTPY":
+            case "EMPTY":
                 return TileType.EMPTY;
             case "WALL":
                 return TileType.WALL;
