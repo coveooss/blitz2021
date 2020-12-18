@@ -37,13 +37,15 @@ export class Recorder {
                 logger.error(err);
             }
 
-            params = {
+            var paramsReplay = {
                 Bucket: bucket,
                 Key: `${path}replay.gz`,
-                Body: result.toString()
+                Body: result,
+                ContentType: 'text/plain',
+                ContentEncoding: 'gzip'
             };
 
-            s3.upload(params, function (err: any, data: any) {
+            s3.upload(paramsReplay, function (err: any, data: any) {
                 if (err) {
                     logger.error(err);
                 }
