@@ -21,11 +21,13 @@ class Action:
 
 @dataclass_json
 class BuyAction(Action):
-    unit_type: UnitType
+    unitType: UnitType
+    type: ActionType
 
     def __init__(self, unit_type: UnitType):
         super().__init__(ActionType.BUY)
-        self.unit_type: unit_type
+        self.type = ActionType.BUY
+        self.unitType: unit_type
 
 
 @dataclass_json
@@ -44,12 +46,14 @@ class UnitAction(Action):
     target: Position
     action: UnitActionType
     unitId: str
+    type: ActionType
 
     def __init__(self, action: UnitActionType, unit_id: str, target: Position):
         super().__init__(ActionType.UNIT)
         self.action = action
         self.unitId = unit_id
         self.target = target
+        self.type = ActionType.UNIT
 
 
 @dataclass_json
