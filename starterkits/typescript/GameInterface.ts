@@ -9,7 +9,7 @@ export interface IDepot {
 }
 
 export type UnitType = 'MINER' | 'CART' | 'OUTLAW';
-export type TileType = 'EMPTY' | 'WALL' | 'DEPOT' | 'BASE';
+export type TileType = 'EMPTY' | 'WALL' | 'MINE' | 'BASE';
 export type ActionType = 'MOVE' | 'MINE' | 'ATTACK' | 'PICKUP' | 'DROP' | 'NONE';
 
 export interface IUnit {
