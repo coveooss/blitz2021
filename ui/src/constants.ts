@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Tick} from 'blitz2021/dist/game/types';
 
-export const TILE_RATIO = 0.65;
+export const TILE_RATIO = 1;
 export const GAP_RATIO = 1 - TILE_RATIO;
 
 export const CAPTURED_TILE_RATIO = 0.8;
@@ -12,11 +12,8 @@ export const fontSize = 24;
 export const smallFontSize = 16;
 export const fontWeight = 'bold';
 
-export const lightenColors = ['#c55353', '#8cb5da', '#dba75e', '#93c289'];
-export const colors = ['#BF4040', '#79A8D4', '#D69C49', '#84B978'];
-export const darkenColors = ['#ac3a3a', '#669bce', '#d19134', '#75b067'];
-
-export const buttonColors = ['#E88F5E', '#E3D1A7', '#AAAAAA'];
+export const darkenColors = ['#547DA3', '#368E65', '#BC9811', '#771616'];
+export const colors = ['#79A8D4', '#5BB88C', '#E9AD32', '#B02E2E'];
 
 export const speeds = [1000, 700, 500, 300, 100];
 
@@ -36,6 +33,7 @@ export const keyCodes = {
     Space: ' ',
     Three: '3',
     Two: '2',
+    P: 'p',
     X: 'x',
     Z: 'z',
     Down: 'ArrowDown',
@@ -49,6 +47,12 @@ export interface IVisualizationContext {
     currentTick: Tick;
     boardSize: number;
 }
+
+export interface IKeyContext {
+    pressedKey: string | null;
+}
+
+export const KeyContext = React.createContext<IKeyContext>({} as IKeyContext);
 
 export const VisualizationContext = React.createContext<IVisualizationContext>({} as IVisualizationContext);
 
