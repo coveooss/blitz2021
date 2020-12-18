@@ -42,21 +42,21 @@ export interface IGameTick {
   }
 }
 
-export interface BuyAction {
+export interface IBuyAction {
   type: 'BUY'
   unitType: UnitType
 }
 
-export interface UnitAction {
+export interface IUnitAction {
   type: 'UNIT',
   target: IPosition,
   unitId: string,
   action: ActionType
 }
 
-export type Action = BuyAction | UnitAction;
+export type Action = IBuyAction | IUnitAction;
 
-export interface GameCommand {
+export interface IGameCommand {
   actions: Action;
 }
 
