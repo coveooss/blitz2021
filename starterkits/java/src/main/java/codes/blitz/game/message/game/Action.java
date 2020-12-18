@@ -1,13 +1,13 @@
 package codes.blitz.game.message.game;
 
 public abstract class Action {
-    private final ActionType actionType;
+    private final ActionType type;
 
     protected Action(ActionType actionType) {
-        this.actionType = actionType;
+        this.type = actionType;
     }
 
     public ActionType getActionType() {
-        return actionType;
+        return type;
     }
 }
