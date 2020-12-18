@@ -1,6 +1,7 @@
 package codes.blitz.game;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import javax.websocket.ClientEndpoint;
@@ -50,6 +51,11 @@ public class WebsocketClient
                 EncodeException
     {
         System.out.println("\nTurn " + receivedMessage.getTick());
+
+        List<String> errors = receivedMessage.getColoniesMapById()
+            .get(receivedMessage.getColonyId()).getErrors();
+        errors.forEach(System.out::println);
+
         // Send back a move
         BotMessage botMessage = new BotMessage();
         botMessage.setType(MessageType.COMMAND);
