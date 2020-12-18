@@ -1,6 +1,6 @@
 stages:
  - build
- - docker
+ - dockerise
  - release
 
 cache:
