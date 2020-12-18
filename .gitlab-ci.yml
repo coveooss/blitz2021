@@ -63,7 +63,7 @@ upload_starterkits:
     - pip install awscli
   script:
     - python -m zipfile -c starterpacks.zip starterpacks/
-    - aws s3 cp starterpacks.zip s3://blitz-2020/
+    - aws s3 cp starterpacks.zip s3://blitz-2021/
     - aws s3api put-object-acl --bucket blitz-2021 --key starterpacks.zip --acl public-read
   only:
     changes:
