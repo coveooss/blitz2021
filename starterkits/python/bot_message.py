@@ -1,24 +1,22 @@
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
 from enum import Enum
+from game_command import Action
+from typing import List
 
-
-class Move(Enum):
-    FORWARD = "FORWARD"
-    TURN_LEFT = "TURN_LEFT"
-    TURN_RIGHT = "TURN_RIGHT"
 
 
 class MessageType(Enum):
-    MOVE = "move"
-    REGISTER = "register"
+    COMMAND = "COMMAND"
+    REGISTER = "REGISTER"
 
 
 @dataclass_json
 @dataclass
 class BotMessage:
     type: MessageType
-    action: Move = None
+    actions: List[Action] = None
     tick: int = None
     token: str = None
-    name: str = None
+    colonyName: str = None
+    
