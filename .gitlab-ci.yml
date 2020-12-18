@@ -55,7 +55,6 @@ docker:
       - .gitlab-ci.yml
     refs:
       - master
-  needs: ["build"]
 
 upload_starterkits:
   image: python:latest
