@@ -1,8 +1,9 @@
 {
   "name": "@germainbergeron/blitz-ui",
-  "version": "2021.0.0",
+  "version": "2021.0.2",
   "description": "Blitz2021 Game UI",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/declaration/index.d.ts",
   "author": "Coveo",
   "license": "MIT",
   "scripts": {
