@@ -33,8 +33,15 @@ export abstract class Unit {
             return;
         }
 
-
         const map = this.colony.game.map;
+        if (!map.isInBound(target) || map.getTile(target).type !== 'EMPTY') {
+            throw new UnitError(this, `Target destination is not walkable: ${toString(target)}`);
+        }
+
+        if (this.colony.game.getUnitAtPosition(target)) {
+            throw new UnitError(this, `A unit is already on that location: ${toString(target)}`);
+        }
+
         const result = map.computePath(this.position, target, this.colony.game);
         if (result.status === "noPath" || result.status === "timeout") {
             throw new UnitError(this, `No path to ${toString(target)}`);
