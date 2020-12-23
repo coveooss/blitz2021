@@ -2,6 +2,7 @@ FROM node:14
 
 COPY ./game/package.json ./package.json
 COPY ./game/dist/ ./
+COPY ./game/maps ./maps
 
 RUN yarn install --production
 
