@@ -10,7 +10,7 @@ const getPrettyFormat: (options: { prettyColors: boolean }) => winston.Logform.F
 }
 
 const getTransports = () => {
-    const env = process.env.NODE_ENV || "production";
+    const env = process.env.NODE_ENV || "development";
     const errorToFileTransport = new winston.transports.File({ filename: 'error.log', level: "error", options: { flags: 'w' } });
 
     switch (env) {
@@ -29,10 +29,12 @@ const getTransports = () => {
             ]
         }
         case "production": {
-            return [new winston.transports.Console({
-                format: winston.format.combine(getPrettyFormat({ prettyColors: true })),
-                level: "info"
-            })]
+            return [
+                new winston.transports.File({ filename: 'game_log.txt', level: "info", options: { flags: 'w' } }),
+                new winston.transports.Console({
+                    format: winston.format.combine(getPrettyFormat({ prettyColors: true })),
+                    level: "info"
+                })]
         }
     }
 }

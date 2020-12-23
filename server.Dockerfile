@@ -12,6 +12,8 @@ ENV NB_OF_COLONIES=2
 ENV KEEP_ALIVE=false
 ENV SERVE_UI=false
 
+ENV NODE_ENV=production
+
 EXPOSE 8765
 
 ENTRYPOINT [ "/usr/local/bin/node", "index.js" ]
