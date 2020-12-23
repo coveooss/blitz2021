@@ -1,4 +1,4 @@
-import path from "path";
+import fs from 'fs';
 import { Colony } from "./colonies/colony";
 import { logger } from "../logger";
 import { timeoutAfter } from "../utils";
@@ -11,7 +11,7 @@ import { Viewer } from "./viewer";
 import { COLONY } from "./config";
 
 export interface GameOptions {
-    map: GameMap,
+    gameMapFile: string,
     numberOfTicks: number,
     timeMsAllowedPerTicks: number,
     maxWaitTimeMsBeforeStartingGame: number,
@@ -26,7 +26,7 @@ export interface GameResult {
 
 export class Game {
     public static readonly DEFAULT_GAME_OPTIONS: GameOptions = {
-        map: null,
+        gameMapFile: '',
         numberOfTicks: 5,
         timeMsAllowedPerTicks: 0,
         maxWaitTimeMsBeforeStartingGame: 0,
@@ -53,7 +53,22 @@ export class Game {
             ...options
         }
 
-        this.map = this.options.map || GameMap.empty(50);
+        if (!this.options.gameMapFile && this.options.gameMapFile === "") {
+            logger.info(`Using the default map`);
+            this.map = GameMap.empty(50);
+        } else {
+            logger.info(`Using ${this.options.gameMapFile}`);
+            this.map = GameMap.fromFile(this.options.gameMapFile);
+        }
+
+        if (this.options.expectedNumberOfColonies === undefined) {
+            this.options.expectedNumberOfColonies = this.map.bases.length;
+        }
+
+        if (this.options.expectedNumberOfColonies > this.map.bases.length) {
+            logger.error(`Number of colonies expected (${this.options.expectedNumberOfColonies}) is greater than the number of bases available (${this.map.bases.length})`);
+            this.options.expectedNumberOfColonies = this.map.bases.length;
+        }
 
         if (this.options.maxWaitTimeMsBeforeStartingGame !== 0) {
             logger.info(`The game will start automatically after ${this.options.maxWaitTimeMsBeforeStartingGame} ms or when ${this.options.expectedNumberOfColonies} colonies will have joined, whichever come first.`);
@@ -161,6 +176,7 @@ export class Game {
             c.spawnPoint = c.homeBase;
             c.blitzium = COLONY.START_BALANCE;
             c.totalBlitzium = c.blitzium;
+
             new Miner(c, c.homeBase);
         });
 

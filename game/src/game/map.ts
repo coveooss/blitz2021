@@ -5,6 +5,7 @@ import aStar from 'a-star';
 import fs from 'fs';
 import { TickMap, TileType } from './types';
 import { Game } from './game';
+import { logger } from '../logger';
 
 export interface Tile {
     type: TileType,
@@ -32,28 +33,37 @@ export class GameMap {
         return new GameMap(tiles, height, width);
     }
 
-    // TO DO
     public static fromFile(mapFile: string) {
         const COLOR_TO_TYLE = new Map<number, TileType>([
-            [0, "WALL"],
-            [16777215, "EMPTY"]
+            [0x00, "WALL"],
+            [0x0000FF, "BASE"], // RED rgb(255, 0, 0);
+            [0x00FFFF, "MINE"], // YELLOW rgb(255, 255, 0);
+            [0xFFFFFF, "EMPTY"]
         ]);
 
         let bmpBuffer = fs.readFileSync(mapFile);
         let bmpData = bmp.decode(bmpBuffer);
 
-        const tiles = new Map<String, Tile>();
-        for (let x = 0; x < bmpData.height; x++) {
-            for (let y = 0; y < bmpData.width; y++) {
-                tiles.set(
-                    hash({ x, y }),
-                    {
-                        position: { x, y },
-                        type: COLOR_TO_TYLE.get(bmpData.data.readUIntBE((((x * bmpData.width) + y) * 4) + 1, 3))
-                    });
+        if (bmpData.width !== bmpData.height) {
+            throw new Error(`Map file is not squared! width:${bmpData.width} height:${bmpData.height}`);
+        }
+
+        const tiles: TileType[][] = new Array(bmpData.width);
+        for (let x = 0; x < bmpData.width; x++) {
+
+            tiles[x] = new Array(bmpData.height);
+
+            for (let y = 0; y < bmpData.height; y++) {
+                let rawValue = bmpData.data.readUIntBE((((y * bmpData.width) + x) * 4) + 1, 3);
+                tiles[x][y] = COLOR_TO_TYLE.get(rawValue);
+
+                if (!tiles[x][y]) {
+                    throw new Error(`Error parsing file, pixel 0x${rawValue.toString(16)} doesn't match ${JSON.stringify(COLOR_TO_TYLE.keys())} for ${COLOR_TO_TYLE.values()}`);
+                }
             }
         }
-        //return new GameMap(tiles, bmpData.height, bmpData.width);
+
+        return GameMap.fromArray(tiles);
     }
 
     public static empty(size: number) {

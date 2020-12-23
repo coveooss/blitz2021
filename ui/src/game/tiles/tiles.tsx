@@ -10,9 +10,9 @@ import Empty from './empty';
 const Tiles: React.FunctionComponent = () => {
     const {currentTick} = React.useContext(VisualizationContext);
 
-    const tiles = currentTick?.map?.tiles?.map((row, y) =>
-        row.map((tile: TileType, x) => {
-            const defaultProps: Position & {key: string} = {key: `tile-${y}-${x}`, x, y};
+    const tiles = currentTick?.map?.tiles?.map((row, x) =>
+        row.map((tile: TileType, y) => {
+            const defaultProps: Position & {key: string} = {key: `tile-${x}-${y}`, x, y};
             if (TilesUtils.isWall(tile)) {
                 return <Wall {...defaultProps} />;
             } else if (TilesUtils.isBlitzium(tile)) {

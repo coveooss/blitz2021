@@ -1,7 +1,9 @@
+import yargs from 'yargs';
+import fs from 'fs';
+
 import { Server } from './server/server'
 import { Game } from './game/game';
 import { Recorder, RecorderMode } from './recorder/recorder';
-import yargs from 'yargs';
 import { logger } from './logger';
 
 const splash = ` ______   _       __________________ _______      _______  _______  _______  __   
@@ -14,24 +16,35 @@ const splash = ` ______   _       __________________ _______      _______  _____
 |/ \\___/ (_______/\\_______/   )_(   (_______/    \\_______/(_______)\\_______/\\____/
                                                                                  
 `;
-console.log(splash);
+const MAP_FILE_FOLDER = './maps/';
 
 const args = yargs(process.argv.slice(2))
-
     .options({
         'timePerTickMs': { type: 'number', default: 1000 },
         'nbOfTicks': { type: 'number', default: 1000 },
         'gameStartTimeoutMs': { type: 'number', default: 500000 },
-        'nbOfColonies': { type: 'number', default: 1 },
+        'nbOfColonies': { type: 'number' },
         'recordPath': { type: 'string' },
         's3Bucket': { type: 'string' },
         's3Path': { type: 'string' },
         'keepAlive': { type: 'boolean', default: true },
         'teamNamesByToken': { type: 'string' },
-        'serveUi': { type: 'boolean', default: true }
+        'serveUi': { type: 'boolean', default: true },
+        'gameConfig': { type: 'string' }
+    })
+    .command('list-maps', 'List all the available maps', () => {
+        let files = fs.readdirSync(MAP_FILE_FOLDER);
+        console.log("Here's the maps you can use, add the --gameConfig=[MAP] option to change the default.");
+        files.forEach(f => {
+            console.log(`\t - ${f}`);
+        });
+
+        process.exit();
     })
     .env(true)
     .argv;
+
+console.log(splash);
 
 (async () => {
     do {
@@ -39,7 +52,8 @@ const args = yargs(process.argv.slice(2))
             timeMsAllowedPerTicks: args.timePerTickMs,
             numberOfTicks: args.nbOfTicks,
             maxWaitTimeMsBeforeStartingGame: args.gameStartTimeoutMs,
-            expectedNumberOfColonies: args.nbOfColonies
+            expectedNumberOfColonies: args.nbOfColonies,
+            gameMapFile: MAP_FILE_FOLDER + args.gameConfig
         });
 
         const teamNamesByToken = args.teamNamesByToken ? JSON.parse(args.teamNamesByToken) : null;
