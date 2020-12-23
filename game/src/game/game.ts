@@ -53,7 +53,7 @@ export class Game {
             ...options
         }
 
-        if (!this.options.gameMapFile && this.options.gameMapFile === "") {
+        if (!this.options.gameMapFile || this.options.gameMapFile === "") {
             logger.info(`Using the default map`);
             this.map = GameMap.empty(50);
         } else {

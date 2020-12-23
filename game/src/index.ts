@@ -53,7 +53,7 @@ console.log(splash);
             numberOfTicks: args.nbOfTicks,
             maxWaitTimeMsBeforeStartingGame: args.gameStartTimeoutMs,
             expectedNumberOfColonies: args.nbOfColonies,
-            gameMapFile: MAP_FILE_FOLDER + args.gameConfig
+            gameMapFile: args.gameConfig ? MAP_FILE_FOLDER + args.gameConfig : null
         });
 
         const teamNamesByToken = args.teamNamesByToken ? JSON.parse(args.teamNamesByToken) : null;
