@@ -30,7 +30,7 @@ const getTransports = () => {
         }
         case "production": {
             return [
-                new winston.transports.File({ filename: 'game_log.txt', level: "info", options: { flags: 'w' } }),
+                new winston.transports.File({ filename: 'game_logs.txt', level: "info", options: { flags: 'w' } }),
                 new winston.transports.Console({
                     format: winston.format.combine(getPrettyFormat({ prettyColors: true })),
                     level: "info"

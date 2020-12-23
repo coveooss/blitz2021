@@ -16,7 +16,7 @@ export class Recorder {
     }
 
     public saveToS3(bucket: string, path: string) {
-        const GAME_LOG = 'game_log.txt';
+        const GAME_LOG = 'game_logs.txt';
         const s3 = new AWS.S3();
 
         let params = {
