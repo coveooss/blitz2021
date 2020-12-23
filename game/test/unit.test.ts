@@ -18,7 +18,10 @@ describe('Unit', () => {
 
     beforeEach(() => {
         map = GameMap.fromArray([['EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY']]);
-        game = new Game({ map });
+        
+        game = new Game();
+        game.map = map;
+
         myColony = new NoopColony(game);
         unit = new TestUnit(myColony, { x: 0, y: 0 }, 'MINER');
     });
