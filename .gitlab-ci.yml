@@ -23,6 +23,7 @@ build:
     changes:
       - game/**/*
       - ui/**/*
+      - "*.Dockerfile"
       - .gitlab-ci.yml
 
 docker:
@@ -52,6 +53,7 @@ docker:
     changes:
       - game/**/*
       - ui/**/*
+      - "*.Dockerfile"
       - .gitlab-ci.yml
     refs:
       - master
