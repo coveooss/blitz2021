@@ -33,6 +33,7 @@ public class Map
     }
 
     public String[][] tiles;
+    public Depot[] depots;
 
     public class PointOutOfMapException : Exception
     {
