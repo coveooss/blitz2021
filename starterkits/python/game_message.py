@@ -46,6 +46,7 @@ class UnitType(Enum):
 @dataclass 
 class Map:
     tiles: List[List[str]]
+    depots: List[Depot]
 
     def get_map_size(self):
         return len(self.tiles)

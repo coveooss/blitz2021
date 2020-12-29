@@ -5,6 +5,7 @@ import codes.blitz.game.message.exception.PositionOutOfMapException;
 public class GameMap
 {
     private String[][] tiles;
+    private Depot[] depots;
 
     public int getMapSize()
     {
@@ -19,6 +20,10 @@ public class GameMap
     public String getRawTileValueAt(Position position) throws PositionOutOfMapException {
         this.validateTileExists(position);
         return this.tiles[position.getY()][position.getX()];
+    }
+
+    public Depot[] getDepots() {
+        return depots;
     }
 
     public void validateTileExists(Position position) throws PositionOutOfMapException {
