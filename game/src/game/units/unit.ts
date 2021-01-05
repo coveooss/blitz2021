@@ -11,7 +11,7 @@ export abstract class Unit {
     public maxBlitzium = 0;
     public path: Position[] = []
 
-    constructor(private colony: Colony, public position: Position, protected type: UnitType) {
+    constructor(public colony: Colony, public position: Position, protected type: UnitType) {
         this.id = uuid();
         this.colony.units.push(this);
     }
@@ -38,11 +38,15 @@ export abstract class Unit {
             throw new UnitError(this, `Target destination is not walkable: ${toString(target)}`);
         }
 
+        if (this.colony.game.isTooCloseToEnemyBase(target, this.colony.id)) {
+            throw new UnitError(this, `Target is too close to an enemy base: ${toString(target)}`);
+        }
+
         if (this.colony.game.getUnitAtPosition(target)) {
             throw new UnitError(this, `A unit is already on that location: ${toString(target)}`);
         }
 
-        const result = map.computePath(this.position, target, this.colony.game);
+        const result = this.colony.game.computePathForUnitTo(this, target);
         if (result.status === "noPath" || result.status === "timeout") {
             throw new UnitError(this, `No path to ${toString(target)}`);
         }
@@ -94,7 +98,6 @@ export abstract class Unit {
 
             targetObject.blitzium = Math.max(targetObject.blitzium - blitziumToTake, 0);
             this.blitzium = this.blitzium + blitziumToTake;
-            return;
         }
 
         if (depot && depot.blitzium <= 0) {

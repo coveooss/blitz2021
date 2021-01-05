@@ -14,4 +14,5 @@ export class UNIT {
 
 export class COLONY {
     public static START_BALANCE = 25;
+    public static SAFE_ZONE_RADIUS = 3;
 }

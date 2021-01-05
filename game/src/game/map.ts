@@ -131,18 +131,6 @@ export class GameMap {
         return from.x >= 0 && from.y >= 0 && from.x < this.height && from.y < this.width;
     }
 
-    public computePath(from: Position, to: Position, game: Game): Path {
-        const units = game.colonies.flatMap(c => c.units.map(u => u.position));
-        return aStar<Position>({
-            start: from,
-            isEnd: (node) => hash(node) === hash(to),
-            neighbor: (node) => this.getWalkableNeighbors(node).map(tile => tile.position).filter(p => !units.some(other => equal(p, other))),
-            distance: distanceBetween,
-            hash: hash,
-            heuristic: (node) => 1
-        });
-    }
-
     public serialize(): TickMap {
         const tiles: TileType[][] = [];
         for (let x = 0; x < this._height; x++) {

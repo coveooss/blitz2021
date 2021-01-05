@@ -3,11 +3,13 @@ import { logger } from "../logger";
 import { hny, timeoutAfter } from "../utils";
 import { ColonyError } from "./error";
 import { Command, Tick } from "./types";
-import { GameMap } from "./map";
-import { Position } from './position'
+import { GameMap, Path } from "./map";
+import { distanceBetween, hash, Position } from './position'
 import { Miner } from "./units/miner";
 import { Viewer } from "./viewer";
 import { COLONY } from "./config";
+import { Unit } from "./units/unit";
+import aStar from "a-star";
 
 export interface GameOptions {
     gameMapFile: string,
@@ -120,6 +122,7 @@ export class Game {
         }
     }
 
+
     public registerViewer(v: Viewer) {
         this.viewers.push(v);
     }
@@ -172,6 +175,38 @@ export class Game {
         return this._isCompleted;
     }
 
+    public isTooCloseToEnemyBase(position: Position, colonyId: string) {
+        return this.colonies.some((c) => {
+            if (c.id === colonyId) return false;
+
+            return (Math.abs(c.homeBase.x - position.x) <= COLONY.SAFE_ZONE_RADIUS) &&
+                (Math.abs(c.homeBase.y - position.y) <= COLONY.SAFE_ZONE_RADIUS);
+        });
+    }
+
+    public hasUnitOnPosition(position: Position) {
+        return this.getUnitAtPosition(position) !== undefined;
+    }
+
+    public getLegalTilesForUnit(unit: Unit, atPosition?: Position) {
+        const target = atPosition || unit.position;
+
+        return this.map.getWalkableNeighbors(target)
+            .filter(tile => !this.isTooCloseToEnemyBase(tile.position, unit.colony.id))
+            .filter(tile => !this.hasUnitOnPosition(tile.position));
+    }
+
+    public computePathForUnitTo(unit: Unit, to: Position): Path {
+        return aStar<Position>({
+            start: unit.position,
+            isEnd: (node) => hash(node) === hash(to),
+            neighbor: (node) => this.getLegalTilesForUnit(unit, node).map(tile => tile.position),
+            distance: distanceBetween,
+            hash: hash,
+            heuristic: () => 1
+        });
+    }
+
     public async play() {
         if (this.maxWaitTimeInterval) {
             clearTimeout(this.maxWaitTimeInterval);
@@ -180,8 +215,6 @@ export class Game {
         if (this.isRunning) {
             throw new Error(`Game is already running.`);
         }
-
-
 
         this.colonies.forEach((c, i) => {
             c.homeBase = this.map.bases[i].position;
@@ -297,7 +330,7 @@ export class Game {
                 .map((c, i) => ({
                     rank: i + 1,
                     teamName: c.name,
-                    score: c.totalBlitzium
+                    score: c.blitzium
                 })));
     };
 
