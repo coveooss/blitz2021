@@ -56,7 +56,7 @@ class Map:
     
     def get_raw_tile_value_at(self, position: Position):
         self.validate_tile_exists(position)
-        return self.tiles[position.y][position.x]
+        return self.tiles[position.x][position.y]
 
     def get_tile_type_at(self, position: Position): 
         raw_tile = self.get_raw_tile_value_at(position)

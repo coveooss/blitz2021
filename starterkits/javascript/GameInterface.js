@@ -148,7 +148,7 @@ class GameMessage {
    */
   getTileTypeAt(position) {
     this.validateTileExists(position);
-    return this.rawTick.map[position.y][position.x];
+    return this.rawTick.map[position.x][position.y];
   }
 
   /**
