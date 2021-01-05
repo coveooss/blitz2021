@@ -32,6 +32,7 @@ const args = yargs(process.argv.slice(2))
         'serveUi': { type: 'boolean', default: true },
         'gameConfig': { type: 'string' }
     })
+    .version(process.env.VERSION || 'DEV')
     .command('list-maps', 'List all the available maps', () => {
         let files = fs.readdirSync(MAP_FILE_FOLDER);
         console.log("Here's the maps you can use, add the --gameConfig=[MAP] option to change the default.");
