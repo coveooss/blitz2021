@@ -326,7 +326,7 @@ export class Game {
 
         this.notifyGameCompleted(
             this.colonies
-                .sort((a, b) => b.totalBlitzium - a.totalBlitzium)
+                .sort((a, b) => b.blitzium - a.blitzium)
                 .map((c, i) => ({
                     rank: i + 1,
                     teamName: c.name,
