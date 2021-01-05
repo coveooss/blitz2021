@@ -142,6 +142,7 @@ describe('Unit', () => {
 
         it('should pick up the blitzium from the target unit if they are allied', () => {
             unit.blitzium = 25;
+            unit.position = { x: 0, y: 3 };
 
             expect(myCart.blitzium).toBe(0);
             myCart.pickup(unit.position);

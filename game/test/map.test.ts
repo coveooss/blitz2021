@@ -44,21 +44,6 @@ describe("Map", () => {
         expect(gameMap.getTile({ x: 1, y: 2 })).toEqual({ position: { x: 1, y: 2 }, type: "WALL" });
     });
 
-    it('should compute a path correctly', () => {
-        const gameMap = GameMap.fromArray(SIMPLE_MAP);
-
-        let result = gameMap.computePath({ x: 0, y: 0 }, { x: 4, y: 4 }, new Game());
-        expect(result.path).toEqual(SIMPLE_MAP_PATH_FROM_0_0_TO_5_4);
-        expect(result.cost).toBe(SIMPLE_MAP_PATH_FROM_0_0_TO_5_4.length - 1);
-        expect(result.status).toBe("success");
-
-
-        result = gameMap.computePath({ x: 0, y: 4 }, { x: 0, y: 0 }, new Game());
-        expect(result.path).toEqual(SIMPLE_MAP_PATH_FROM_0_4_TO_0_0);
-        expect(result.cost).toBe(SIMPLE_MAP_PATH_FROM_0_4_TO_0_0.length - 1);
-        expect(result.status).toBe("success");
-    });
-
     it("should serialize the map correctly", () => {
         const gameMap = GameMap.fromArray(SIMPLE_MAP);
 
