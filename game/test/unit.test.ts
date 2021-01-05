@@ -1,7 +1,7 @@
 import { Colony } from "../src/game/colonies/colony";
 import { NoopColony } from "../src/game/colonies/noopColony";
 import { Game } from "../src/game/game";
-import { GameMap, Tile } from "../src/game/map";
+import { Depot, GameMap, Tile } from "../src/game/map";
 import { Unit } from "../src/game/units/unit";
 
 jest.mock('uuid', () => ({
@@ -18,7 +18,7 @@ describe('Unit', () => {
 
     beforeEach(() => {
         map = GameMap.fromArray([['EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY']]);
-        
+
         game = new Game();
         game.map = map;
 
@@ -129,30 +129,45 @@ describe('Unit', () => {
     });
 
     describe('pickup', () => {
-        it('should pick up the blitzium from the target unit if they are allied', () => {
-            let cart = new TestUnit(myColony, { x: 0, y: 1 }, 'CART');
+        let myCart: Unit;
+        let myDepot: Depot;
 
-            cart.maxBlitzium = 50;
+        beforeEach(() => {
+            myCart = new TestUnit(myColony, { x: 0, y: 2 }, 'CART');
+            myDepot = { position: { x: 0, y: 1 }, blitzium: 75 };
+
+            myCart.maxBlitzium = 50;
+            map.depots = [myDepot];
+        });
+
+        it('should pick up the blitzium from the target unit if they are allied', () => {
             unit.blitzium = 25;
 
-            expect(cart.blitzium).toBe(0);
-            cart.pickup(unit.position);
+            expect(myCart.blitzium).toBe(0);
+            myCart.pickup(unit.position);
 
-            expect(cart.blitzium).toBe(25);
+            expect(myCart.blitzium).toBe(25);
             expect(unit.blitzium).toBe(0);
         });
 
         it('should pick up the blitzium from the target depot', () => {
-            let cart = new TestUnit(myColony, { x: 0, y: 2 }, 'CART');
-            map.depots.push({ position: { x: 0, y: 1 }, blitzium: 75 });
+            expect(myCart.blitzium).toBe(0);
+            myCart.pickup({ x: 0, y: 1 });
 
-            cart.maxBlitzium = 50;
-
-            expect(cart.blitzium).toBe(0);
-            cart.pickup({ x: 0, y: 1 });
-
-            expect(cart.blitzium).toBe(50);
+            expect(myCart.blitzium).toBe(50);
             expect(unit.blitzium).toBe(0);
+        });
+
+        it('should remove the depot if it drops to 0', () => {
+            myDepot.blitzium = 50;
+            myCart.maxBlitzium = 50;
+
+            expect(map.depots).toContain(myDepot);
+
+            myCart.pickup(myDepot.position);
+
+            expect(myDepot.blitzium).toBe(0);
+            expect(map.depots).not.toContain(myDepot);
         });
 
         it.todo('should throw if target is not adjacent');

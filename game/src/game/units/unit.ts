@@ -83,19 +83,22 @@ export abstract class Unit {
             throw new UnitError(this, `Target is not near by`);
         }
 
-        const unit = this.colony.getUnitAtPosition(target) || this.colony.game.map.depots.find(d => equal(target, d.position));
+        const unit = this.colony.getUnitAtPosition(target);
+        const depot = this.colony.game.map.depots.find(d => equal(target, d.position));
 
-        if (unit) {
+        const targetObject = unit || depot;
+
+        if (targetObject) {
             let availableCargo = this.maxBlitzium - this.blitzium;
-            let blitziumToTake = Math.min(unit.blitzium, availableCargo);
+            let blitziumToTake = Math.min(targetObject.blitzium, availableCargo);
 
-            unit.blitzium = Math.max(unit.blitzium - blitziumToTake, 0);
+            targetObject.blitzium = Math.max(targetObject.blitzium - blitziumToTake, 0);
             this.blitzium = this.blitzium + blitziumToTake;
             return;
         }
 
-        if (unit.blitzium <= 0 && this.colony.game.map.depots.includes(unit)) {
-            this.colony.game.map.depots.splice(this.colony.game.map.depots.indexOf(unit), 1);
+        if (depot && depot.blitzium <= 0) {
+            this.colony.game.map.depots.splice(this.colony.game.map.depots.indexOf(depot), 1);
         }
     }
 

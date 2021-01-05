@@ -18,7 +18,7 @@ public class GameMap
 
     public String getRawTileValueAt(Position position) throws PositionOutOfMapException {
         this.validateTileExists(position);
-        return this.tiles[position.getY()][position.getX()];
+        return this.tiles[position.getX()][position.getY()];
     }
 
     public void validateTileExists(Position position) throws PositionOutOfMapException {

@@ -1,7 +1,6 @@
-import fs from 'fs';
 import { Colony } from "./colonies/colony";
 import { logger } from "../logger";
-import { timeoutAfter } from "../utils";
+import { hny, timeoutAfter } from "../utils";
 import { ColonyError } from "./error";
 import { Command, Tick } from "./types";
 import { GameMap } from "./map";
@@ -22,6 +21,13 @@ export interface GameResult {
     teamName: string,
     rank: number,
     score: number
+}
+
+export interface ColonyStats {
+    responseTimePerTicks: number[],
+    processingTimePerTicks: number[],
+    unitsPerTicks: number[],
+    nbTimeouts: number,
 }
 
 export class Game {
@@ -46,12 +52,16 @@ export class Game {
     public readonly colonies: Colony[] = [];
     public readonly viewers: Viewer[] = [];
 
+    public readonly responseTimePerColony: Map<Colony, ColonyStats>;
+
     constructor(private options?: Partial<GameOptions>) {
 
         this.options = {
             ...Game.DEFAULT_GAME_OPTIONS,
             ...options
         }
+
+        this.responseTimePerColony = new Map<Colony, ColonyStats>();
 
         if (!this.options.gameMapFile || this.options.gameMapFile === "") {
             logger.info(`Using the default map`);
@@ -171,6 +181,8 @@ export class Game {
             throw new Error(`Game is already running.`);
         }
 
+
+
         this.colonies.forEach((c, i) => {
             c.homeBase = this.map.bases[i].position;
             c.spawnPoint = c.homeBase;
@@ -178,6 +190,13 @@ export class Game {
             c.totalBlitzium = c.blitzium;
 
             new Miner(c, c.homeBase);
+
+            this.responseTimePerColony.set(c, {
+                responseTimePerTicks: [],
+                processingTimePerTicks: [],
+                unitsPerTicks: [],
+                nbTimeouts: 0
+            });
         });
 
         this._isRunning = true;
@@ -192,13 +211,19 @@ export class Game {
 
             const allTickCommandsWaiting = this.colonies.map(async c => {
                 try {
+                    const stat = this.responseTimePerColony.get(c);
                     let command: Command | void = null;
 
                     if (this.options.timeMsAllowedPerTicks !== 0) {
+                        let timeWhenStarted = new Date().getTime();
+
                         command = await Promise.race([
                             timeoutAfter(this.options.timeMsAllowedPerTicks),
                             c.getNextCommand({ colonyId: c.id, ...startingState })
                         ]);
+
+                        stat.responseTimePerTicks.push(new Date().getTime() - timeWhenStarted);
+                        stat.unitsPerTicks.push(c.units.length);
                     } else {
                         command = await c.getNextCommand({ colonyId: c.id, ...startingState });
                     }
@@ -206,12 +231,17 @@ export class Game {
                     if (command) {
                         logger.debug(`Command received for ${c}`, command);
 
+                        let timeWhenStarted = new Date().getTime();
                         c.applyCommand(command);
+                        stat.processingTimePerTicks.push(new Date().getTime() - timeWhenStarted);
 
                         this.notifyCommandApplied();
                     } else {
+                        stat.nbTimeouts = stat.nbTimeouts + 1;
                         logger.info(`No command was received in time for ${c} on tick ${tick}`);
                     }
+
+                    this.responseTimePerColony.set(c, stat);
                 } catch (ex) {
                     logger.warn(`Error while fetching ${c} command for tick ${tick}.`, ex);
                 }
@@ -242,6 +272,24 @@ export class Game {
 
         this._isCompleted = true;
         this._isRunning = false;
+
+        this.colonies.forEach(c => {
+            logger.info(`Sending stats for ${c}`);
+
+            const stat = this.responseTimePerColony.get(c);
+            const event = hny.newEvent();
+            event.addField('game.team_name', c.name);
+            event.addField('game.total_blitzium', c.totalBlitzium);
+            event.addField('game.nb_of_units', c.units.length);
+            event.addField('game.response_time_avg', stat.responseTimePerTicks.reduce((a, b) => a + b, 0) / stat.responseTimePerTicks.length);
+            event.addField('game.processing_times_avg', stat.processingTimePerTicks.reduce((a, b) => a + b, 0) / stat.processingTimePerTicks.length);
+            event.addField('game.nb_of_timeouts', stat.nbTimeouts);
+
+            event.addField('service_name', "game");
+            event.addField('name', "game_stats");
+
+            event.send();
+        });
 
         this.notifyGameCompleted(
             this.colonies

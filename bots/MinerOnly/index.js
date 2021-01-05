@@ -37,15 +37,20 @@ const startClient = () => {
                             row.forEach((tile, y) => {
                                 if (tile === 'MINE') {
                                     depot = { x, y: y };
-                                    depotPoint = { x, y: y - 1 };
+                                    depotPoint = { x, y: y + 1 };
                                 }
                             })
                         });
 
+                        
+
 
                         myColony.errors.forEach(c => console.log(c));
-
+                        console.log(myColony.blitzium);
+                        console.log(myColony.totalBlitzium);
                         const actions = myColony.units.map(u => {
+                            console.log(JSON.stringify(u.position));
+                            
                             if (u.blitzium > 0 && u.position.x === homeBasePoint.x && u.position.y === homeBasePoint.y) {
                                 console.log('DROPING');
                                 return { type: 'UNIT', action: 'DROP', unitId: u.id, target: myColony.homeBase }
@@ -69,10 +74,9 @@ const startClient = () => {
                             return { type: 'UNIT', action: 'NONE' };
                         });
 
-                        if (myColony.blitzium >= 25) {
-                            actions.push({ type: 'BUY', unitType: 'MINER' });
-                        }
 
+
+                        console.log(myColony.units.length);
                         setTimeout(() => {
                             client.send(JSON.stringify({ type: "COMMAND", tick: message.tick, actions }));
                         }, 100);

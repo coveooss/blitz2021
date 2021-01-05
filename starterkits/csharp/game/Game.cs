@@ -69,7 +69,7 @@ public class Map
     public String getRawTileValueAt(Position position)
     {
         this.validateTileExists(position);
-        return this.tiles[position.y][position.x];
+        return this.tiles[position.x][position.y];
     }
 
     public void validateTileExists(Position position)
