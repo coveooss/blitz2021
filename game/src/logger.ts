@@ -24,7 +24,7 @@ const getTransports = () => {
                 errorToFileTransport,
                 new winston.transports.Console({
                     format: winston.format.combine(getPrettyFormat({ prettyColors: true })),
-                    level: "debug"
+                    level: "info"
                 })
             ]
         }
