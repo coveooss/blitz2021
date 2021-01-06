@@ -6,6 +6,7 @@ import {Size, VisualizationContext} from '../constants';
 import {Stage} from 'react-konva';
 import Game from '../game/game';
 import Infos from '../infos/infos';
+import StaticElements from '../game/staticElements';
 
 const Viewer: React.FC = () => {
     const [currentTick, setCurrentTick] = React.useState<Tick | null>(null);
@@ -35,6 +36,7 @@ const Viewer: React.FC = () => {
 
     return (
         <Stage width={width} height={height}>
+            <StaticElements firstTick={currentTick} boardSize={boardSize} />
             <VisualizationContext.Provider value={{tick: currentTick.tick, boardSize, currentTick}}>
                 <Game />
                 <Infos />

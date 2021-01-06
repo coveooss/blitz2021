@@ -3,6 +3,7 @@ import {Group, Path} from 'react-konva';
 
 import {Size} from '../../constants';
 import {TileProps} from './tileProps';
+import useCachedRef from '../../hooks/useCachedRef';
 
 const shapes: Array<{path: string; fill: string;}> = [
     {path: "M11.2 0L22 4.8 23.2 8l-3.6 6 1.2 2.8.8 2.8-13.2 3.2L4 20.4 2.8 18l.4-4L6.4 2z", fill: "#fbe58d"},
@@ -19,10 +20,12 @@ const shapes: Array<{path: string; fill: string;}> = [
 ];
 
 const Blitzium: React.FunctionComponent<TileProps & {scale?: number}> = ({x, y, scale = 1}) => {
+    const ref = useCachedRef();
+
     const tileSizeInMockup = 26;
     const pathScale = Size.Tile / tileSizeInMockup * scale;
     return (
-        <Group x={x * Size.Tile} y={y * Size.Tile}>
+        <Group x={x * Size.Tile} y={y * Size.Tile} ref={ref}>
             {shapes.map(({path, fill}, i: number) => (
                 <Path
                     key={`shape-${i}`}

@@ -24,6 +24,8 @@ const Scores: React.FunctionComponent = () => {
                     align="left"
                     wrap="none"
                     ellipsis
+                    hitStrokeWidth={0}
+                    shadowForStrokeEnabled={false}
                 />
                 <Text
                     x={teamNameMaxLength}
@@ -35,6 +37,8 @@ const Scores: React.FunctionComponent = () => {
                     shadowColor={color}
                     text={blitzium.toString()}
                     align="left"
+                    hitStrokeWidth={0}
+                    shadowForStrokeEnabled={false}
                 />
             </React.Fragment>
         );
