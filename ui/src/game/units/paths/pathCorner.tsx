@@ -43,12 +43,7 @@ const PathCorner: React.FunctionComponent<PathCornerProps> = ({x, y, previous, n
                     width={lineSize}
                     height={Size.Tile / 2}
                     offset={{x: lineSize / 2, y: lineSize / 2}}
-                    shadowColor={'#000'}
-                    shadowOffset={{
-                        x: (-CAPTURED_GAP_RATIO / 2) * Size.InnerTile,
-                        y: (CAPTURED_GAP_RATIO / 2) * Size.InnerTile,
-                    }}
-                    shadowOpacity={0.3}
+                    perfectDrawEnabled={false}
                 />
             </Group>
         </Group>

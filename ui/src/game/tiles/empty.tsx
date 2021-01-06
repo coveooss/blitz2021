@@ -14,6 +14,7 @@ const Empty: React.FunctionComponent<TileProps> = ({x, y}) => {
             y={y * Size.Tile}
             stroke="#C2BCB0"
             strokeWidth={1}
+            perfectDrawEnabled={false}
         />
     );
 };

@@ -5,6 +5,7 @@ import {Tick} from 'blitz2021/dist/game/types';
 import {Stage} from 'react-konva';
 import Infos from '../infos/infos';
 import Game from '../game/game';
+import StaticElements from '../game/staticElements';
 
 export interface IReplayViewerProps {
     ticks: Tick[];
@@ -101,6 +102,7 @@ const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, heigh
     return (
         <KeyHandler onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
             <Stage width={width} height={height} >
+                <StaticElements firstTick={ticks?.[0]} boardSize={boardSize} />
                 <KeyContext.Provider value={{pressedKey: key}}>
                   <VisualizationContext.Provider value={{tick, boardSize, currentTick}}>
                       <Game />

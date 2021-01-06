@@ -9,7 +9,7 @@ export interface InfosProps {
 
 const Infos: React.FunctionComponent<InfosProps> = ({speed}) => {
     return (
-        <Layer listening={false}>
+        <Layer listening={false} pixelRatio={1}>
             <Scores />
             <GameState speed={speed} />
         </Layer>
