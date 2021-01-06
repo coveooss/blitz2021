@@ -5,6 +5,7 @@ import { Server } from './server/server'
 import { Game } from './game/game';
 import { Recorder, RecorderMode } from './recorder/recorder';
 import { logger } from './logger';
+import { GameMap } from './game/map';
 
 const splash = ` ______   _       __________________ _______      _______  _______  _______  __   
 (  ___ \\ ( \\      \\__   __/\\__   __// ___   )    / ___   )(  __   )/ ___   )/  \\  
@@ -42,6 +43,20 @@ const args = yargs(process.argv.slice(2))
 
         process.exit();
     })
+  .command("validate-maps", "Validate all the available maps", () => {
+    let files = fs.readdirSync(MAP_FILE_FOLDER);
+    files.forEach((f) => {
+      try {
+        GameMap.fromFile(MAP_FILE_FOLDER + f);
+      } catch (error) {
+        console.log(`\t - ${f} - Invalid - `, error);
+        return;
+      }
+      console.log(`\t - ${f} - Valid`);
+    });
+
+    process.exit();
+  })
     .env(true)
     .argv;
 

@@ -58,7 +58,7 @@ export class GameMap {
                 tiles[x][y] = COLOR_TO_TYLE.get(rawValue);
 
                 if (!tiles[x][y]) {
-                    throw new Error(`Error parsing file, pixel 0x${rawValue.toString(16)} doesn't match ${JSON.stringify(COLOR_TO_TYLE.keys())} for ${COLOR_TO_TYLE.values()}`);
+                    throw new Error(`Error parsing file, pixel 0x${rawValue.toString(16)} doesn't match ${Array.from(COLOR_TO_TYLE.keys()).map(c => `0x${c.toString(16)}`)} for ${COLOR_TO_TYLE.values()}`);
                 }
             }
         }
