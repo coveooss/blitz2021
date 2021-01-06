@@ -59,6 +59,18 @@ const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, heigh
             case keyCodes.Five:
                 setSpeed(4);
                 break;
+            case keyCodes.Six:
+                setSpeed(5);
+                break;
+            case keyCodes.Seven:
+                setSpeed(6);
+                break;
+            case keyCodes.Eight:
+                setSpeed(7);
+                break;
+            case keyCodes.Nine:
+                setSpeed(8);
+                break;
             default:
                 break;
         }

@@ -15,7 +15,7 @@ export const fontWeight = 'bold';
 export const darkenColors = ['#547DA3', '#368E65', '#BC9811', '#771616'];
 export const colors = ['#79A8D4', '#5BB88C', '#E9AD32', '#B02E2E'];
 
-export const speeds = [1000, 700, 500, 300, 100];
+export const speeds = [1000, 700, 500, 300, 100, 50, 25, 10, 5, 2];
 
 export const AnglePerDirection = {
     LEFT: 180,
@@ -26,11 +26,15 @@ export const AnglePerDirection = {
 
 export const keyCodes = {
     Comma: ',',
+    Eight: '8',
     Five: '5',
     Four: '4',
+    Nine: '9',
     One: '1',
     Period: '.',
     Space: ' ',
+    Seven: '7',
+    Six: '6',
     Three: '3',
     Two: '2',
     P: 'p',
