@@ -30,7 +30,7 @@ export abstract class Colony {
     }
 
     public getUnitPrices() {
-        const MULTIPLIER = COLONY.UNIT_MULTIPLIER * (this.units.length + 1);
+        const MULTIPLIER = Math.max(COLONY.UNIT_MULTIPLIER * (this.units.length - 1), 1);
         return {
             "MINER": Math.round(UNIT.MINER_COST * MULTIPLIER),
             "CART": Math.round(UNIT.CART_COST * MULTIPLIER),

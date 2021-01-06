@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { UnitError } from "../error";
 import { Colony } from "../colonies/colony";
 import { TickColonyUnit, UnitType } from "../types";
+import {  UNIT } from "../config";
 
 export abstract class Unit {
     public readonly id: string
@@ -61,6 +62,12 @@ export abstract class Unit {
 
         if (isAdjacent(target, this.position) && enemy && enemy.colony !== this.colony) {
             enemy.kill();
+
+            let odds = enemy.type === "OUTLAW" ? UNIT.OUTLAW_SURVIVAL_X_OUTLAW : UNIT.OUTLAW_SURVICAL_X_OTHER;
+            if (Math.random() >= odds) {
+                this.kill();
+            }
+
             return;
         }
 
