@@ -9,11 +9,11 @@ export interface TickColony {
     id: string;
     name: string;
     homeBase: Position;
-    spawnPoint: Position;
     blitzium: number;
     totalBlitzium: number;
     units: TickColonyUnit[];
     errors: string[];
+    prices: { [key: string]: number }
 }
 
 export interface TickColonyUnit {

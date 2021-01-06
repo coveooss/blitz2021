@@ -1,4 +1,4 @@
-import { UNIT } from '../config';
+import { COLONY, UNIT } from '../config';
 import { ColonyError, CommandActionError, UnitError } from '../error';
 import { Command, CommandActionBuy, PlayerTick, TickColony, UnitType } from '../types';
 import { Cart } from '../units/cart';
@@ -18,8 +18,6 @@ export abstract class Colony {
     public errors: string[] = [];
 
     public homeBase: Position;
-    public spawnPoint: Position;
-
     public isDead: boolean = false;
 
     constructor(public game: Game, public name: string) {
@@ -31,42 +29,46 @@ export abstract class Colony {
         this.game.registerColony(this);
     }
 
+    public getUnitPrices() {
+        const MULTIPLIER = COLONY.UNIT_MULTIPLIER * (this.units.length + 1);
+        return {
+            "MINER": Math.round(UNIT.MINER_COST * MULTIPLIER),
+            "CART": Math.round(UNIT.CART_COST * MULTIPLIER),
+            "OUTLAW": Math.round(UNIT.OUTLAW_COST * MULTIPLIER)
+        }
+    }
+
     public dropBlitzium(blitzium: number) {
         this.blitzium = this.blitzium + blitzium;
         this.totalBlitzium = this.totalBlitzium + blitzium;
     }
 
     private buyUnit(action: CommandActionBuy) {
+        let unitPrice = this.getUnitPrices()[action.unitType];
+
+        if (unitPrice === undefined) {
+            throw new CommandActionError(action, `Invalid unitType ${action.unitType}`);
+        }
+
+        if (unitPrice > this.blitzium) {
+            throw new CommandActionError(action, `Unit ${action.unitType} is too expensive ${unitPrice}`);
+        }
+
+        let spawnPoint = this.findNearestSpawnPoint();
+        this.blitzium = this.blitzium - unitPrice;
+
         switch (action.unitType) {
             case "MINER": {
-                if (this.blitzium < UNIT.MINER_COST) {
-                    throw new CommandActionError(action, `Unit ${action.unitType} is too expensive ${UNIT.MINER_COST}`);
-                }
-
-                this.blitzium = this.blitzium - UNIT.MINER_COST;
-                new Miner(this, this.spawnPoint);
+                new Miner(this, spawnPoint);
                 break;
             }
             case "CART": {
-                if (this.blitzium < UNIT.CART_COST) {
-                    throw new CommandActionError(action, `Unit ${action.unitType} is too expensive ${UNIT.CART_COST}`);
-                }
-
-                this.blitzium = this.blitzium - UNIT.CART_COST;
-                new Cart(this, this.spawnPoint);
+                new Cart(this, spawnPoint);
                 break;
             }
             case "OUTLAW": {
-                if (this.blitzium < UNIT.OUTLAW_COST) {
-                    throw new CommandActionError(action, `Unit ${action.unitType} is too expensive ${UNIT.OUTLAW_COST}`);
-                }
-
-                this.blitzium = this.blitzium - UNIT.OUTLAW_COST;
-                new Outlaw(this, this.spawnPoint);
+                new Outlaw(this, spawnPoint);
                 break;
-            }
-            default: {
-                new CommandActionError(action, `Invalid unitType ${action.unitType}`);
             }
         }
     }
@@ -154,7 +156,23 @@ export abstract class Colony {
         });
     }
 
-    public abstract async getNextCommand(tick: PlayerTick): Promise<Command>;
+    public abstract getNextCommand(tick: PlayerTick): Promise<Command>;
+
+    public findNearestSpawnPoint(from: Position = this.homeBase): Position {
+        let allCandidates = this.game.map.getNeighbors(from);
+        let validCandidates = allCandidates.filter(t => !this.game.hasUnitOnPosition(t.position));
+
+        if (validCandidates.length > 0) {
+            return validCandidates[0].position;
+        } else {
+            let nextCandidates = allCandidates.map(t => this.findNearestSpawnPoint(t.position));
+            if (nextCandidates.length > 0) {
+                return nextCandidates[0];
+            }
+
+            throw new ColonyError(this, `Impossible to find a spawn point`);
+        }
+    }
 
     public toString() {
         return `([Colony] ${this.id} - ${this.name})`;
@@ -166,10 +184,10 @@ export abstract class Colony {
             name: this.name,
             errors: this.errors,
             homeBase: this.homeBase,
-            spawnPoint: this.spawnPoint,
             blitzium: this.blitzium,
             totalBlitzium: this.totalBlitzium,
-            units: this.units.map(u => u.serialize())
+            units: this.units.map(u => u.serialize()),
+            prices: this.getUnitPrices()
         }
     }
 }

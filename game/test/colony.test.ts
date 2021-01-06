@@ -13,7 +13,6 @@ class TestColony extends Colony {
     constructor(public game: Game) {
         super(game, EXPECTED_COLONY_NAME);
         this.id = EXPECTED_COLONY_ID;
-        this.spawnPoint = { x: 12, y: 24 };
         this.homeBase = { x: 11, y: 24 };
     }
 
@@ -170,10 +169,10 @@ describe('Colony', () => {
                 name: EXPECTED_COLONY_NAME,
                 errors: [],
                 homeBase: { x: 11, y: 24 },
-                spawnPoint: { x: 12, y: 24 },
                 blitzium: 0,
                 units: [],
-                totalBlitzium: 0
+                totalBlitzium: 0,
+                prices: colony.getUnitPrices()
             });
         });
 
