@@ -26,8 +26,9 @@ const Wall: React.FunctionComponent<TileProps> = ({x, y}) => {
     const pathScale = Size.Tile / tileSizeInMockup;
     return (
         <Group x={x * Size.Tile} y={y * Size.Tile}>
-            {paths.map(p => (
+            {paths.map((p) => (
                 <Path
+                    key={p}
                     data={p}
                     fill="#7B7B7B"
                     width={Size.InnerTile}

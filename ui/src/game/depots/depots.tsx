@@ -1,20 +1,23 @@
 import * as React from 'react';
-import {Group, Path} from 'react-konva';
+import {Group} from 'react-konva';
 
 import {Size, VisualizationContext} from '../../constants';
 import Blitzium from '../tiles/blitzium';
+import BlitziumCount from '../units/blitziumCount';
 
 const Depots: React.FunctionComponent = () => {
     const {currentTick} = React.useContext(VisualizationContext);
 
-    const depots = currentTick?.map?.depots?.map((depot, i) =>
-            {
-                const {y, x} = depot.position;
-                return (
-                <Group key={`depot-${i}`}>
+    const depots = currentTick?.map?.depots
+        //?.filter(({blitzium}) => blitzium > 0)
+        ?.map(({blitzium, position}, i) => {
+            const {y, x} = position;
+            return (
+                <React.Fragment key={`depot-${x}-${y}`}>
                     <Blitzium x={x + 0.05} y={y + 0.05} scale={0.4}/>
                     <Blitzium x={x + 0.55} y={y + 0.55} scale={0.4}/>
-                </Group>
+                    <BlitziumCount color="#ffd121" blitzium={blitzium} position={position}/>
+                </React.Fragment>
             );
         });
     return (
