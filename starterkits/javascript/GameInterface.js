@@ -31,6 +31,7 @@
  * @property {number} totalBlitzium
  * @property {IUnit[]} units
  * @property {string[]} errors
+ * @property {{MINER: number, CART: number, OUTLAW: number}} prices
  */
 
 /**

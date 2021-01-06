@@ -3,6 +3,13 @@ using static Map;
 
 public class Colony
 {
+    public class Prices
+    {
+        public int MINER;
+        public int OUTLAW;
+        public int CART;
+    }
+
     public string id;
     public string name;
     public Position homeBase;
@@ -10,6 +17,7 @@ public class Colony
     public int totalBlitzium;
     public List<Unit> units;
     public List<string> errors;
+    public Prices prices;
 }
 
 public class Unit

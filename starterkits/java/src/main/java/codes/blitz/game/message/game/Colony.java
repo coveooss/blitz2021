@@ -10,6 +10,7 @@ public class Colony {
     private int totalBlitzium;
     private List<Unit> units;
     private List<String> errors;
+    private Prices prices;
 
 
     public String getId() {
@@ -68,4 +69,7 @@ public class Colony {
         this.errors = errors;
     }
 
+    public Prices getPrices() {
+        return prices;
+    }
 }

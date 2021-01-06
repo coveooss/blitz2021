@@ -43,20 +43,20 @@ const args = yargs(process.argv.slice(2))
 
         process.exit();
     })
-  .command("validate-maps", "Validate all the available maps", () => {
-    let files = fs.readdirSync(MAP_FILE_FOLDER);
-    files.forEach((f) => {
-      try {
-        GameMap.fromFile(MAP_FILE_FOLDER + f);
-      } catch (error) {
-        console.log(`\t - ${f} - Invalid - `, error);
-        return;
-      }
-      console.log(`\t - ${f} - Valid`);
-    });
+    .command("validate-maps", "Validate all the available maps", () => {
+        let files = fs.readdirSync(MAP_FILE_FOLDER);
+        files.forEach((f) => {
+            try {
+                GameMap.fromFile(MAP_FILE_FOLDER + f);
+            } catch (error) {
+                console.log(`\t - ${f} - Invalid - `, error);
+                return;
+            }
+            console.log(`\t - ${f} - Valid`);
+        });
 
-    process.exit();
-  })
+        process.exit();
+    })
     .env(true)
     .argv;
 

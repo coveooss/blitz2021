@@ -27,6 +27,12 @@ class Position:
     x: int
     y: int
 
+@dataclass_json
+@dataclass
+class Prices:
+    MINER: int
+    OUTLAW: int
+    CART: int
 
 @dataclass_json
 @dataclass
@@ -93,6 +99,7 @@ class Colony:
     totalBlitzium: int
     units: List[Unit]
     errors: List[str]
+    prices: Prices
 
 
 @dataclass_json

@@ -27,7 +27,12 @@ export interface IColony {
   blitzium: number,
   totalBlitzium: number,
   units: IUnit[],
-  errors: string[]
+  errors: string[],
+  prices: {
+    MINER: number,
+    CART: number,
+    OUTLAW: number
+  }
 }
 
 export interface IGameTick {

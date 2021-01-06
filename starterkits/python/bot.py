@@ -14,10 +14,6 @@ class Bot:
 
         actions: List[UnitAction] = [UnitAction(UnitActionType.MOVE, unit.id, self.get_random_position(game_message.map.get_map_size())) for unit in my_colony.units]
 
-        # You can print out a pretty version of the map but be aware that
-        # printing out long strings can impact your bot performance (30 ms in average).
-        # print(game_message.game.pretty_map)
-
         return actions
 
     def get_random_position(self, map_size: int) -> Position:
