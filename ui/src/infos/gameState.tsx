@@ -22,6 +22,8 @@ const GameState: React.FunctionComponent<GameStateProps> = ({speed}) => {
                 shadowColor="red"
                 text={`Step: ${Math.max(0, tick + 1)}`}
                 align="left"
+                hitStrokeWidth={0}
+                shadowForStrokeEnabled={false}
             />
             {speed !== undefined
              ? (
@@ -34,6 +36,8 @@ const GameState: React.FunctionComponent<GameStateProps> = ({speed}) => {
                     shadowColor="red"
                     text={`Speed: ${speed + 1}`}
                     align="right"
+                    hitStrokeWidth={0}
+                    shadowForStrokeEnabled={false}
                 />
             )
             : null

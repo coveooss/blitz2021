@@ -42,12 +42,7 @@ const Paths: React.FunctionComponent = () => {
                                        height={isVertical ? Size.Tile : lineSize}
                                        x={isVertical ? posX + halfOffset : posX - Size.Gap / 2}
                                        y={isVertical ? posY - Size.Gap / 2 : posY + halfOffset}
-                                       shadowColor={'#000'}
-                                       shadowOffset={{
-                                           x: (-CAPTURED_GAP_RATIO / 2) * Size.InnerTile,
-                                           y: (CAPTURED_GAP_RATIO / 2) * Size.InnerTile,
-                                       }}
-                                       shadowOpacity={0.3}
+                                       perfectDrawEnabled={false}
                                    />
                                );
                     }

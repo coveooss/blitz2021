@@ -1,16 +1,17 @@
 import * as React from 'react';
 import {Group} from 'react-konva';
-import {Size, VisualizationContext} from '../../constants';
+import {Size} from '../../constants';
 import {TileType, Position} from 'blitz2021/dist/game/types';
 import {TilesUtils} from '../../utils/tilesUtils';
 import Wall from './wall';
 import Blitzium from './blitzium';
 import Empty from './empty';
+import useCachedRef from '../../hooks/useCachedRef';
 
-const Tiles: React.FunctionComponent = () => {
-    const {currentTick} = React.useContext(VisualizationContext);
+const Tiles: React.FunctionComponent<{tiles?: TileType[][]}> = ({tiles}) => {
+    const ref = useCachedRef();
 
-    const tiles = currentTick?.map?.tiles?.map((row, x) =>
+    const tilesShape = tiles?.map((row, x) =>
         row.map((tile: TileType, y) => {
             const defaultProps: Position & {key: string} = {key: `tile-${x}-${y}`, x, y};
             if (TilesUtils.isWall(tile)) {
@@ -24,8 +25,8 @@ const Tiles: React.FunctionComponent = () => {
     );
 
     return (
-        <Group offset={{x: -0.5 * Size.Gap, y: -0.5 * Size.Gap}}>
-            {tiles}
+        <Group offset={{x: -0.5 * Size.Gap, y: -0.5 * Size.Gap}} ref={ref}>
+            {tilesShape}
         </Group>
     );
 };
