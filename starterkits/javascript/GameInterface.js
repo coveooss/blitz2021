@@ -27,7 +27,6 @@
  * @property {string} id
  * @property {string} name
  * @property {IPosition} homeBase
- * @property {IPosition} spawnPoint
  * @property {number} blitzium
  * @property {number} totalBlitzium
  * @property {IUnit[]} units

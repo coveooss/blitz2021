@@ -24,7 +24,6 @@ export interface IColony {
   id: string,
   name: string,
   homeBase: IPosition,
-  spawnPoint: IPosition,
   blitzium: number,
   totalBlitzium: number,
   units: IUnit[],

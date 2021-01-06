@@ -88,7 +88,6 @@ class Unit:
 class Colony:
     id: str
     name: str
-    spawnPoint: Position
     homeBase: Position
     blitzium: int
     totalBlitzium: int

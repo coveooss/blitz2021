@@ -6,7 +6,6 @@ public class Colony
     public string id;
     public string name;
     public Position homeBase;
-    public Position spawnPoint;
     public int blitzium;
     public int totalBlitzium;
     public List<Unit> units;

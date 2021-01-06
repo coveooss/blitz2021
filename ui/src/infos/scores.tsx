@@ -7,7 +7,7 @@ const Scores: React.FunctionComponent = () => {
     const {boardSize, currentTick} = React.useContext(VisualizationContext);
     const teamNameMaxLength = 200;
     const getTeamOffset = (i: number) => i * verticalMargin;
-    const scores = currentTick?.colonies?.map(({id, name, totalBlitzium}, i: number) => {
+    const scores = currentTick?.colonies?.map(({id, name, blitzium}, i: number) => {
         const y = getTeamOffset(i) + verticalMargin;
         const color = colors[i];
         return (
@@ -33,7 +33,7 @@ const Scores: React.FunctionComponent = () => {
                     fontStyle={fontWeight}
                     fill={color}
                     shadowColor={color}
-                    text={totalBlitzium.toString()}
+                    text={blitzium.toString()}
                     align="left"
                 />
             </React.Fragment>

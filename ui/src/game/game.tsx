@@ -6,7 +6,6 @@ import Tiles from './tiles/tiles';
 import Units from './units/units';
 import Paths from './units/paths/paths';
 import Bases from './bases';
-import SpawnPoints from './spawnPoints';
 import {keyCodes, KeyContext} from '../constants';
 
 const Game: React.FunctionComponent = () => {
@@ -16,7 +15,6 @@ const Game: React.FunctionComponent = () => {
             <Layer listening={false}>
                 <Background/>
                 <Tiles />
-                <SpawnPoints />
                 <Bases />
             </Layer>
             {/* different layer to avoid repainting the first one if it doesn't change */}

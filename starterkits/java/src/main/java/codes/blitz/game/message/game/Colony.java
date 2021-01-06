@@ -6,7 +6,6 @@ public class Colony {
     private String id;
     private String name;
     private Position homeBase;
-    private Position spawnPoint;
     private int blitzium;
     private int totalBlitzium;
     private List<Unit> units;
@@ -35,14 +34,6 @@ public class Colony {
 
     public void setHomeBase(Position homeBase) {
         this.homeBase = homeBase;
-    }
-
-    public Position getSpawnPoint() {
-        return spawnPoint;
-    }
-
-    public void setSpawnPoint(Position spawnPoint) {
-        this.spawnPoint = spawnPoint;
     }
 
     public int getBlitzium() {

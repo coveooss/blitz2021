@@ -218,7 +218,6 @@ export class Game {
 
         this.colonies.forEach((c, i) => {
             c.homeBase = this.map.bases[i].position;
-            c.spawnPoint = c.homeBase;
             c.blitzium = COLONY.START_BALANCE;
             c.totalBlitzium = c.blitzium;
 
@@ -284,6 +283,12 @@ export class Game {
                 await Promise.allSettled(allTickCommandsWaiting);
 
                 this.viewers.forEach(v => v.onTick(this.serialize()));
+
+                this.colonies.forEach(c => {
+                    if (c.units.length === 0) {
+                        new Miner(c, c.findNearestSpawnPoint());
+                    }
+                });
 
                 this.notifyTickApplied();
             } catch (ex) {
