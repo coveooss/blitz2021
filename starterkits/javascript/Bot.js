@@ -10,13 +10,11 @@ class Bot {
     }
 
     /**
-     * 
      * @param {Game.GameMessage} gameMessage 
      */
     getNextMove(gameMessage) {
         const myColony = gameMessage.colonies.find(c => c.id === gameMessage.colonyId);
         const mapSize = gameMessage.map.tiles.length;
-        gameMessage.
 
         const randomPosition = {
             x: Math.round(Math.random() * mapSize),
