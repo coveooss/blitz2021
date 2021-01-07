@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Group, Path} from 'react-konva';
+import {Group, Path, Rect} from 'react-konva';
 
 import {Size} from '../../constants';
 import {TileProps} from './tileProps';
@@ -26,6 +26,7 @@ const Wall: React.FunctionComponent<TileProps> = ({x, y}) => {
     const pathScale = Size.Tile / tileSizeInMockup;
     return (
         <Group x={x * Size.Tile} y={y * Size.Tile}>
+            <Rect fill="#0E251B" width={Size.InnerTile} height={Size.InnerTile} perfectDrawEnabled={false} />
             {paths.map((p) => (
                 <Path
                     key={p}

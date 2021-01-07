@@ -9,8 +9,8 @@ const StaticElements: React.FunctionComponent<{firstTick?: Tick, boardSize: numb
     return (
         <Layer listening={false} pixelRatio={1}>
             <Background boardSize={boardSize} />
-            <Tiles tiles={firstTick?.map.tiles} />
             <Bases colonies={firstTick?.colonies} />
+            <Tiles tiles={firstTick?.map.tiles} />
         </Layer>
     );
 }

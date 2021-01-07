@@ -169,6 +169,7 @@ describe('Colony', () => {
                 name: EXPECTED_COLONY_NAME,
                 errors: [],
                 homeBase: { x: 11, y: 24 },
+                safeZoneRadius: 3,
                 blitzium: 0,
                 units: [],
                 totalBlitzium: 0,
