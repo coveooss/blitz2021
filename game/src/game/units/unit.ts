@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { UnitError } from "../error";
 import { Colony } from "../colonies/colony";
 import { TickColonyUnit, UnitType } from "../types";
-import {  UNIT } from "../config";
+import { UNIT } from "../config";
 
 export abstract class Unit {
     public readonly id: string
@@ -12,7 +12,7 @@ export abstract class Unit {
     public maxBlitzium = 0;
     public path: Position[] = []
 
-    constructor(public colony: Colony, public position: Position, protected type: UnitType) {
+    constructor(public colony: Colony, public position: Position, public type: UnitType) {
         this.id = uuid();
         this.colony.units.push(this);
     }
@@ -32,6 +32,16 @@ export abstract class Unit {
         if (equal(this.position, target)) {
             this.path = [];
             return;
+        }
+
+        if (this.path.length > 0 && equal(target, this.path[this.path.length - 1])) {
+            let newPosition = this.path[0];
+
+            if (!this.colony.game.getUnitAtPosition(target)) {
+                this.position = newPosition;
+                this.path = this.path.slice(1);
+                return;
+            }
         }
 
         const map = this.colony.game.map;

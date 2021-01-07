@@ -54,20 +54,23 @@ export abstract class Colony {
             throw new CommandActionError(action, `Unit ${action.unitType} is too expensive ${unitPrice}`);
         }
 
-        let spawnPoint = this.findNearestSpawnPoint();
+        if (this.game.hasUnitOnPosition(this.homeBase)) {
+            throw new CommandActionError(action, `There's a unit already at home base`);
+        }
+
         this.blitzium = this.blitzium - unitPrice;
 
         switch (action.unitType) {
             case "MINER": {
-                new Miner(this, spawnPoint);
+                new Miner(this, this.homeBase);
                 break;
             }
             case "CART": {
-                new Cart(this, spawnPoint);
+                new Cart(this, this.homeBase);
                 break;
             }
             case "OUTLAW": {
-                new Outlaw(this, spawnPoint);
+                new Outlaw(this, this.homeBase);
                 break;
             }
         }
