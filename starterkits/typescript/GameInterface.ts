@@ -96,7 +96,7 @@ export class GameMessage implements IGameTick {
 
   public getTileTypeAt(position: IPosition): TileType {
     this.validateTileExists(position);
-    return this.rawTick.map[position.x][position.y];
+    return this.rawTick.map.tiles[position.x][position.y];
   }
 
   public getPlayerMapById() {
