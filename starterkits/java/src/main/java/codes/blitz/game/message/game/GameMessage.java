@@ -13,6 +13,7 @@ public class GameMessage
     private List<Colony> colonies;
     private GameMap map;
     private Map<String, Colony> coloniesMapById;
+    private Rules rules;
 
     public int getTick() {
         return tick;
@@ -41,5 +42,7 @@ public class GameMessage
         return coloniesMapById;
     }
 
-
+    public Rules getRules() {
+        return rules;
+    }
 }

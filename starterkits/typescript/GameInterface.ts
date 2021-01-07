@@ -35,6 +35,12 @@ export interface IColony {
   }
 }
 
+export interface IRules {
+  MAX_MINER_CARGO: number,
+  MAX_TRANSPORTER_CARGO: number,
+  MAX_MINER_MOVE_CARGO: number
+}
+
 export interface IGameTick {
   tick: number,
   totalTick: number,
@@ -43,7 +49,8 @@ export interface IGameTick {
   map: {
     tiles: TileType[][],
     depots: IDepot[]
-  }
+  },
+  rules: IRules
 }
 
 export interface IBuyAction {

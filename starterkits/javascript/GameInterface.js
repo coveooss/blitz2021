@@ -42,6 +42,14 @@
  */
 
 /**
+ * @typedef IRules
+ * @type {object}
+ * @property {number} MAX_MINER_CARGO
+ * @property {number} MAX_TRANSPORTER_CARGO
+ * @property {number} MAX_MINER_MOVE_CARGO
+ */
+
+/**
  * @typedef IGameTick
  * @type {object}
  * @property {number} tick
@@ -49,6 +57,7 @@
  * @property {string} colonyId
  * @property {IColony[]} colonies
  * @property {IMap} map
+ * @property {IRules} rules
  */
 
 /**
@@ -116,7 +125,12 @@ class GameMessage {
    * @type {IMap}
    * @readonly
    */
-  map
+  map;
+  /**
+   * @type {IRules}
+   * @readonly
+   */
+  rules;
 
   /**
    * 
@@ -197,8 +211,8 @@ const ActionType = Object.freeze({
 const TileType = Object.freeze({
   Empty: 'EMPTY',
   Wall: 'WALL',
-  Depot: 'DEPOT',
-  Base: 'BASE'
+  Base: 'BASE',
+  Mine: 'MINE'
 });
 
 module.exports = {
