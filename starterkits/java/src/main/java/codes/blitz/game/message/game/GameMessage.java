@@ -5,51 +5,44 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class GameMessage
-{
-    private int tick;
-    private int totalTick;
-    private String colonyId;
-    private List<Colony> colonies;
-    private GameMap map;
-    private Map<String, Colony> coloniesMapById;
-    private Rules rules;
+public class GameMessage {
+	private int tick;
+	private int totalTick;
+	private String colonyId;
+	private List<Colony> colonies;
+	private GameMap map;
+	private Map<String, Colony> coloniesMapById;
+	private Rules rules;
 
-    public int getTick()
-    {
-        return tick;
-    }
+	public int getTick() {
+		return tick;
+	}
 
-    public int getTotalTick()
-    {
-        return totalTick;
-    }
+	public int getTotalTick() {
+		return totalTick;
+	}
 
-    public String getColonyId()
-    {
-        return colonyId;
-    }
+	public String getColonyId() {
+		return colonyId;
+	}
 
-    public List<Colony> getColonies()
-    {
-        return colonies;
-    }
+	public List<Colony> getColonies() {
+		return colonies;
+	}
 
-    public GameMap getGameMap()
-    {
-        return map;
-    }
+	public GameMap getGameMap() {
+		return map;
+	}
 
-    public Map<String, Colony> getColoniesMapById()
-    {
-        if (coloniesMapById == null) {
-            coloniesMapById = colonies.stream().collect(Collectors.toMap(Colony::getId, Function.identity()));
-        }
-        return coloniesMapById;
-    }
+	public Map<String, Colony> getColoniesMapById() {
+		if (coloniesMapById == null) {
+			coloniesMapById = colonies.stream().collect(
+					Collectors.toMap(Colony::getId, Function.identity()));
+		}
+		return coloniesMapById;
+	}
 
-    public Rules getRules()
-    {
-        return rules;
-    }
+	public Rules getRules() {
+		return rules;
+	}
 }

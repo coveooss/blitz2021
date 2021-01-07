@@ -19,56 +19,51 @@ import codes.blitz.game.message.bot.BotMessage;
 import codes.blitz.game.message.game.GameMessage;
 
 @ClientEndpoint(decoders = MessageDecoder.class, encoders = MessageEncoder.class)
-public class WebsocketClient
-{
-    private Bot bot;
-    private CountDownLatch latch;
+public class WebsocketClient {
+	private Bot bot;
+	private CountDownLatch latch;
 
-    public WebsocketClient(CountDownLatch latch)
-    {
-        this.latch = latch;
-        this.bot = new Bot();
-    }
+	public WebsocketClient(CountDownLatch latch) {
+		this.latch = latch;
+		this.bot = new Bot();
+	}
 
-    @OnOpen
-    public void onOpen(Session session) throws IOException, EncodeException
-    {
-        BotMessage message = new BotMessage();
-        message.setType(MessageType.REGISTER);
-        if (System.getenv("TOKEN") != null) {
-            String token = System.getenv("TOKEN");
-            message.setToken(token);
-        } else {
-            message.setColonyName("MyBot");
-        }
+	@OnOpen
+	public void onOpen(Session session) throws IOException, EncodeException {
+		BotMessage message = new BotMessage();
+		message.setType(MessageType.REGISTER);
+		if (System.getenv("TOKEN") != null) {
+			String token = System.getenv("TOKEN");
+			message.setToken(token);
+		} else {
+			message.setColonyName("MyBot");
+		}
 
-        session.getBasicRemote().sendObject(message);
-    }
+		session.getBasicRemote().sendObject(message);
+	}
 
-    @OnMessage
-    public void processMessageFromServer(GameMessage receivedMessage, Session session)
-            throws IOException,
-                EncodeException
-    {
-        System.out.println("\nTurn " + receivedMessage.getTick());
+	@OnMessage
+	public void processMessageFromServer(GameMessage receivedMessage,
+			Session session) throws IOException, EncodeException {
+		System.out.println("\nTurn " + receivedMessage.getTick());
 
-        List<String> errors = receivedMessage.getColoniesMapById().get(receivedMessage.getColonyId()).getErrors();
-        errors.forEach(System.out::println);
+		List<String> errors = receivedMessage.getColoniesMapById()
+				.get(receivedMessage.getColonyId()).getErrors();
+		errors.forEach(System.out::println);
 
-        // Send back a move
-        BotMessage botMessage = new BotMessage();
-        botMessage.setType(MessageType.COMMAND);
-        botMessage.setTick(receivedMessage.getTick());
-        botMessage.setActions(bot.getNextActions(receivedMessage));
+		// Send back a move
+		BotMessage botMessage = new BotMessage();
+		botMessage.setType(MessageType.COMMAND);
+		botMessage.setTick(receivedMessage.getTick());
+		botMessage.setActions(bot.getNextActions(receivedMessage));
 
-        session.getBasicRemote().sendObject(botMessage);
+		session.getBasicRemote().sendObject(botMessage);
 
-    }
+	}
 
-    @SuppressWarnings("unused")
-    @OnClose
-    public void onClose(Session session, CloseReason closeReason)
-    {
-        latch.countDown();
-    }
+	@SuppressWarnings("unused")
+	@OnClose
+	public void onClose(Session session, CloseReason closeReason) {
+		latch.countDown();
+	}
 }

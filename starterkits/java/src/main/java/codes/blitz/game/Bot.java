@@ -12,34 +12,30 @@ import codes.blitz.game.message.game.Position;
 import codes.blitz.game.message.game.UnitAction;
 import codes.blitz.game.message.game.UnitActionType;
 
-public class Bot
-{
-    public Bot()
-    {
-        // initialize some variables you will need throughout the game here
-    }
+public class Bot {
+	public Bot() {
+		// initialize some variables you will need throughout the game here
+	}
 
-    public List<Action> getNextActions(GameMessage gameMessage)
-    {
-        // Here is where the magic happens, for now the moves are random. I bet you can do better ;)
+	public List<Action> getNextActions(GameMessage gameMessage) {
+		// Here is where the magic happens, for now the moves are random. I bet
+		// you can do better ;)
 
-        Colony myColony = gameMessage.getColoniesMapById().get(gameMessage.getColonyId());
-        int mapSize = gameMessage.getGameMap().getMapSize();
+		Colony myColony = gameMessage.getColoniesMapById()
+				.get(gameMessage.getColonyId());
+		int mapSize = gameMessage.getGameMap().getMapSize();
 
-        List<Action> actions = myColony.getUnits()
-                                       .stream()
-                                       .map(unit -> new UnitAction(UnitActionType.MOVE,
-                                                                   unit.getId(),
-                                                                   getRandomPosition(mapSize)))
-                                       .collect(Collectors.toList());
+		List<Action> actions = myColony.getUnits().stream()
+				.map(unit -> new UnitAction(UnitActionType.MOVE, unit.getId(),
+						getRandomPosition(mapSize)))
+				.collect(Collectors.toList());
 
-        return actions;
+		return actions;
 
-    }
+	}
 
-    public Position getRandomPosition(int size)
-    {
-        Random rand = ThreadLocalRandom.current();
-        return new Position(rand.nextInt(size), rand.nextInt(size));
-    }
+	public Position getRandomPosition(int size) {
+		Random rand = ThreadLocalRandom.current();
+		return new Position(rand.nextInt(size), rand.nextInt(size));
+	}
 }
