@@ -211,8 +211,8 @@ const ActionType = Object.freeze({
 const TileType = Object.freeze({
   Empty: 'EMPTY',
   Wall: 'WALL',
-  Depot: 'DEPOT',
-  Base: 'BASE'
+  Base: 'BASE',
+  Mine: 'MINE'
 });
 
 module.exports = {
