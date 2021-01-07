@@ -1,19 +1,19 @@
 package codes.blitz.game.message.game;
 
 public class Prices {
-	private int MINER;
-	private int OUTLAW;
-	private int CART;
+	private int minerPrice;
+	private int outlawPrice;
+	private int cartPrice;
 
 	public int getMinerPrice() {
-		return MINER;
+		return minerPrice;
 	}
 
 	public int getOutlawPrice() {
-		return OUTLAW;
+		return outlawPrice;
 	}
 
 	public int getCartPrice() {
-		return CART;
+		return cartPrice;
 	}
 }
