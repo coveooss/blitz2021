@@ -37,7 +37,7 @@ export abstract class Unit {
         if (this.path.length > 0 && equal(target, this.path[this.path.length - 1])) {
             let newPosition = this.path[0];
 
-            if (!this.colony.game.getUnitAtPosition(target)) {
+            if (!this.colony.game.getUnitAtPosition(newPosition)) {
                 this.position = newPosition;
                 this.path = this.path.slice(1);
                 return;
