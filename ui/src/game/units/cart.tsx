@@ -5,6 +5,7 @@ import {Size} from '../../constants';
 import {UnitProps} from './unitProps';
 import Blitzium from '../tiles/blitzium';
 import useCachedRef from '../../hooks/useCachedRef';
+import BlitziumCount from './blitziumCount';
 
 const cart = "M7.5 34h25l2.1-2.1V18.5l1.4-1.4v-1.4H4v1.4l1.4 1.4v13.4z";
 const cartTopAngle = "M4 17.1h32l-1.4 1.4H5.4z";
@@ -69,6 +70,7 @@ const Cart: React.FunctionComponent<UnitProps> = ({position, color, darkColor, b
                     shadowForStrokeEnabled={false}
                 />
             </Group>
+            <BlitziumCount color={color} position={{x, y}} blitzium={blitzium} />
         </>
     );
 };

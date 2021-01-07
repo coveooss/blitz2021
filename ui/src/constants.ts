@@ -25,6 +25,7 @@ export const AnglePerDirection = {
 };
 
 export const keyCodes = {
+    C: 'c',
     Comma: ',',
     Eight: '8',
     Five: '5',
