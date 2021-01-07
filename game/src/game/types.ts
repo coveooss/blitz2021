@@ -9,6 +9,7 @@ export interface TickColony {
     id: string;
     name: string;
     homeBase: Position;
+    safeZoneRadius: number;
     blitzium: number;
     totalBlitzium: number;
     units: TickColonyUnit[];

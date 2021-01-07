@@ -187,6 +187,7 @@ export abstract class Colony {
             name: this.name,
             errors: this.errors,
             homeBase: this.homeBase,
+            safeZoneRadius: COLONY.SAFE_ZONE_RADIUS,
             blitzium: this.blitzium,
             totalBlitzium: this.totalBlitzium,
             units: this.units.map(u => u.serialize()),

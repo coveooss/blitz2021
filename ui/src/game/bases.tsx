@@ -3,6 +3,7 @@ import {Group, Path, Rect} from 'react-konva';
 
 import {Size, colors} from '../constants';
 import {TickColony} from 'blitz2021/dist/game/types';
+import BaseSafeZone from './baseSafeZone';
 
 const roof = "M35.3 4l1.1 8.5c.1.6-.4 1.2-1 1.3H2.3c-.6 0-1.1-.5-1.1-1.1v-.1L2.3 4c.1-.6.6-1 1.1-1h30.7c.6 0 1.1.4 1.2 1z";
 const house = "M3.3 13.7h31v19.2h-31z";
@@ -19,6 +20,7 @@ const Bases: React.FunctionComponent<{colonies?: TickColony[]}> = ({colonies}) =
         const {x, y} = colony.homeBase;
         return (
             <Group key={`base-${i}`} x={x * Size.Tile} y={y * Size.Tile}>
+                <BaseSafeZone color={colors[i]} safeZoneRadius={colony.safeZoneRadius} />
                 <Rect
                     fill="#efe4d0"
                     width={Size.Tile}
