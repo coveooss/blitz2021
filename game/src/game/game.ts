@@ -242,6 +242,10 @@ export class Game {
             logger.debug(`Sending Tick ${tick}: ${startingState}`);
 
             const allTickCommandsWaiting = this.colonies.map(async c => {
+                if (c.isDead) {
+                    return;
+                }
+
                 try {
                     const stat = this.responseTimePerColony.get(c);
                     let command: Command | void = null;
