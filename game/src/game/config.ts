@@ -4,7 +4,7 @@ export class UNIT {
     public static CART_COST = 25;
 
     public static MAX_MINER_CARGO = 50;
-    public static MAX_TRANSPORTER_CARGO = 50;
+    public static MAX_TRANSPORTER_CARGO = 20;
 
     public static MAX_MINER_MOVE_CARGO = 5;
 
@@ -15,5 +15,5 @@ export class UNIT {
 export class COLONY {
     public static START_BALANCE = 25;
     public static SAFE_ZONE_RADIUS = 3;
-    public static UNIT_MULTIPLIER = 1.5;
+    public static UNIT_MULTIPLIER = 1.1;
 }
