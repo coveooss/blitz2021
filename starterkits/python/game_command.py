@@ -15,11 +15,12 @@ class ActionType(Enum):
 class Action:
     type: ActionType
     
-    def __init__(self, type):
+    def __init__(self, type: ActionType):
         self.type = type
 
 
 @dataclass_json
+@dataclass
 class BuyAction(Action):
     unitType: UnitType
     type: ActionType

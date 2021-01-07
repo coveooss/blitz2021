@@ -36,6 +36,13 @@ class Prices:
 
 @dataclass_json
 @dataclass
+class Rules:
+    MAX_MINER_CARGO: int
+    MAX_TRANSPORTER_CARGO: int
+    MAX_MINER_MOVE_CARGO: int
+
+@dataclass_json
+@dataclass
 class Depot:
     position: Position
     blitzium: int
@@ -110,6 +117,7 @@ class GameMessage:
     colonyId: str
     colonies: List[Colony]
     map: Map
+    rules: Rules
 
     def get_colonies_by_id(self) -> Dict[str, Colony]:
         return {colony.id: colony for colony in self.colonies}
