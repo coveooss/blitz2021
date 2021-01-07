@@ -1,5 +1,6 @@
 import { Game } from "../src/game/game";
 import { NoopColony } from "../src/game/colonies/noopColony";
+import { UNIT } from "../src/game/config";
 
 jest.useFakeTimers('legacy');
 
@@ -146,6 +147,11 @@ describe("Game", () => {
                 tick: 0,
                 totalTick: NUMBER_OF_TICKS,
                 map: { tiles: expect.any(Array), depots: [] },
+                rules: {
+                    MAX_MINER_CARGO: UNIT.MAX_MINER_CARGO,
+                    MAX_TRANSPORTER_CARGO: UNIT.MAX_TRANSPORTER_CARGO,
+                    MAX_MINER_MOVE_CARGO: UNIT.MAX_MINER_MOVE_CARGO
+                }
             });
         });
 
@@ -159,6 +165,11 @@ describe("Game", () => {
                 tick: 0,
                 totalTick: NUMBER_OF_TICKS,
                 map: { tiles: expect.any(Array), depots: [] },
+                rules: {
+                    MAX_MINER_CARGO: UNIT.MAX_MINER_CARGO,
+                    MAX_TRANSPORTER_CARGO: UNIT.MAX_TRANSPORTER_CARGO,
+                    MAX_MINER_MOVE_CARGO: UNIT.MAX_MINER_MOVE_CARGO
+                }
             });
         });
 
@@ -172,6 +183,11 @@ describe("Game", () => {
                 tick: NUMBER_OF_TICKS,
                 totalTick: NUMBER_OF_TICKS,
                 map: { tiles: expect.any(Array), depots: [] },
+                rules: {
+                    MAX_MINER_CARGO: UNIT.MAX_MINER_CARGO,
+                    MAX_TRANSPORTER_CARGO: UNIT.MAX_TRANSPORTER_CARGO,
+                    MAX_MINER_MOVE_CARGO: UNIT.MAX_MINER_MOVE_CARGO
+                }
             });
         });
     });

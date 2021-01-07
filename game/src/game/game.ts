@@ -7,7 +7,7 @@ import { GameMap, Path } from "./map";
 import { distanceBetween, hash, Position } from './position'
 import { Miner } from "./units/miner";
 import { Viewer } from "./viewer";
-import { COLONY } from "./config";
+import { COLONY, UNIT } from "./config";
 import { Unit } from "./units/unit";
 import aStar from "a-star";
 
@@ -348,7 +348,12 @@ export class Game {
             colonies: this.colonies.map(c => c.serialize()),
             tick: this._currentTick,
             totalTick: this.options.numberOfTicks,
-            map: this.map?.serialize?.() ?? { tiles: [], depots: [] }
+            map: this.map?.serialize?.() ?? { tiles: [], depots: [] },
+            rules: {
+                MAX_MINER_CARGO: UNIT.MAX_MINER_CARGO,
+                MAX_TRANSPORTER_CARGO: UNIT.MAX_TRANSPORTER_CARGO,
+                MAX_MINER_MOVE_CARGO: UNIT.MAX_MINER_MOVE_CARGO
+            }
         }
     }
 }
