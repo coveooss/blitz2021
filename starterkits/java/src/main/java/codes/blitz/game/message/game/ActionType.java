@@ -1,5 +1,6 @@
 package codes.blitz.game.message.game;
 
-public enum ActionType {
+public enum ActionType
+{
     BUY, UNIT
 }

@@ -11,7 +11,10 @@ public class PositionOutOfMapException extends Exception
         super(message);
     }
 
-    public PositionOutOfMapException(Position position, int mapSize) {
-        super(String.format("Point %s is out of map, x and y must be greater than 0 and less than %s.", position, mapSize));
+    public PositionOutOfMapException(Position position, int mapSize)
+    {
+        super(String.format("Point %s is out of map, x and y must be greater than 0 and less than %s.",
+                            position,
+                            mapSize));
     }
 }

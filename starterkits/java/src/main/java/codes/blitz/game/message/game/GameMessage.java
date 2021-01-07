@@ -15,34 +15,41 @@ public class GameMessage
     private Map<String, Colony> coloniesMapById;
     private Rules rules;
 
-    public int getTick() {
+    public int getTick()
+    {
         return tick;
     }
 
-    public int getTotalTick() {
+    public int getTotalTick()
+    {
         return totalTick;
     }
 
-    public String getColonyId() {
+    public String getColonyId()
+    {
         return colonyId;
     }
 
-    public List<Colony> getColonies() {
+    public List<Colony> getColonies()
+    {
         return colonies;
     }
 
-    public GameMap getGameMap() {
+    public GameMap getGameMap()
+    {
         return map;
     }
 
-    public Map<String, Colony> getColoniesMapById() {
-        if(coloniesMapById == null) {
+    public Map<String, Colony> getColoniesMapById()
+    {
+        if (coloniesMapById == null) {
             coloniesMapById = colonies.stream().collect(Collectors.toMap(Colony::getId, Function.identity()));
         }
         return coloniesMapById;
     }
 
-    public Rules getRules() {
+    public Rules getRules()
+    {
         return rules;
     }
 }

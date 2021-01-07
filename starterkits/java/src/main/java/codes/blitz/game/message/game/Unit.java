@@ -2,54 +2,61 @@ package codes.blitz.game.message.game;
 
 import java.util.List;
 
-public class Unit {
+public class Unit
+{
     private String id;
     private UnitType type;
     private int blitzium;
     private Position position;
     private List<Position> path;
 
-
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(String id)
+    {
         this.id = id;
     }
 
-    public UnitType getType() {
+    public UnitType getType()
+    {
         return type;
     }
 
-    public void setType(UnitType type) {
+    public void setType(UnitType type)
+    {
         this.type = type;
     }
 
-    public int getBlitzium() {
+    public int getBlitzium()
+    {
         return blitzium;
     }
 
-    public void setBlitzium(int blitzium) {
+    public void setBlitzium(int blitzium)
+    {
         this.blitzium = blitzium;
     }
 
-    public Position getPosition() {
+    public Position getPosition()
+    {
         return position;
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(Position position)
+    {
         this.position = position;
     }
 
-    public List<Position> getPath() {
+    public List<Position> getPath()
+    {
         return path;
     }
 
-    public void setPath(List<Position> path) {
+    public void setPath(List<Position> path)
+    {
         this.path = path;
     }
-
 }
-
-

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public enum MessageType
 {
-    @SerializedName("COMMAND") COMMAND,
-    @SerializedName("REGISTER") REGISTER
+    @SerializedName("COMMAND")
+    COMMAND, @SerializedName("REGISTER")
+    REGISTER
 }

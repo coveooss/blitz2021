@@ -4,7 +4,6 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -12,8 +11,6 @@ import codes.blitz.game.message.game.GameMessage;
 
 public class MessageDecoder implements Decoder.Text<GameMessage>
 {
-
-//    private static Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
     private static Gson gson = new GsonBuilder().create();
 
     @Override

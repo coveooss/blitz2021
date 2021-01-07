@@ -1,5 +1,6 @@
 package codes.blitz.game.message.game;
 
-public enum UnitType {
+public enum UnitType
+{
     MINER, CART, OUTLAW
 }

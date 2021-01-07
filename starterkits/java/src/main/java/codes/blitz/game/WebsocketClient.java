@@ -52,8 +52,7 @@ public class WebsocketClient
     {
         System.out.println("\nTurn " + receivedMessage.getTick());
 
-        List<String> errors = receivedMessage.getColoniesMapById()
-            .get(receivedMessage.getColonyId()).getErrors();
+        List<String> errors = receivedMessage.getColoniesMapById().get(receivedMessage.getColonyId()).getErrors();
         errors.forEach(System.out::println);
 
         // Send back a move
@@ -66,6 +65,7 @@ public class WebsocketClient
 
     }
 
+    @SuppressWarnings("unused")
     @OnClose
     public void onClose(Session session, CloseReason closeReason)
     {

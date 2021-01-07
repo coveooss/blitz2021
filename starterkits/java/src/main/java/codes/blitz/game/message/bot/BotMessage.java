@@ -1,9 +1,9 @@
 package codes.blitz.game.message.bot;
 
+import java.util.List;
+
 import codes.blitz.game.message.MessageType;
 import codes.blitz.game.message.game.Action;
-
-import java.util.List;
 
 public class BotMessage
 {
@@ -13,13 +13,12 @@ public class BotMessage
     private String token;
     private Integer tick;
 
-
-    public Integer getTick() 
+    public Integer getTick()
     {
         return this.tick;
     }
 
-    public void setTick(Integer tick) 
+    public void setTick(Integer tick)
     {
         this.tick = tick;
     }

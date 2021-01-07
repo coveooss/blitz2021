@@ -6,15 +6,18 @@ public class Prices
     private int OUTLAW;
     private int CART;
 
-    public int getMinerPrice() {
+    public int getMinerPrice()
+    {
         return MINER;
     }
 
-    public int getOutlawPrice() {
+    public int getOutlawPrice()
+    {
         return OUTLAW;
     }
 
-    public int getCartPrice() {
+    public int getCartPrice()
+    {
         return CART;
     }
 }
