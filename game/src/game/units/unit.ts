@@ -124,6 +124,10 @@ export abstract class Unit {
 
     public drop(target: Position) {
         if (isAdjacent(target, this.position)) {
+            if (this.blitzium === 0) {
+                throw new UnitError(this, `Unit is empty, nothing to drop`);
+            }
+
             if (equal(target, this.colony.homeBase)) {
                 this.colony.dropBlitzium(this.blitzium);
                 this.blitzium = 0;
