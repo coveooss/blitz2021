@@ -3,7 +3,7 @@ package codes.blitz.game.message.game;
 public class Rules
 {
     private int MAX_MINER_CARGO;
-    private int MAX_TRANSPORTER_CARGO;
+    private int MAX_CART_CARGO;
     private int MAX_MINER_MOVE_CARGO;
 
     public int getMaxMinerCargo() {
@@ -11,7 +11,7 @@ public class Rules
     }
 
     public int getMaxTransporterCargo() {
-        return MAX_TRANSPORTER_CARGO;
+        return MAX_CART_CARGO;
     }
 
     public int getMaxMinerMoveCargo() {

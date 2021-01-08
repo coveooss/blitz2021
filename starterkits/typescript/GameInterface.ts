@@ -37,7 +37,7 @@ export interface IColony {
 
 export interface IRules {
   MAX_MINER_CARGO: number,
-  MAX_TRANSPORTER_CARGO: number,
+  MAX_CART_CARGO: number,
   MAX_MINER_MOVE_CARGO: number
 }
 
@@ -86,6 +86,7 @@ export class GameMessage implements IGameTick {
     tiles: TileType[][],
     depots: IDepot[]
   }
+  public readonly rules: IRules;
 
   constructor(private rawTick: IGameTick) {
     Object.assign(this, rawTick);

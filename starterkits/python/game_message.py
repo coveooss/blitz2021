@@ -38,7 +38,7 @@ class Prices:
 @dataclass
 class Rules:
     MAX_MINER_CARGO: int
-    MAX_TRANSPORTER_CARGO: int
+    MAX_CART_CARGO: int
     MAX_MINER_MOVE_CARGO: int
 
 @dataclass_json

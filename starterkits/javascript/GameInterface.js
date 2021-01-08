@@ -45,7 +45,7 @@
  * @typedef IRules
  * @type {object}
  * @property {number} MAX_MINER_CARGO
- * @property {number} MAX_TRANSPORTER_CARGO
+ * @property {number} MAX_CART_CARGO
  * @property {number} MAX_MINER_MOVE_CARGO
  */
 

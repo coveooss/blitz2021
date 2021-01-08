@@ -109,7 +109,7 @@ describe("Recorder", () => {
         });
 
         it('should stringify the object', () => {
-            recorder.buffer = [{ colonies: [], map: { tiles: [[]], depots: [] }, tick: 0, totalTick: 10, rules: { MAX_MINER_CARGO: 0, MAX_MINER_MOVE_CARGO: 0, MAX_TRANSPORTER_CARGO: 0 } }];
+            recorder.buffer = [{ colonies: [], map: { tiles: [[]], depots: [] }, tick: 0, totalTick: 10, rules: { MAX_MINER_CARGO: 0, MAX_MINER_MOVE_CARGO: 0, MAX_CART_CARGO: 0 } }];
             recorder.saveToFile('path/to/file');
 
             expect(fs.writeFileSync).toHaveBeenCalledWith('path/to/file', JSON.stringify(recorder.buffer, null, 2));
