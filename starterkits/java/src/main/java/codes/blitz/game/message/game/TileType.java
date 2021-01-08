@@ -4,21 +4,9 @@
 package codes.blitz.game.message.game;
 
 public enum TileType {
-    EMPTY, WALL, BASE, MINE;
+	EMPTY, WALL, BASE, MINE;
 
-    //Probably easier to use the java stuff directly
-    public static TileType getTileTypeFromString(String rawTile) {
-        switch (rawTile) {
-            case "EMPTY":
-                return TileType.EMPTY;
-            case "WALL":
-                return TileType.WALL;
-            case "MINE":
-                return TileType.MINE;
-            case "BASE":
-                return TileType.BASE;
-            default:
-                throw new IllegalArgumentException(String.format("'%s' is not a valid tile", rawTile));
-        }
-    }
+	public static TileType getTileTypeFromString(String rawTile) {
+		return TileType.valueOf(rawTile);
+	}
 }
