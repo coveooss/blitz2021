@@ -30,7 +30,7 @@ export abstract class Colony {
     }
 
     public getUnitPrices() {
-        const computePrice = (base: number) => Math.round(base * Math.pow(COLONY.UNIT_MULTIPLIER, this.units.length));
+        const computePrice = (base: number) => Math.round(base * Math.pow(COLONY.UNIT_MULTIPLIER, Math.max(this.units.length - 1, 0)));
 
         return {
             "MINER": computePrice(UNIT.MINER_COST),
