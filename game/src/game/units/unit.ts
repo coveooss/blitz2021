@@ -101,7 +101,7 @@ export abstract class Unit {
 
     public pickup(target: Position) {
         if (!isAdjacent(target, this.position)) {
-            throw new UnitError(this, `Target is not near by`);
+            throw new UnitError(this, `Target is not nearby`);
         }
 
         const unit = this.colony.getUnitAtPosition(target);

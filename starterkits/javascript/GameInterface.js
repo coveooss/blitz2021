@@ -17,6 +17,7 @@
  * @type {object}
  * @property {string} id
  * @property {UnitType} type
+ * @property {number} blitzium
  * @property {IPosition} position
  * @property {IPosition[]} path
  */
