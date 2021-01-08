@@ -36,7 +36,7 @@ export interface Tick {
     colonies: TickColony[];
     rules: {
         MAX_MINER_CARGO: number,
-        MAX_TRANSPORTER_CARGO: number,
+        MAX_CART_CARGO: number,
         MAX_MINER_MOVE_CARGO: number,
     }
     map: TickMap;

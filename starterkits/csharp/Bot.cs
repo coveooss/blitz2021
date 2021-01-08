@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static GameCommand;
-using static GameCommand.UnitAction;
-using static Map;
+using Blitz2021;
+using static Blitz2021.GameCommand;
+using static Blitz2021.GameCommand.UnitAction;
+using static Blitz2021.Map;
 
 namespace Blitz2020
 {

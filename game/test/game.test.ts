@@ -149,7 +149,7 @@ describe("Game", () => {
                 map: { tiles: expect.any(Array), depots: [] },
                 rules: {
                     MAX_MINER_CARGO: UNIT.MAX_MINER_CARGO,
-                    MAX_TRANSPORTER_CARGO: UNIT.MAX_TRANSPORTER_CARGO,
+                    MAX_CART_CARGO: UNIT.MAX_CART_CARGO,
                     MAX_MINER_MOVE_CARGO: UNIT.MAX_MINER_MOVE_CARGO
                 }
             });
@@ -167,7 +167,7 @@ describe("Game", () => {
                 map: { tiles: expect.any(Array), depots: [] },
                 rules: {
                     MAX_MINER_CARGO: UNIT.MAX_MINER_CARGO,
-                    MAX_TRANSPORTER_CARGO: UNIT.MAX_TRANSPORTER_CARGO,
+                    MAX_CART_CARGO: UNIT.MAX_CART_CARGO,
                     MAX_MINER_MOVE_CARGO: UNIT.MAX_MINER_MOVE_CARGO
                 }
             });
@@ -185,7 +185,7 @@ describe("Game", () => {
                 map: { tiles: expect.any(Array), depots: [] },
                 rules: {
                     MAX_MINER_CARGO: UNIT.MAX_MINER_CARGO,
-                    MAX_TRANSPORTER_CARGO: UNIT.MAX_TRANSPORTER_CARGO,
+                    MAX_CART_CARGO: UNIT.MAX_CART_CARGO,
                     MAX_MINER_MOVE_CARGO: UNIT.MAX_MINER_MOVE_CARGO
                 }
             });
