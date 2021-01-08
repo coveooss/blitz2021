@@ -1,6 +1,6 @@
 {
   "name": "@germainbergeron/blitz-ui",
-  "version": "2021.0.8",
+  "version": "2021.0.9",
   "description": "Blitz2021 Game UI",
   "main": "dist/index.js",
   "types": "dist/declaration/index.d.ts",
