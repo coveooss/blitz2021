@@ -140,6 +140,6 @@ export class GameMap {
             }
             tiles.push(row);
         }
-        return { tiles, depots: [...this.depots] };
+        return { tiles, depots: [...this.depots.map(d => Object.assign(d))] };
     }
 }
