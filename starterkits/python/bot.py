@@ -17,12 +17,4 @@ class Bot:
         return actions
 
     def get_random_position(self, map_size: int) -> Position:
-        """
-        You should define here what moves are legal for your current position and direction
-        so that your bot does not send a lethal move.
-
-        Your bot moves are relative to its direction, if you are in the DOWN direction.
-        A TURN_RIGHT move will make your bot move left in the map visualization (replay or logs)
-        """
-
         return Position(random.randint(0, map_size), random.randint(0, map_size))
