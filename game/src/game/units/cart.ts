@@ -15,4 +15,8 @@ export class Cart extends Unit {
     public attack(target: Position) {
         throw new UnitError(this, 'Action not supported');
     }
+
+    public mine(target: Position) {
+        throw new UnitError(this, 'Action not supported');
+    }
 }
