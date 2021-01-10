@@ -9,6 +9,7 @@ const BaseSafeZone: React.FunctionComponent<{ color: string; safeZoneRadius: num
         for (let x = -safeZoneRadius; x <= safeZoneRadius; x++) {
             tiles.push(
                 <Rect
+                    key={`${x}-${y}`}
                     x={x * Size.Tile}
                     y={y * Size.Tile}
                     opacity={0.3}
