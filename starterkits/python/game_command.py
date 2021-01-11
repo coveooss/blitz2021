@@ -14,7 +14,7 @@ class ActionType(Enum):
 @dataclass_json
 class Action:
     type: ActionType
-    
+
     def __init__(self, type: ActionType):
         self.type = type
 
@@ -22,7 +22,7 @@ class Action:
 @dataclass_json
 @dataclass
 class BuyAction(Action):
-    unitType: UnitType
+    unit_type: UnitType
     type: ActionType
 
     def __init__(self, unit_type: UnitType):
@@ -34,10 +34,10 @@ class BuyAction(Action):
 @dataclass_json
 class UnitActionType(Enum):
     MOVE = "MOVE"
-    ATTACK = "ATTACK" 
+    ATTACK = "ATTACK"
     PICKUP = "PICKUP"
     MINE = "MINE"
-    DROP = "DROP" 
+    DROP = "DROP"
     NONE = "NONE"
 
 
@@ -46,7 +46,7 @@ class UnitActionType(Enum):
 class UnitAction(Action):
     target: Position
     action: UnitActionType
-    unitId: str
+    unit_id: str
     type: ActionType
 
     def __init__(self, action: UnitActionType, unit_id: str, target: Position):

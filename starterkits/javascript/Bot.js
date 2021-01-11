@@ -9,9 +9,12 @@ class Bot {
         // This method should be use to initialize some variables you will need throughout the game.
     }
 
-    /**
-     * @param {Game.GameMessage} gameMessage 
-     */
+    /*
+    * Here is where the magic happens, for now the moves are random. I bet you can do better ;)
+    *
+    * No path finding is required, you can simply send a destination per unit and the game will move your unit towards
+    * it in the next turns.
+    */
     getNextMove(gameMessage) {
         const myColony = gameMessage.colonies.find(c => c.id === gameMessage.colonyId);
         const mapSize = gameMessage.map.tiles.length;
