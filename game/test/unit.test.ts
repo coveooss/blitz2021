@@ -12,18 +12,27 @@ class TestUnit extends Unit { }
 
 describe('Unit', () => {
     let game: Game;
-    let myColony: Colony;
-    let unit: Unit;
     let map: GameMap;
 
+    let myColony: Colony;
+    let unit: Unit;
+
+    let enemyColony: Colony;
+    let enemyUnit: Unit;
+
     beforeEach(() => {
-        map = GameMap.fromArray([['EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY']]);
+        map = GameMap.fromArray([['EMPTY', 'EMPTY', 'EMPTY', 'WALL', 'EMPTY', 'MINE', 'EMPTY', 'EMPTY']]);
 
         game = new Game();
         game.map = map;
 
         myColony = new NoopColony(game);
+        myColony.homeBase = { x: 0, y: 2 };
+
         unit = new TestUnit(myColony, { x: 0, y: 0 }, 'MINER');
+
+        enemyColony = new NoopColony(game);
+        enemyUnit = new TestUnit(enemyColony, { x: 0, y: 6 }, 'MINER');
     });
 
     describe('move', () => {
@@ -73,16 +82,10 @@ describe('Unit', () => {
     });
 
     describe('attack', () => {
-        let enemyColony: Colony;
-        let enemyUnit: Unit;
-
-        beforeEach(() => {
-            enemyColony = new NoopColony(game);
-            enemyUnit = new TestUnit(enemyColony, { x: 0, y: 1 }, 'MINER');
-        });
         it('should kill the target', () => {
             expect(enemyColony.units).toContainEqual(enemyUnit);
 
+            enemyUnit.position = { x: 0, y: 1 };
             unit.attack(enemyUnit.position);
 
             expect(enemyColony.units).not.toContainEqual(enemyUnit);
@@ -96,6 +99,19 @@ describe('Unit', () => {
             let friendlyUnit = new TestUnit(myColony, { x: 1, y: 0 }, 'MINER');
 
             expect(() => unit.attack(friendlyUnit.position)).toThrowError();
+        });
+
+        it('should drop blitzium to the ground', () => {
+            enemyUnit.blitzium = 50;
+            enemyUnit.position = { x: 0, y: 1 };
+
+            expect(map.depots.length).toBe(0);
+
+            unit.attack(enemyUnit.position);
+
+            expect(map.depots.length).toBe(1);
+            expect(map.depots[0].blitzium).toBe(50);
+            expect(map.depots[0].position).toEqual(enemyUnit.position);
         });
     });
 
@@ -136,7 +152,7 @@ describe('Unit', () => {
             myCart = new TestUnit(myColony, { x: 0, y: 2 }, 'CART');
             myDepot = { position: { x: 0, y: 1 }, blitzium: 75 };
 
-            myCart.maxBlitzium = 50;
+            myCart.maxBlitzium = 25;
             map.depots = [myDepot];
         });
 
@@ -151,12 +167,19 @@ describe('Unit', () => {
             expect(unit.blitzium).toBe(0);
         });
 
+        it('should throw if the target is an enemy', () => {
+            enemyUnit.blitzium = 25;
+            enemyUnit.position = { x: 0, y: 3 };
+
+            expect(() => myCart.pickup(enemyUnit.position)).toThrowError();
+        });
+
         it('should pick up the blitzium from the target depot', () => {
             expect(myCart.blitzium).toBe(0);
             myCart.pickup({ x: 0, y: 1 });
 
-            expect(myCart.blitzium).toBe(50);
-            expect(unit.blitzium).toBe(0);
+            expect(myCart.blitzium).toBe(25);
+            expect(myDepot.blitzium).toBe(50);
         });
 
         it('should remove the depot if it drops to 0', () => {
@@ -171,15 +194,17 @@ describe('Unit', () => {
             expect(map.depots).not.toContain(myDepot);
         });
 
-        it.todo('should throw if target is not adjacent');
-        it.todo('should throw if the unit is full');
-        it.todo('should only pick up the amount to fill its cargo');
+        it('should throw if target is not adjacent', () => {
+            unit.blitzium = 25;
+            unit.position = { x: 0, y: 4 };
+
+            expect(() => myCart.pickup(unit.position)).toThrowError();
+        });
     })
 
     describe('drop', () => {
         it('should create a new depot when a unit drops blitzium', () => {
             unit.blitzium = 50;
-            myColony.homeBase = { x: 0, y: 2 };
 
             let target = { x: 0, y: 1 };
 
@@ -192,7 +217,6 @@ describe('Unit', () => {
 
         it('should use the existing depot when a unit drops blitzium', () => {
             unit.blitzium = 50;
-            myColony.homeBase = { x: 0, y: 2 };
 
             let target = { x: 0, y: 1 };
             map.depots.push({ position: target, blitzium: 50 });
@@ -208,6 +232,7 @@ describe('Unit', () => {
         it('should drop in the home base colony', () => {
             let target = { x: 0, y: 1 };
             unit.blitzium = 50;
+
             myColony.homeBase = target;
             myColony.blitzium = 0;
             myColony.totalBlitzium = 0;;
@@ -219,7 +244,36 @@ describe('Unit', () => {
             expect(myColony.totalBlitzium).toBe(50);
         });
 
-        it.todo('should not drop on a wall or mine or home base');
+        it('should drop in an ally unit', () => {
+            let target = new TestUnit(myColony, { x: 0, y: 1 }, 'MINER');
+            target.blitzium = 0;
+            target.maxBlitzium = 25;
+
+            unit.blitzium = 50;
+            unit.drop(target.position);
+
+            expect(target.blitzium).toBe(25);
+            expect(unit.blitzium).toBe(25);
+
+            unit.blitzium = 10;
+            target.blitzium = 0;
+            unit.drop(target.position);
+
+            expect(target.blitzium).toBe(10);
+            expect(unit.blitzium).toBe(0);
+        });
+        it('should throw if it drops on a wall or mine', () => {
+            unit.position = { x: 0, y: 4 };
+            unit.blitzium = 50;
+
+            expect(() => unit.drop({ x: 0, y: 3 })).toThrowError();
+            expect(() => unit.drop({ x: 0, y: 5 })).toThrowError();
+        });
+
+        it('should throw if there is nothing to drop', () => {
+            unit.blitzium = 0;
+            expect(() => unit.drop({ x: 0, y: 1 })).toThrowError();
+        });
     });
 
     describe('serialize', () => {

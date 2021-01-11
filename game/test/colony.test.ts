@@ -7,8 +7,6 @@ import { NoopColony } from '../src/game/colonies/noopColony';
 const EXPECTED_COLONY_ID = 'test-id';
 const EXPECTED_COLONY_NAME = 'test-name';
 
-jest.mock('../src/game/game');
-
 class TestColony extends Colony {
     constructor(public game: Game) {
         super(game, EXPECTED_COLONY_NAME);
@@ -30,6 +28,7 @@ describe('Colony', () => {
     beforeEach(() => {
 
         myColony = new NoopColony(new Game());
+        myColony.homeBase = { x: 0, y: 5 };
         units = [
             new TestUnit(myColony, { x: 0, y: 0 }, 'MINER'),
             new TestUnit(myColony, { x: 0, y: 1 }, 'MINER'),
@@ -38,8 +37,33 @@ describe('Colony', () => {
     });
 
     describe('buy unit', () => {
-        it.todo('should throw if there is not enough blitzium available');
-        it.todo('should add the unit to the colony with the proper cost');
+        it('should throw if there is not enough blitzium available', () => {
+            myColony.blitzium = 0;
+            expect(() => myColony.buyUnit({ type: 'BUY', unitType: 'CART' })).toThrowError();
+        });
+
+        it('should add the unit to the colony with the proper cost', () => {
+            myColony.blitzium = myColony.getUnitPrices().CART;
+
+            expect(myColony.units.length).toBe(3);
+            myColony.buyUnit({ type: 'BUY', unitType: 'CART' });
+
+            expect(myColony.units.length).toBe(4);
+            expect(myColony.units[3].type).toBe('CART');
+            expect(myColony.units[3].position).toEqual(myColony.homeBase);
+
+            expect(myColony.blitzium).toBe(0);
+        });
+
+        it('should throw if there is a unit at the home base', () => {
+            myColony.blitzium = myColony.getUnitPrices().CART;
+            myColony.units[0].position = myColony.homeBase;
+
+            expect(myColony.units.length).toBe(3);
+            expect(() => myColony.buyUnit({ type: 'BUY', unitType: 'CART' })).toThrowError();
+            expect(myColony.units.length).toBe(3);
+            expect(myColony.blitzium).toBe(myColony.getUnitPrices().CART);
+        });
     });
 
     describe('apply command', () => {
@@ -157,7 +181,27 @@ describe('Colony', () => {
 
             expect(targetUnit.mine).toHaveBeenCalledWith(target);
         });
-        it.todo('should allow only one buy command per tick');
+        it('should allow only one buy command per tick', () => {
+            myColony.blitzium = 1000000;
+
+            expect(myColony.units.length).toBe(3);
+
+            myColony.applyCommand({
+                actions: [
+                    {
+                        type: 'BUY',
+                        unitType: 'MINER'
+                    },
+                    {
+                        type: 'BUY',
+                        unitType: 'MINER'
+                    }
+                ]
+            });
+
+            expect(myColony.units.length).toBe(4);
+            expect(myColony.errors.length).toBe(1);
+        });
     });
 
     describe('serialize', () => {

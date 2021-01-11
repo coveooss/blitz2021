@@ -44,7 +44,7 @@ export abstract class Colony {
         this.totalBlitzium = this.totalBlitzium + blitzium;
     }
 
-    private buyUnit(action: CommandActionBuy) {
+    public buyUnit(action: CommandActionBuy) {
         let unitPrice = this.getUnitPrices()[action.unitType];
 
         if (unitPrice === undefined) {
@@ -158,6 +158,14 @@ export abstract class Colony {
                 }
             }
         });
+
+        if (this.units.filter(u => u.type === "MINER").length === 0) {
+            if (this.game.hasUnitOnPosition(this.homeBase)) {
+                this.errors.push(`Can't respawn a MINER; home base already occupied`);
+            }
+
+            new Miner(this, this.homeBase);
+        }
     }
 
     public abstract getNextCommand(tick: PlayerTick): Promise<Command>;

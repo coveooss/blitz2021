@@ -288,16 +288,6 @@ export class Game {
 
                 this.viewers.forEach(v => v.onTick(this.serialize()));
 
-                this.colonies.forEach(c => {
-                    if (c.units.filter(u => u.type === "MINER").length === 0) {
-                        if (this.hasUnitOnPosition(c.homeBase)) {
-                            throw new ColonyError(c, `Can't respawn a MINER; home base already occupied`);
-                        }
-
-                        new Miner(c, c.homeBase);
-                    }
-                });
-
                 this.notifyTickApplied();
             } catch (ex) {
                 logger.error(`An unhandled error occured`, ex);

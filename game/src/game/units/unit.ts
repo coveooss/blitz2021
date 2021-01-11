@@ -115,6 +115,8 @@ export abstract class Unit {
 
             targetObject.blitzium = Math.max(targetObject.blitzium - blitziumToTake, 0);
             this.blitzium = this.blitzium + blitziumToTake;
+        } else {
+            throw new UnitError(this, 'Target is invalid, no depot or friendly unit');
         }
 
         if (depot && depot.blitzium <= 0) {
@@ -132,8 +134,16 @@ export abstract class Unit {
                 this.colony.dropBlitzium(this.blitzium);
                 this.blitzium = 0;
             } else {
+                const unit = this.colony.getUnitAtPosition(target);
                 const existingDepot = this.colony.game.map.depots.find(d => equal(target, d.position));
-                if (existingDepot) {
+
+                if (unit) {
+                    const maxCargoSpace = unit.maxBlitzium - unit.blitzium;
+                    const amountToDrop = Math.min(maxCargoSpace, this.blitzium);
+
+                    unit.blitzium = unit.blitzium + amountToDrop;
+                    this.blitzium = this.blitzium - amountToDrop;
+                } else if (existingDepot) {
                     existingDepot.blitzium = existingDepot.blitzium + this.blitzium;
                     this.blitzium = 0;
                 } else if (this.colony.game.map.getTile(target).type === 'EMPTY') {

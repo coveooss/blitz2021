@@ -17,4 +17,8 @@ export class Outlaw extends Unit {
         throw new UnitError(this, 'Action not supported');
     }
 
+    public drop(target: Position) {
+        throw new UnitError(this, 'Action not supported');
+    }
+
 }
