@@ -1,6 +1,6 @@
 {
   "name": "@germainbergeron/blitz-ui",
-  "version": "2021.0.10",
+  "version": "2021.0.13",
   "description": "Blitz2021 Game UI",
   "main": "dist/index.js",
   "types": "dist/declaration/index.d.ts",
@@ -11,7 +11,7 @@
     "test-watch": "jest --watchAll --collect-coverage",
     "start": "parcel src/*.html",
     "dev": "yarn start",
-    "build": "parcel build src/*.html && tsc"
+    "build": "copyfiles -u 1 \"./src/**/*.png\" dist && parcel build src/*.html && tsc"
   },
   "dependencies": {
     "konva": "^7.2.1",
@@ -25,6 +25,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "blitz2021": "^1.0.0",
+    "copyfiles": "^2.4.1",
     "jest": "^26.2.2",
     "parcel-bundler": "^1.12.4",
     "ts-jest": "^26.1.4",

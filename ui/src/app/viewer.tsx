@@ -7,6 +7,7 @@ import { Stage } from 'react-konva';
 import Game from '../game/game';
 import Infos from '../infos/infos';
 import StaticElements from '../game/staticElements';
+import TilesTextureCache from '../game/tiles/TileTextureCache';
 
 const mainStyle: React.CSSProperties = {
     'backgroundColor': 'rgb(239, 228, 208',
@@ -70,16 +71,18 @@ const Viewer: React.FC = () => {
                 <span>Connecting to the local server ...</span>
             </section>}
 
-            {currentTick !== null && <section style={{ padding: "25px" }}>
-                <Stage width={width} height={height}>
-                    <StaticElements firstTick={currentTick} boardSize={boardSize} />
-                    <VisualizationContext.Provider value={{ tick: currentTick.tick, boardSize, currentTick }}>
-                        <Game />
-                        <Infos />
-                    </VisualizationContext.Provider>
-                </Stage>
-            </section>
-            }
+            {currentTick !== null && (
+                <section style={{ padding: "25px" }}>
+                    <Stage width={width} height={height}>
+                        <StaticElements firstTick={currentTick} boardSize={boardSize} />
+                        <VisualizationContext.Provider value={{ tick: currentTick.tick, boardSize, currentTick }}>
+                            <Game />
+                            <Infos />
+                        </VisualizationContext.Provider>
+                    </Stage>
+                    <TilesTextureCache />
+                </section>
+            )}
 
             {isConnected && <section>
                 <p>Connected! 🚀</p>
