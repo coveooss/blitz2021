@@ -6,6 +6,7 @@ import {Stage} from 'react-konva';
 import Infos from '../infos/infos';
 import Game from '../game/game';
 import StaticElements from '../game/staticElements';
+import TilesTextureCache from '../game/tiles/TileTextureCache';
 
 export interface IReplayViewerProps {
     ticks: Tick[];
@@ -100,17 +101,20 @@ const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, heigh
     }, [tick, isPaused, speed]);
 
     return (
-        <KeyHandler onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
-            <Stage width={width} height={height}>
-                <StaticElements firstTick={ticks?.[0]} boardSize={boardSize} />
-                <KeyContext.Provider value={{pressedKey: key}}>
-                  <VisualizationContext.Provider value={{tick, boardSize, currentTick}}>
-                      <Game />
-                      <Infos speed={speed} />
-                  </VisualizationContext.Provider>
-                </KeyContext.Provider>
-            </Stage>
-        </KeyHandler>
+        <>
+            <KeyHandler onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
+                <Stage width={width} height={height}>
+                    <StaticElements firstTick={ticks?.[0]} boardSize={boardSize} />
+                    <KeyContext.Provider value={{pressedKey: key}}>
+                      <VisualizationContext.Provider value={{tick, boardSize, currentTick}}>
+                          <Game />
+                          <Infos speed={speed} />
+                      </VisualizationContext.Provider>
+                    </KeyContext.Provider>
+                </Stage>
+            </KeyHandler>
+            <TilesTextureCache />
+        </>
     );
 };
 export default ReplayViewer;

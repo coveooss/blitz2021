@@ -3,13 +3,13 @@ import {Group, Rect, Image} from 'react-konva';
 
 import {Size} from '../../constants';
 import {TileProps} from './tileProps';
-import useImage from '../../hooks/useImage';
-import Walls from "./Walls.png";
+import useCachedTexture from '../../hooks/useCachedTexture';
+import {TexturedTiles} from './TileTextureCache';
 
 const WallImage: React.FC = () => {
-    const [image, status] = useImage(Walls);
+    const [image] = useCachedTexture(TexturedTiles.Walls);
 
-    if (status !== "loaded") {
+    if (image === null) {
         return <Rect fill="#7B7B7B" width={Size.InnerTile} height={Size.InnerTile} perfectDrawEnabled={false} />;
     }
 
