@@ -101,7 +101,7 @@ const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, heigh
 
     return (
         <KeyHandler onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
-            <Stage width={width} height={height} >
+            <Stage width={width} height={height}>
                 <StaticElements firstTick={ticks?.[0]} boardSize={boardSize} />
                 <KeyContext.Provider value={{pressedKey: key}}>
                   <VisualizationContext.Provider value={{tick, boardSize, currentTick}}>

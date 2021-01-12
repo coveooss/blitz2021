@@ -5,7 +5,6 @@ import {TileType, Position} from 'blitz2021/dist/game/types';
 import {TilesUtils} from '../../utils/tilesUtils';
 import Wall from './wall';
 import Blitzium from './blitzium';
-import Empty from './empty';
 import useCachedRef from '../../hooks/useCachedRef';
 
 const Tiles: React.FunctionComponent<{tiles?: TileType[][]}> = ({tiles}) => {
@@ -18,8 +17,6 @@ const Tiles: React.FunctionComponent<{tiles?: TileType[][]}> = ({tiles}) => {
                 return <Wall {...defaultProps} />;
             } else if (TilesUtils.isBlitzium(tile)) {
                 return <Blitzium {...defaultProps} />;
-            } else {
-                return <Empty {...defaultProps} />;
             }
         })
     );
