@@ -14,7 +14,7 @@ class ActionType(Enum):
 @dataclass_json
 class Action:
     type: ActionType
-    
+
     def __init__(self, type: ActionType):
         self.type = type
 
@@ -34,10 +34,10 @@ class BuyAction(Action):
 @dataclass_json
 class UnitActionType(Enum):
     MOVE = "MOVE"
-    ATTACK = "ATTACK" 
+    ATTACK = "ATTACK"
     PICKUP = "PICKUP"
     MINE = "MINE"
-    DROP = "DROP" 
+    DROP = "DROP"
     NONE = "NONE"
 
 
