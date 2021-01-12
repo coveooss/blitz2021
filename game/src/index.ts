@@ -22,6 +22,7 @@ const MAP_FILE_FOLDER = './maps/';
 const args = yargs(process.argv.slice(2))
     .options({
         'timePerTickMs': { type: 'number', default: 1000, description: "Max time the game will wait for a tick" },
+        'delayBetweenTicksMs': { type: 'number', default: 150, description: "Time to wait between ticks" },
         'nbOfTicks': { type: 'number', default: 1000, description: "Number of tick to play" },
         'gameStartTimeoutMs': { type: 'number', default: 500000, description: "Delay before starting the game" },
         'nbOfColonies': { type: 'number', description: "Number of colonies to expect before starting the game" },
@@ -75,7 +76,8 @@ console.log(splash);
             numberOfTicks: args.nbOfTicks,
             maxWaitTimeMsBeforeStartingGame: args.gameStartTimeoutMs,
             expectedNumberOfColonies: args.nbOfColonies,
-            gameMapFile: args.gameConfig ? MAP_FILE_FOLDER + args.gameConfig : null
+            gameMapFile: args.gameConfig ? MAP_FILE_FOLDER + args.gameConfig : null,
+            delayMsBetweenTicks: args.delayBetweenTicksMs
         });
 
         const teamNamesByToken = args.teamNamesByToken ? JSON.parse(args.teamNamesByToken) : null;

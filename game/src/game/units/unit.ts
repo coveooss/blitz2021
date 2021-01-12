@@ -71,7 +71,12 @@ export abstract class Unit {
         const enemy = this.colony.game.getUnitAtPosition(target);
 
         if (isAdjacent(target, this.position) && enemy && enemy.colony !== this.colony) {
+            if (this.colony.blitzium < UNIT.OUTLAW_COST_OF_ATTACKING) {
+                throw new UnitError(this, `There's not enough Blitizum to pay the Outlaw to attack!`);
+            }
+
             enemy.kill();
+            this.colony.blitzium = this.colony.blitzium - UNIT.OUTLAW_COST_OF_ATTACKING;
 
             let odds = enemy.type === "OUTLAW" ? UNIT.OUTLAW_SURVIVAL_X_OUTLAW : UNIT.OUTLAW_SURVICAL_X_OTHER;
             if (Math.random() >= odds) {

@@ -8,8 +8,10 @@ export class UNIT {
 
     public static MAX_MINER_MOVE_CARGO = 5;
 
-    public static OUTLAW_SURVIVAL_X_OUTLAW = 0.50;
-    public static OUTLAW_SURVICAL_X_OTHER = 0.80;
+    public static OUTLAW_SURVIVAL_X_OUTLAW = 1;
+    public static OUTLAW_SURVICAL_X_OTHER = 1;
+
+    public static OUTLAW_COST_OF_ATTACKING = 50;
 }
 
 export class COLONY {

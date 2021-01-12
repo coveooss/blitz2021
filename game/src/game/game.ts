@@ -15,6 +15,7 @@ export interface GameOptions {
     gameMapFile: string,
     numberOfTicks: number,
     timeMsAllowedPerTicks: number,
+    delayMsBetweenTicks: number,
     maxWaitTimeMsBeforeStartingGame: number,
     expectedNumberOfColonies: number
 }
@@ -38,7 +39,8 @@ export class Game {
         numberOfTicks: 5,
         timeMsAllowedPerTicks: 0,
         maxWaitTimeMsBeforeStartingGame: 0,
-        expectedNumberOfColonies: 3
+        expectedNumberOfColonies: 3,
+        delayMsBetweenTicks: 0
     }
 
     public map: GameMap;
@@ -272,6 +274,11 @@ export class Game {
                         stat.processingTimePerTicks.push(new Date().getTime() - timeWhenStarted);
 
                         this.notifyCommandApplied();
+
+                        if (this.options.delayMsBetweenTicks !== 0) {
+                            await timeoutAfter(this.options.delayMsBetweenTicks);
+                        }
+
                     } else {
                         stat.nbTimeouts = stat.nbTimeouts + 1;
                         logger.info(`No command was received in time for ${c} on tick ${tick}`);

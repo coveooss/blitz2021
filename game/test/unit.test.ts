@@ -1,5 +1,6 @@
 import { Colony } from "../src/game/colonies/colony";
 import { NoopColony } from "../src/game/colonies/noopColony";
+import { UNIT } from "../src/game/config";
 import { Game } from "../src/game/game";
 import { Depot, GameMap, Tile } from "../src/game/map";
 import { Unit } from "../src/game/units/unit";
@@ -28,6 +29,7 @@ describe('Unit', () => {
 
         myColony = new NoopColony(game);
         myColony.homeBase = { x: 0, y: 2 };
+        myColony.blitzium = 150;
 
         unit = new TestUnit(myColony, { x: 0, y: 0 }, 'MINER');
 
@@ -84,10 +86,12 @@ describe('Unit', () => {
     describe('attack', () => {
         it('should kill the target', () => {
             expect(enemyColony.units).toContainEqual(enemyUnit);
+            expect(myColony.blitzium).toBe(150);
 
             enemyUnit.position = { x: 0, y: 1 };
             unit.attack(enemyUnit.position);
 
+            expect(myColony.blitzium).toBe(150 - UNIT.OUTLAW_COST_OF_ATTACKING);
             expect(enemyColony.units).not.toContainEqual(enemyUnit);
         });
         it('should throw if target is not adjacent', () => {

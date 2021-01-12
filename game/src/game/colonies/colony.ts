@@ -1,6 +1,6 @@
 import { COLONY, UNIT } from '../config';
 import { ColonyError, CommandActionError, UnitError } from '../error';
-import { Command, CommandActionBuy, PlayerTick, TickColony, UnitType } from '../types';
+import { Command, CommandAction, CommandActionBuy, PlayerTick, TickColony } from '../types';
 import { Cart } from '../units/cart';
 import { Outlaw } from '../units/outlaw';
 import { Miner } from '../units/miner';
@@ -85,6 +85,32 @@ export abstract class Colony {
         return this.units.find(u => equal(u.position, position));
     }
 
+    public validateAction(action: CommandAction) {
+        if (!action) {
+            throw new CommandActionError(action, `Empty action was sent`);
+        }
+
+        if (action.type === 'BUY') {
+            if (!['MINER', 'OUTLAW', 'CART'].includes(action.unitType)) {
+                throw new CommandActionError(action, `Invalid unitType was sent ${JSON.stringify(action)}`);
+            }
+        }
+
+        if (action.type === "UNIT") {
+            if (action.target?.x === undefined || action.target?.y === undefined) {
+                throw new CommandActionError(action, `Invalid target was sent ${JSON.stringify(action)}`);
+            }
+
+            if (!['MOVE', 'ATTACK', 'DROP', 'PICKUP', 'MINE', 'NONE'].includes(action.action)) {
+                throw new CommandActionError(action, `Invalid action was sent ${JSON.stringify(action)}`);
+            }
+
+            if (!action.unitId) {
+                throw new CommandActionError(action, `No unitId was sent ${JSON.stringify(action)}`);
+            }
+        }
+    }
+
     public applyCommand(command: Command) {
         let alreadyHasBuyCommand = false;
         let alreadyReceivedCommand: Unit[] = [];
@@ -96,9 +122,7 @@ export abstract class Colony {
 
         command.actions?.forEach(action => {
             try {
-                if (!action) {
-                    throw new CommandActionError(action, `Invalid action was sent ${JSON.stringify(action)}`);
-                }
+                this.validateAction(action);
 
                 if (action.type === "BUY") {
                     if (alreadyHasBuyCommand) {
