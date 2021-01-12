@@ -7,7 +7,7 @@ import Background from './background';
 import Grid from './grid';
 
 const StaticElements: React.FunctionComponent<{firstTick?: Tick, boardSize: number;}> = ({firstTick, boardSize}) => {
-    const size = {x: firstTick?.map?.tiles?.[0].length ?? 0, y: firstTick?.map?.tiles.length};
+    const size = {x: firstTick?.map?.tiles?.[0].length ?? 0, y: firstTick?.map?.tiles.length ?? 0};
     return (
         <Layer listening={false} pixelRatio={1}>
             <Background boardSize={boardSize} />

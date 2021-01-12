@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export type useImageStatus: 'loading' | 'failed' | 'loaded';
+export type useImageStatus = 'loading' | 'failed' | 'loaded';
 
 interface useImageState {
     image?: HTMLImageElement;
