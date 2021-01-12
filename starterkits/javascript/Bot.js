@@ -14,6 +14,8 @@ class Bot {
     *
     * No path finding is required, you can simply send a destination per unit and the game will move your unit towards
     * it in the next turns.
+    * 
+    * @param {Game.GameMessage} gameMessage
     */
     getNextMove(gameMessage) {
         const myColony = gameMessage.colonies.find(c => c.id === gameMessage.colonyId);

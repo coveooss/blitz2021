@@ -101,9 +101,9 @@ class Unit:
 class Colony:
     id: str
     name: str
-    home_base: Position
+    homeBase: Position
     blitzium: int
-    total_blitzium: int
+    totalBlitzium: int
     units: List[Unit]
     errors: List[str]
     prices: Prices
@@ -113,8 +113,8 @@ class Colony:
 @dataclass
 class GameMessage:
     tick: int
-    total_tick: int
-    colony_id: str
+    totalTick: int
+    colonyId: str
     colonies: List[Colony]
     map: Map
     rules: Rules

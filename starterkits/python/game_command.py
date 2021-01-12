@@ -22,7 +22,7 @@ class Action:
 @dataclass_json
 @dataclass
 class BuyAction(Action):
-    unit_type: UnitType
+    unitType: UnitType
     type: ActionType
 
     def __init__(self, unit_type: UnitType):
@@ -46,7 +46,7 @@ class UnitActionType(Enum):
 class UnitAction(Action):
     target: Position
     action: UnitActionType
-    unit_id: str
+    unitId: str
     type: ActionType
 
     def __init__(self, action: UnitActionType, unit_id: str, target: Position):
