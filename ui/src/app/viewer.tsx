@@ -83,7 +83,7 @@ const Viewer: React.FC = () => {
 
             {isConnected && <section>
                 <p>Connected! 🚀</p>
-                {currentTick === null && <span>Waiting for the game to start, launch your bot locally and it should connect automaticly and start the game!</span>}
+                {currentTick === null && <span>Waiting for the game to start, launch your bot locally and it should connect automatically and start the game!</span>}
             </section>}
         </section>
     );
