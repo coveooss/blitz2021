@@ -13,10 +13,12 @@ class Bot:
         No path finding is required, you can simply send a destination per unit and the game will move your unit towards
         it in the next turns.
         """
-        my_colony: Colony = game_message.get_colonies_by_id()[game_message.colony_id]
+        my_colony: Colony = game_message.get_colonies_by_id()[game_message.colonyId]
 
-        actions: List[UnitAction] = [UnitAction(UnitActionType.MOVE, unit.id, self.get_random_position(
-            game_message.map.get_map_size())) for unit in my_colony.units]
+        actions: List[UnitAction] = [UnitAction(UnitActionType.MOVE,
+                                                unit.id,
+                                                self.get_random_position(
+                                                    game_message.map.get_map_size())) for unit in my_colony.units]
 
         return actions
 
