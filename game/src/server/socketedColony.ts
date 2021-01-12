@@ -72,7 +72,10 @@ export class SocketedColony extends Colony {
 
         this.socket.on('close', () => {
             if (!this.game.isCompleted) {
-                this.socketCallbacks.reject('Socket disconected');
+                if (this.socketCallbacks) {
+                    this.socketCallbacks.reject('Socket disconected');
+                }
+
                 this.isDead = true;
                 logger.warn(`${this} disconnected`);
             }

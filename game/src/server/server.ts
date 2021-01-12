@@ -15,6 +15,8 @@ export class Server {
 
     constructor(private port: number = 8765, private game: Game, private serveUi: boolean = true, private teamNamesByToken: { [token: string]: string } = null) {
         if (this.serveUi) {
+            logger.info(`Web viewer available on http://localhost:${port}/viewer.html`);
+
             let serve = serveStatic('./ui/');
             this.server = createServer(function (req, res) {
                 var done = finalhandler(req, res);
