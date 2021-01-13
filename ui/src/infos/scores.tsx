@@ -46,15 +46,6 @@ const Scores: React.FunctionComponent = () => {
 
     return (
         <Group x={boardSize + Size.Gap}>
-            <Text
-                fontSize={fontSize}
-                fontFamily={font}
-                fontStyle={fontWeight}
-                fill="#6EE4CE"
-                shadowColor="#6EE4CE"
-                text="Team"
-                align="left"
-            />
             {scores}
         </Group>
     );
