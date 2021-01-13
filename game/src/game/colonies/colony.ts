@@ -186,9 +186,9 @@ export abstract class Colony {
         if (this.units.filter(u => u.type === "MINER").length === 0) {
             if (this.game.hasUnitOnPosition(this.homeBase)) {
                 this.errors.push(`Can't respawn a MINER; home base already occupied`);
+            } else {
+                new Miner(this, this.homeBase);
             }
-
-            new Miner(this, this.homeBase);
         }
     }
 

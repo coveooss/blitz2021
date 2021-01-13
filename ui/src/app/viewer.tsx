@@ -2,12 +2,13 @@ import * as React from 'react'
 
 import { Tick } from 'blitz2021/dist/game/types';
 import useWindowSize from '../hooks/useWindowSize';
-import { Size, VisualizationContext } from '../constants';
+import { KeyContext, Size, VisualizationContext } from '../constants';
 import { Stage } from 'react-konva';
 import Game from '../game/game';
 import Infos from '../infos/infos';
 import StaticElements from '../game/staticElements';
 import TilesTextureCache from '../game/tiles/TileTextureCache';
+import KeyHandler from '../replay/controls/keyHandler';
 
 const mainStyle: React.CSSProperties = {
     'backgroundColor': 'rgb(239, 228, 208',
@@ -21,6 +22,7 @@ const titleStyle: React.CSSProperties = {
 }
 
 const Viewer: React.FC = () => {
+    const [key, setKey] = React.useState<string | null>(null);
     const [currentTick, setCurrentTick] = React.useState<Tick | null>(null);
     const { width, height } = useWindowSize();
     const [isConnected, setIsConnected] = React.useState(false);
@@ -57,6 +59,15 @@ const Viewer: React.FC = () => {
         }
     }
 
+    const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        setKey(e.key);
+    };
+
+
+    const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        setKey(null);
+    }
+
     React.useEffect(start, []);
 
     const numberOfTile: number = currentTick?.map?.tiles?.[0]?.length ?? 0;
@@ -65,30 +76,37 @@ const Viewer: React.FC = () => {
     Size.Tile = boardSize / numberOfTile;
 
     return (
-        <section style={mainStyle}>
-            <h1 style={titleStyle}>Blitz 2021 - Web Viewer</h1>
-            {!isConnected && <section>
-                <span>Connecting to the local server ...</span>
-            </section>}
+        <KeyHandler onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
+            <section style={mainStyle}>
+                <h1 style={titleStyle}>Blitz 2021 - Web Viewer</h1>
+                {!isConnected && <section>
+                    <span>Connecting to the local server ...</span>
+                </section>}
 
-            {currentTick !== null && (
-                <section style={{ padding: "25px" }}>
-                    <Stage width={width} height={height}>
-                        <StaticElements firstTick={currentTick} boardSize={boardSize} />
-                        <VisualizationContext.Provider value={{ tick: currentTick.tick, boardSize, currentTick }}>
-                            <Game />
-                            <Infos />
-                        </VisualizationContext.Provider>
-                    </Stage>
-                    <TilesTextureCache />
-                </section>
-            )}
+                {currentTick !== null && (
+                    <section style={{ padding: "25px" }}>
+                        <Stage width={width} height={height}>
+                            <StaticElements firstTick={currentTick} boardSize={boardSize} />
+                            <KeyContext.Provider value={{ pressedKey: key }}>
+                                <VisualizationContext.Provider value={{ tick: currentTick.tick, boardSize, currentTick }}>
+                                    <Game />
+                                    <Infos />
+                                </VisualizationContext.Provider>
+                            </KeyContext.Provider>
+                        </Stage>
+                        <TilesTextureCache />
+                    </section>
+                )
+                }
 
-            {isConnected && <section>
-                <p>Connected! 🚀</p>
-                {currentTick === null && <span>Waiting for the game to start, launch your bot locally and it should connect automatically and start the game!</span>}
-            </section>}
-        </section>
+                {
+                    isConnected && <section>
+                        <p>Connected! 🚀</p>
+                        {currentTick === null && <span>Waiting for the game to start, launch your bot locally and it should connect automatically and start the game!</span>}
+                    </section>
+                }
+            </section >
+        </KeyHandler>
     );
 };
 
