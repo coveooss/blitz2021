@@ -23,4 +23,4 @@ class Bot:
         return actions
 
     def get_random_position(self, map_size: int) -> Position:
-        return Position(random.randint(0, map_size), random.randint(0, map_size))
+        return Position(random.randint(0, map_size - 1), random.randint(0, map_size - 1))
