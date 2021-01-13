@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Group, Text} from 'react-konva';
 
-import {font, fontSize, fontWeight, Size, VisualizationContext} from '../constants';
+import {font, fontSize, fontWeight, Size, VisualizationContext, metaTextColor} from '../constants';
 
 export interface GameStateProps {
     speed?: number;
@@ -18,9 +18,9 @@ const GameState: React.FunctionComponent<GameStateProps> = ({speed}) => {
                 fontSize={fontSize}
                 fontFamily={font}
                 fontStyle={fontWeight}
-                fill="red"
-                shadowColor="red"
-                text={`Step: ${Math.max(0, tick + 1)}`}
+                fill={metaTextColor}
+                shadowColor={metaTextColor}
+                text={`Tick: ${Math.max(0, currentTick.tick + 1)}`}
                 align="left"
                 hitStrokeWidth={0}
                 shadowForStrokeEnabled={false}
@@ -32,8 +32,8 @@ const GameState: React.FunctionComponent<GameStateProps> = ({speed}) => {
                     fontSize={fontSize}
                     fontFamily={font}
                     fontStyle={fontWeight}
-                    fill="red"
-                    shadowColor="red"
+                    fill={metaTextColor}
+                    shadowColor={metaTextColor}
                     text={`Speed: ${speed + 1}`}
                     align="right"
                     hitStrokeWidth={0}

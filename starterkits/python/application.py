@@ -34,7 +34,7 @@ async def game_loop(websocket: websockets.WebSocketServerProtocol, bot: Bot):
         game_message: GameMessage = GameMessage.from_json(message)
 
         my_colony: Colony = game_message.get_colonies_by_id()[game_message.colonyId]
-        print(f"\nTurn {game_message.tick}")
+        print(f"\Tick {game_message.tick}")
         print(f"\nError? {' '.join(my_colony.errors)}")
 
         next_move: UnitActionType.MOVE = bot.get_next_move(game_message)

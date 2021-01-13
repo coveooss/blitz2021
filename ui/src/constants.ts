@@ -14,6 +14,7 @@ export const fontWeight = 'bold';
 
 export const darkenColors = ['#547DA3', '#368E65', '#BC9811', '#771616'];
 export const colors = ['#79A8D4', '#5BB88C', '#E9AD32', '#B02E2E'];
+export const metaTextColor = '#0E251B'
 
 export const speeds = [1000, 700, 500, 300, 100, 50, 25, 10, 5, 2];
 
