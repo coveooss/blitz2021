@@ -100,7 +100,7 @@ export class Game {
             }, this.options.maxWaitTimeMsBeforeStartingGame);
 
         } else if (this.options.expectedNumberOfCrews) {
-            logger.info(`The game will start as soon as ${this.options.expectedNumberOfCrews} crew(ies) will join.`);
+            logger.info(`The game will start as soon as ${this.options.expectedNumberOfCrews} crew(s) will join.`);
         }
     }
 
