@@ -17,7 +17,7 @@ export interface IReplayViewerProps {
 
 const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, height, ticks, onEnd}) => {
     const [tick, setTick] = React.useState(0);
-    const [speed, setSpeed] = React.useState(0);
+    const [speed, setSpeed] = React.useState(5);
     const [isPaused, setIsPaused] = React.useState(false);
     const [key, setKey] = React.useState<string | null>(null);
 
