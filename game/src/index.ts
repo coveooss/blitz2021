@@ -32,7 +32,7 @@ const args = yargs(process.argv.slice(2))
         'keepAlive': { type: 'boolean', default: true, description: "Indicates if the game should close or restart on completion" },
         'teamNamesByToken': { type: 'string' },
         'serveUi': { type: 'boolean', default: true },
-        'gameConfig': { type: 'string', description: "Map configuration" }
+        'gameConfig': { type: 'string', description: "Map configuration", default: '2P-01.bmp' }
     })
     .version(process.env.VERSION || 'DEV')
     .command('list-maps', 'List all the available maps', () => {
