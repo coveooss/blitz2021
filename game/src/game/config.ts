@@ -14,7 +14,7 @@ export class UNIT {
     public static OUTLAW_COST_OF_ATTACKING = 50;
 }
 
-export class COLONY {
+export class CREW {
     public static START_BALANCE = 25;
     public static SAFE_ZONE_RADIUS = 3;
     public static UNIT_MULTIPLIER = 1.1;

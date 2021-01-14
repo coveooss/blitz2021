@@ -12,7 +12,7 @@ const StaticElements: React.FunctionComponent<{firstTick?: Tick, boardSize: numb
         <Layer listening={false} pixelRatio={1}>
             <Background boardSize={boardSize} />
             <Grid boardSize={boardSize} size={size} />
-            <Bases colonies={firstTick?.colonies} />
+            <Bases crews={firstTick?.crews} />
             <Tiles tiles={firstTick?.map.tiles} />
         </Layer>
     );

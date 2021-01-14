@@ -23,7 +23,7 @@
  */
 
 /**
- * @typedef IColony
+ * @typedef ICrew
  * @type {object}
  * @property {string} id
  * @property {string} name
@@ -55,8 +55,8 @@
  * @type {object}
  * @property {number} tick
  * @property {number} totalTick
- * @property {string} colonyId
- * @property {IColony[]} colonies
+ * @property {string} crewId
+ * @property {ICrew[]} crews
  * @property {IMap} map
  * @property {IRules} rules
  */
@@ -116,12 +116,12 @@ class GameMessage {
    * @type {string}
    * @readonly
    */
-  colonyId;
+  crewId;
   /**
-   * @type {IColony[]}
+   * @type {ICrew[]}
    * @readonly
    */
-  colonies;
+  crews;
   /**
    * @type {IMap}
    * @readonly
@@ -167,10 +167,10 @@ class GameMessage {
   }
 
   /**
-   * @returns {Object.<string, IColony>}
+   * @returns {Object.<string, ICrew>}
    */
   getPlayerMapById() {
-    return this.colonies.map(c => [c.id, c]);
+    return this.crews.map(c => [c.id, c]);
   }
 }
 

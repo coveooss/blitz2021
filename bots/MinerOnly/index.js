@@ -7,7 +7,7 @@ const startClient = () => {
 
         client.on('open', () => {
             let isRegistered = false;
-            let colonyId = null;
+            let crewId = null;
             let randomBlitzium = 1 + Math.round(Math.random() * 3);
 
             const token = process.env.TOKEN;
@@ -15,7 +15,7 @@ const startClient = () => {
             if (token) {
                 client.send(JSON.stringify({ type: "REGISTER", token: token }));
             } else {
-                client.send(JSON.stringify({ type: "REGISTER", colonyName: "MinerSquared" }));
+                client.send(JSON.stringify({ type: "REGISTER", crewName: "MinerSquared" }));
             }
 
             client.on('message', (data) => {
@@ -24,13 +24,13 @@ const startClient = () => {
                 switch (message.type) {
 
                     case "TICK": {
-                        const colonyId = message.colonyId;
-                        const myColony = message.colonies.find(c => c.id === colonyId);
+                        const crewId = message.crewId;
+                        const myCrew = message.crews.find(c => c.id === crewId);
 
                         let depot = null;
                         let depotPoint = null;
 
-                        let homeBasePoint = { x: myColony.homeBase.x, y: myColony.homeBase.y + 1 }
+                        let homeBasePoint = { x: myCrew.homeBase.x, y: myCrew.homeBase.y + 1 }
 
 
                         message.map.tiles.forEach((row, x) => {
@@ -45,15 +45,15 @@ const startClient = () => {
                         
 
 
-                        myColony.errors.forEach(c => console.log(c));
-                        console.log(myColony.blitzium);
-                        console.log(myColony.totalBlitzium);
-                        const actions = myColony.units.map(u => {
+                        myCrew.errors.forEach(c => console.log(c));
+                        console.log(myCrew.blitzium);
+                        console.log(myCrew.totalBlitzium);
+                        const actions = myCrew.units.map(u => {
                             console.log(JSON.stringify(u.position));
                             
                             if (u.blitzium > 0 && u.position.x === homeBasePoint.x && u.position.y === homeBasePoint.y) {
                                 console.log('DROPING');
-                                return { type: 'UNIT', action: 'DROP', unitId: u.id, target: myColony.homeBase }
+                                return { type: 'UNIT', action: 'DROP', unitId: u.id, target: myCrew.homeBase }
                             }
 
                             if (u.blitzium == randomBlitzium && !(u.position.x == homeBasePoint.x && u.position.y == homeBasePoint.y)) {
@@ -76,7 +76,7 @@ const startClient = () => {
 
 
 
-                        console.log(myColony.units.length);
+                        console.log(myCrew.units.length);
                         setTimeout(() => {
                             client.send(JSON.stringify({ type: "COMMAND", tick: message.tick, actions }));
                         }, 100);

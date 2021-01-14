@@ -1,6 +1,6 @@
-import { COLONY, UNIT } from '../config';
-import { ColonyError, CommandActionError, UnitError } from '../error';
-import { Command, CommandAction, CommandActionBuy, PlayerTick, TickColony } from '../types';
+import { CREW, UNIT } from '../config';
+import { CrewError, CommandActionError, UnitError } from '../error';
+import { Command, CommandAction, CommandActionBuy, PlayerTick, TickCrew } from '../types';
 import { Cart } from '../units/cart';
 import { Outlaw } from '../units/outlaw';
 import { Miner } from '../units/miner';
@@ -9,7 +9,7 @@ import { v4 as uuid } from 'uuid';
 import { Game } from '../game';
 import { equal, Position } from '../position';
 
-export abstract class Colony {
+export abstract class Crew {
     public id: string;
     public blitzium: number;
     public totalBlitzium: number;
@@ -26,11 +26,11 @@ export abstract class Colony {
         this.units = [];
         this.id = uuid();
 
-        this.game.registerColony(this);
+        this.game.registerCrew(this);
     }
 
     public getUnitPrices() {
-        const computePrice = (base: number) => Math.round(base * Math.pow(COLONY.UNIT_MULTIPLIER, Math.max(this.units.length - 1, 0)));
+        const computePrice = (base: number) => Math.round(base * Math.pow(CREW.UNIT_MULTIPLIER, Math.max(this.units.length - 1, 0)));
 
         return {
             "MINER": computePrice(UNIT.MINER_COST),
@@ -206,21 +206,21 @@ export abstract class Colony {
                 return nextCandidates[0];
             }
 
-            throw new ColonyError(this, `Impossible to find a spawn point`);
+            throw new CrewError(this, `Impossible to find a spawn point`);
         }
     }
 
     public toString() {
-        return `([Colony] ${this.id} - ${this.name})`;
+        return `([Crew] ${this.id} - ${this.name})`;
     }
 
-    public serialize(): TickColony {
+    public serialize(): TickCrew {
         return {
             id: this.id,
             name: this.name,
             errors: this.errors,
             homeBase: this.homeBase,
-            safeZoneRadius: COLONY.SAFE_ZONE_RADIUS,
+            safeZoneRadius: CREW.SAFE_ZONE_RADIUS,
             blitzium: this.blitzium,
             totalBlitzium: this.totalBlitzium,
             units: this.units.map(u => u.serialize()),

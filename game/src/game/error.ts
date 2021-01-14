@@ -1,5 +1,5 @@
 import { Unit } from "./units/unit";
-import { Colony } from "./colonies/colony";
+import { Crew } from "./crews/crew";
 import { CommandAction } from './types';
 
 export class FatalError extends Error {
@@ -20,9 +20,9 @@ export class CommandActionError extends Error {
     }
 }
 
-export class ColonyError extends Error {
-    constructor(colony: Colony, message: string) {
-        super(`${colony} ${message}`);
+export class CrewError extends Error {
+    constructor(crew: Crew, message: string) {
+        super(`${crew} ${message}`);
     }
 }
 

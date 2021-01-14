@@ -98,7 +98,7 @@ class Unit:
 
 @dataclass_json
 @dataclass
-class Colony:
+class Crew:
     id: str
     name: str
     homeBase: Position
@@ -114,10 +114,10 @@ class Colony:
 class GameMessage:
     tick: int
     totalTick: int
-    colonyId: str
-    colonies: List[Colony]
+    crewId: str
+    crews: List[Crew]
     map: Map
     rules: Rules
 
-    def get_colonies_by_id(self) -> Dict[str, Colony]:
-        return {colony.id: colony for colony in self.colonies}
+    def get_crews_by_id(self) -> Dict[str, Crew]:
+        return {crew.id: crew for crew in self.crews}

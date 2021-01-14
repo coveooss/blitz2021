@@ -1,16 +1,16 @@
 import { Game } from '../src/game/game';
-import { Colony } from '../src/game/colonies/colony';
+import { Crew } from '../src/game/crews/crew';
 import { Command, CommandAction, PlayerTick } from '../src/game/types';
 import { Unit } from '../src/game/units/unit';
-import { NoopColony } from '../src/game/colonies/noopColony';
+import { NoopCrew } from '../src/game/crews/noopCrew';
 
-const EXPECTED_COLONY_ID = 'test-id';
-const EXPECTED_COLONY_NAME = 'test-name';
+const EXPECTED_CREW_ID = 'test-id';
+const EXPECTED_CREW_NAME = 'test-name';
 
-class TestColony extends Colony {
+class TestCrew extends Crew {
     constructor(public game: Game) {
-        super(game, EXPECTED_COLONY_NAME);
-        this.id = EXPECTED_COLONY_ID;
+        super(game, EXPECTED_CREW_NAME);
+        this.id = EXPECTED_CREW_ID;
         this.homeBase = { x: 11, y: 24 };
     }
 
@@ -21,48 +21,48 @@ class TestColony extends Colony {
 
 class TestUnit extends Unit { }
 
-describe('Colony', () => {
-    let myColony: Colony;
+describe('Crew', () => {
+    let myCrew: Crew;
     let units: Unit[];
 
     beforeEach(() => {
 
-        myColony = new NoopColony(new Game());
-        myColony.homeBase = { x: 0, y: 5 };
+        myCrew = new NoopCrew(new Game());
+        myCrew.homeBase = { x: 0, y: 5 };
         units = [
-            new TestUnit(myColony, { x: 0, y: 0 }, 'MINER'),
-            new TestUnit(myColony, { x: 0, y: 1 }, 'MINER'),
-            new TestUnit(myColony, { x: 0, y: 2 }, 'MINER')
+            new TestUnit(myCrew, { x: 0, y: 0 }, 'MINER'),
+            new TestUnit(myCrew, { x: 0, y: 1 }, 'MINER'),
+            new TestUnit(myCrew, { x: 0, y: 2 }, 'MINER')
         ];
     });
 
     describe('buy unit', () => {
         it('should throw if there is not enough blitzium available', () => {
-            myColony.blitzium = 0;
-            expect(() => myColony.buyUnit({ type: 'BUY', unitType: 'CART' })).toThrowError();
+            myCrew.blitzium = 0;
+            expect(() => myCrew.buyUnit({ type: 'BUY', unitType: 'CART' })).toThrowError();
         });
 
-        it('should add the unit to the colony with the proper cost', () => {
-            myColony.blitzium = myColony.getUnitPrices().CART;
+        it('should add the unit to the crew with the proper cost', () => {
+            myCrew.blitzium = myCrew.getUnitPrices().CART;
 
-            expect(myColony.units.length).toBe(3);
-            myColony.buyUnit({ type: 'BUY', unitType: 'CART' });
+            expect(myCrew.units.length).toBe(3);
+            myCrew.buyUnit({ type: 'BUY', unitType: 'CART' });
 
-            expect(myColony.units.length).toBe(4);
-            expect(myColony.units[3].type).toBe('CART');
-            expect(myColony.units[3].position).toEqual(myColony.homeBase);
+            expect(myCrew.units.length).toBe(4);
+            expect(myCrew.units[3].type).toBe('CART');
+            expect(myCrew.units[3].position).toEqual(myCrew.homeBase);
 
-            expect(myColony.blitzium).toBe(0);
+            expect(myCrew.blitzium).toBe(0);
         });
 
         it('should throw if there is a unit at the home base', () => {
-            myColony.blitzium = myColony.getUnitPrices().CART;
-            myColony.units[0].position = myColony.homeBase;
+            myCrew.blitzium = myCrew.getUnitPrices().CART;
+            myCrew.units[0].position = myCrew.homeBase;
 
-            expect(myColony.units.length).toBe(3);
-            expect(() => myColony.buyUnit({ type: 'BUY', unitType: 'CART' })).toThrowError();
-            expect(myColony.units.length).toBe(3);
-            expect(myColony.blitzium).toBe(myColony.getUnitPrices().CART);
+            expect(myCrew.units.length).toBe(3);
+            expect(() => myCrew.buyUnit({ type: 'BUY', unitType: 'CART' })).toThrowError();
+            expect(myCrew.units.length).toBe(3);
+            expect(myCrew.blitzium).toBe(myCrew.getUnitPrices().CART);
         });
     });
 
@@ -79,17 +79,17 @@ describe('Colony', () => {
 
             targetUnit.move = jest.fn();
 
-            myColony.applyCommand({
+            myCrew.applyCommand({
                 actions: [action, action]
             });
 
-            expect(myColony.errors.length).toBe(1);
+            expect(myCrew.errors.length).toBe(1);
             expect(targetUnit.move).toHaveBeenCalledTimes(1);
             expect(targetUnit.move).toHaveBeenCalledWith(target);
         });
         it('should add error if the unit id is not found', () => {
 
-            myColony.applyCommand({
+            myCrew.applyCommand({
                 actions: [
                     {
                         type: 'UNIT',
@@ -101,7 +101,7 @@ describe('Colony', () => {
             });
 
 
-            expect(myColony.errors.length).toBe(1);
+            expect(myCrew.errors.length).toBe(1);
         });
 
         it('should send the move command to the proper unit', () => {
@@ -110,7 +110,7 @@ describe('Colony', () => {
 
             targetUnit.move = jest.fn();
 
-            myColony.applyCommand({
+            myCrew.applyCommand({
                 actions: [
                     {
                         type: 'UNIT',
@@ -129,7 +129,7 @@ describe('Colony', () => {
 
             targetUnit.attack = jest.fn();
 
-            myColony.applyCommand({
+            myCrew.applyCommand({
                 actions: [
                     {
                         type: 'UNIT',
@@ -148,7 +148,7 @@ describe('Colony', () => {
 
             targetUnit.pickup = jest.fn();
 
-            myColony.applyCommand({
+            myCrew.applyCommand({
                 actions: [
                     {
                         type: 'UNIT',
@@ -168,7 +168,7 @@ describe('Colony', () => {
 
             targetUnit.mine = jest.fn();
 
-            myColony.applyCommand({
+            myCrew.applyCommand({
                 actions: [
                     {
                         type: 'UNIT',
@@ -182,11 +182,11 @@ describe('Colony', () => {
             expect(targetUnit.mine).toHaveBeenCalledWith(target);
         });
         it('should allow only one buy command per tick', () => {
-            myColony.blitzium = 1000000;
+            myCrew.blitzium = 1000000;
 
-            expect(myColony.units.length).toBe(3);
+            expect(myCrew.units.length).toBe(3);
 
-            myColony.applyCommand({
+            myCrew.applyCommand({
                 actions: [
                     {
                         type: 'BUY',
@@ -199,25 +199,25 @@ describe('Colony', () => {
                 ]
             });
 
-            expect(myColony.units.length).toBe(4);
-            expect(myColony.errors.length).toBe(1);
+            expect(myCrew.units.length).toBe(4);
+            expect(myCrew.errors.length).toBe(1);
         });
     });
 
     describe('serialize', () => {
         it('should serialize its default state', () => {
-            const colony = new TestColony(new Game());
+            const crew = new TestCrew(new Game());
 
-            expect(colony.serialize()).toStrictEqual({
-                id: EXPECTED_COLONY_ID,
-                name: EXPECTED_COLONY_NAME,
+            expect(crew.serialize()).toStrictEqual({
+                id: EXPECTED_CREW_ID,
+                name: EXPECTED_CREW_NAME,
                 errors: [],
                 homeBase: { x: 11, y: 24 },
                 safeZoneRadius: 3,
                 blitzium: 0,
                 units: [],
                 totalBlitzium: 0,
-                prices: colony.getUnitPrices()
+                prices: crew.getUnitPrices()
             });
         });
 

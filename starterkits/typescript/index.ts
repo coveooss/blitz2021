@@ -12,7 +12,7 @@ webSocket.onopen = (event: WebSocket.OpenEvent) => {
       JSON.stringify({ type: "REGISTER", token: process.env.TOKEN })
     );
   } else {
-    webSocket.send(JSON.stringify({ type: "REGISTER", colonyName: "MyBot TypeScript" }));
+    webSocket.send(JSON.stringify({ type: "REGISTER", crewName: "MyBot TypeScript" }));
   }
 };
 
@@ -20,8 +20,8 @@ webSocket.onmessage = (message: WebSocket.MessageEvent) => {
   let rawGameMessage = JSON.parse(message.data.toString())
   let gameMessage = new GameMessage(rawGameMessage);
 
-  let myColony = gameMessage.getPlayerMapById().get(gameMessage.colonyId);
-  myColony.errors.forEach(e => console.error(e));
+  let myCrew = gameMessage.getPlayerMapById().get(gameMessage.crewId);
+  myCrew.errors.forEach(e => console.error(e));
 
   webSocket.send(
     JSON.stringify({

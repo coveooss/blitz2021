@@ -1,6 +1,6 @@
-import {TickColonyUnit} from 'blitz2021/dist/game/types';
+import {TickCrewUnit} from 'blitz2021/dist/game/types';
 
-export interface UnitProps extends TickColonyUnit {
+export interface UnitProps extends TickCrewUnit {
     color: string;
     darkColor: string;
 }

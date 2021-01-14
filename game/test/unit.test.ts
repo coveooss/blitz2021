@@ -1,5 +1,5 @@
-import { Colony } from "../src/game/colonies/colony";
-import { NoopColony } from "../src/game/colonies/noopColony";
+import { Crew } from "../src/game/crews/crew";
+import { NoopCrew } from "../src/game/crews/noopCrew";
 import { UNIT } from "../src/game/config";
 import { Game } from "../src/game/game";
 import { Depot, GameMap, Tile } from "../src/game/map";
@@ -15,10 +15,10 @@ describe('Unit', () => {
     let game: Game;
     let map: GameMap;
 
-    let myColony: Colony;
+    let myCrew: Crew;
     let unit: Unit;
 
-    let enemyColony: Colony;
+    let enemyCrew: Crew;
     let enemyUnit: Unit;
 
     beforeEach(() => {
@@ -27,14 +27,14 @@ describe('Unit', () => {
         game = new Game();
         game.map = map;
 
-        myColony = new NoopColony(game);
-        myColony.homeBase = { x: 0, y: 2 };
-        myColony.blitzium = 150;
+        myCrew = new NoopCrew(game);
+        myCrew.homeBase = { x: 0, y: 2 };
+        myCrew.blitzium = 150;
 
-        unit = new TestUnit(myColony, { x: 0, y: 0 }, 'MINER');
+        unit = new TestUnit(myCrew, { x: 0, y: 0 }, 'MINER');
 
-        enemyColony = new NoopColony(game);
-        enemyUnit = new TestUnit(enemyColony, { x: 0, y: 6 }, 'MINER');
+        enemyCrew = new NoopCrew(game);
+        enemyUnit = new TestUnit(enemyCrew, { x: 0, y: 6 }, 'MINER');
     });
 
     describe('move', () => {
@@ -85,14 +85,14 @@ describe('Unit', () => {
 
     describe('attack', () => {
         it('should kill the target', () => {
-            expect(enemyColony.units).toContainEqual(enemyUnit);
-            expect(myColony.blitzium).toBe(150);
+            expect(enemyCrew.units).toContainEqual(enemyUnit);
+            expect(myCrew.blitzium).toBe(150);
 
             enemyUnit.position = { x: 0, y: 1 };
             unit.attack(enemyUnit.position);
 
-            expect(myColony.blitzium).toBe(150 - UNIT.OUTLAW_COST_OF_ATTACKING);
-            expect(enemyColony.units).not.toContainEqual(enemyUnit);
+            expect(myCrew.blitzium).toBe(150 - UNIT.OUTLAW_COST_OF_ATTACKING);
+            expect(enemyCrew.units).not.toContainEqual(enemyUnit);
         });
         it('should throw if target is not adjacent', () => {
             enemyUnit.position = { x: 0, y: 2 };
@@ -100,7 +100,7 @@ describe('Unit', () => {
         });
 
         it('should throw if the target is friendly', () => {
-            let friendlyUnit = new TestUnit(myColony, { x: 1, y: 0 }, 'MINER');
+            let friendlyUnit = new TestUnit(myCrew, { x: 1, y: 0 }, 'MINER');
 
             expect(() => unit.attack(friendlyUnit.position)).toThrowError();
         });
@@ -153,7 +153,7 @@ describe('Unit', () => {
         let myDepot: Depot;
 
         beforeEach(() => {
-            myCart = new TestUnit(myColony, { x: 0, y: 2 }, 'CART');
+            myCart = new TestUnit(myCrew, { x: 0, y: 2 }, 'CART');
             myDepot = { position: { x: 0, y: 1 }, blitzium: 75 };
 
             myCart.maxBlitzium = 25;
@@ -233,23 +233,23 @@ describe('Unit', () => {
             expect(map.depots[0].position).toBe(target);
         });
 
-        it('should drop in the home base colony', () => {
+        it('should drop in the home base crew', () => {
             let target = { x: 0, y: 1 };
             unit.blitzium = 50;
 
-            myColony.homeBase = target;
-            myColony.blitzium = 0;
-            myColony.totalBlitzium = 0;;
+            myCrew.homeBase = target;
+            myCrew.blitzium = 0;
+            myCrew.totalBlitzium = 0;;
 
             unit.drop(target);
 
             expect(unit.blitzium).toBe(0);
-            expect(myColony.blitzium).toBe(50);
-            expect(myColony.totalBlitzium).toBe(50);
+            expect(myCrew.blitzium).toBe(50);
+            expect(myCrew.totalBlitzium).toBe(50);
         });
 
         it('should drop in an ally unit', () => {
-            let target = new TestUnit(myColony, { x: 0, y: 1 }, 'MINER');
+            let target = new TestUnit(myCrew, { x: 0, y: 1 }, 'MINER');
             target.blitzium = 0;
             target.maxBlitzium = 25;
 
@@ -282,7 +282,7 @@ describe('Unit', () => {
 
     describe('serialize', () => {
         it('should serialize its state', () => {
-            unit = new TestUnit(myColony, { x: 4, y: 3 }, 'MINER');
+            unit = new TestUnit(myCrew, { x: 4, y: 3 }, 'MINER');
 
             expect(unit.serialize()).toStrictEqual({
                 id: 'test-id',

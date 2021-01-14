@@ -7,7 +7,7 @@ const Scores: React.FunctionComponent = () => {
     const {boardSize, currentTick} = React.useContext(VisualizationContext);
     const teamNameMaxLength = 200;
     const getTeamOffset = (i: number) => i * verticalMargin;
-    const scores = currentTick?.colonies?.map(({id, name, blitzium}, i: number) => {
+    const scores = currentTick?.crews?.map(({id, name, blitzium}, i: number) => {
         const y = getTeamOffset(i) + verticalMargin;
         const color = colors[i];
         return (

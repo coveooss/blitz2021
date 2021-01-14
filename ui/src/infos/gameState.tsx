@@ -10,7 +10,7 @@ export interface GameStateProps {
 const GameState: React.FunctionComponent<GameStateProps> = ({speed}) => {
     const verticalMargin = 35;
     const {boardSize, currentTick, tick} = React.useContext(VisualizationContext);
-    const y = ((currentTick?.colonies?.length ?? 0) + 2) * verticalMargin;
+    const y = ((currentTick?.crews?.length ?? 0) + 2) * verticalMargin;
 
     return (
         <Group x={boardSize + Size.Gap} y={y}>

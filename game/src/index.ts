@@ -25,7 +25,7 @@ const args = yargs(process.argv.slice(2))
         'delayBetweenTicksMs': { type: 'number', default: 150, description: "Time to wait between ticks" },
         'nbOfTicks': { type: 'number', default: 1000, description: "Number of tick to play" },
         'gameStartTimeoutMs': { type: 'number', default: 500000, description: "Delay before starting the game" },
-        'nbOfColonies': { type: 'number', description: "Number of colonies to expect before starting the game" },
+        'nbOfCrews': { type: 'number', description: "Number of crews to expect before starting the game" },
         'recordPath': { type: 'string', description: "File path to record replay to" },
         's3Bucket': { type: 'string' },
         's3Path': { type: 'string' },
@@ -61,7 +61,7 @@ const args = yargs(process.argv.slice(2))
     .env(true)
     .example([
         ["docker run [...]", "Run server with default map"],
-        ["docker run [...] --nbOfColonies=1 --gameConfig=2P-01.bmp", "Run server with custom map and custom number of colonies"],
+        ["docker run [...] --nbOfCrews=1 --gameConfig=2P-01.bmp", "Run server with custom map and custom number of crews"],
         ["docker run [...] list-maps", "List the names of all available maps"]
     ])
     .scriptName("docker run [...]")
@@ -75,7 +75,7 @@ console.log(splash);
             timeMsAllowedPerTicks: args.timePerTickMs,
             numberOfTicks: args.nbOfTicks,
             maxWaitTimeMsBeforeStartingGame: args.gameStartTimeoutMs,
-            expectedNumberOfColonies: args.nbOfColonies,
+            expectedNumberOfCrews: args.nbOfCrews,
             gameMapFile: args.gameConfig ? MAP_FILE_FOLDER + args.gameConfig : null,
             delayMsBetweenTicks: args.delayBetweenTicksMs
         });

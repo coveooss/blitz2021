@@ -5,19 +5,19 @@ export type TileType = "EMPTY" | "WALL" | "BASE" | "MINE";
 
 export type Position = { x: number, y: number }
 
-export interface TickColony {
+export interface TickCrew {
     id: string;
     name: string;
     homeBase: Position;
     safeZoneRadius: number;
     blitzium: number;
     totalBlitzium: number;
-    units: TickColonyUnit[];
+    units: TickCrewUnit[];
     errors: string[];
     prices: { [key: string]: number }
 }
 
-export interface TickColonyUnit {
+export interface TickCrewUnit {
     id: string;
     type: UnitType;
     blitzium: number;
@@ -33,7 +33,7 @@ export interface TickMap {
 export interface Tick {
     tick: number;
     totalTick: number;
-    colonies: TickColony[];
+    crews: TickCrew[];
     rules: {
         MAX_MINER_CARGO: number,
         MAX_CART_CARGO: number,
@@ -42,7 +42,7 @@ export interface Tick {
     map: TickMap;
 }
 
-export type PlayerTick = Tick & { colonyId: string; }
+export type PlayerTick = Tick & { crewId: string; }
 
 export interface CommandActionBuy {
     type: 'BUY';

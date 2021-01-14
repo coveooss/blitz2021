@@ -3,7 +3,7 @@ using static Blitz2021.Map;
 
 namespace Blitz2021
 {
-    public class Colony
+    public class Crew
     {
         public class Prices
         {

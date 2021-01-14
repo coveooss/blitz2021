@@ -8,7 +8,7 @@ import codes.blitz.game.message.game.Action;
 public class BotMessage {
 	private MessageType type;
 	private List<Action> actions;
-	private String colonyName;
+	private String crewName;
 	private String token;
 	private Integer tick;
 
@@ -36,12 +36,12 @@ public class BotMessage {
 		this.actions = action;
 	}
 
-	public String getColonyName() {
-		return colonyName;
+	public String getCrewName() {
+		return crewName;
 	}
 
-	public void setColonyName(String colonyName) {
-		this.colonyName = colonyName;
+	public void setCrewName(String crewName) {
+		this.crewName = crewName;
 	}
 
 	public String getToken() {
@@ -58,7 +58,7 @@ public class BotMessage {
 		int result = 1;
 		result = prime * result + ((actions == null) ? 0 : actions.hashCode());
 		result = prime * result
-				+ ((colonyName == null) ? 0 : colonyName.hashCode());
+				+ ((crewName == null) ? 0 : crewName.hashCode());
 		result = prime * result + ((token == null) ? 0 : token.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -79,11 +79,11 @@ public class BotMessage {
 		if (actions != other.actions) {
 			return false;
 		}
-		if (colonyName == null) {
-			if (other.colonyName != null) {
+		if (crewName == null) {
+			if (other.crewName != null) {
 				return false;
 			}
-		} else if (!colonyName.equals(other.colonyName)) {
+		} else if (!crewName.equals(other.crewName)) {
 			return false;
 		}
 		if (token == null) {
@@ -102,6 +102,6 @@ public class BotMessage {
 	@Override
 	public String toString() {
 		return "BotMessage [type=" + type + ", action=" + actions + ", name="
-				+ colonyName + ", token=" + token + "]";
+				+ crewName + ", token=" + token + "]";
 	}
 }

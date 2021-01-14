@@ -2,7 +2,7 @@ package codes.blitz.game.message.game;
 
 import java.util.List;
 
-public class Colony {
+public class Crew {
 	private String id;
 	private String name;
 	private Position homeBase;

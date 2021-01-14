@@ -36,7 +36,7 @@ public class WebsocketClient {
 			String token = System.getenv("TOKEN");
 			message.setToken(token);
 		} else {
-			message.setColonyName("MyBot");
+			message.setCrewName("MyBot");
 		}
 
 		session.getBasicRemote().sendObject(message);
@@ -47,8 +47,8 @@ public class WebsocketClient {
 			Session session) throws IOException, EncodeException {
 		System.out.println("\nTurn " + receivedMessage.getTick());
 
-		List<String> errors = receivedMessage.getColoniesMapById()
-				.get(receivedMessage.getColonyId()).getErrors();
+		List<String> errors = receivedMessage.getCrewsMapById()
+				.get(receivedMessage.getCrewId()).getErrors();
 		errors.forEach(System.out::println);
 
 		// Send back a move

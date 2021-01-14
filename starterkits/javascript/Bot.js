@@ -18,7 +18,7 @@ class Bot {
     * @param {Game.GameMessage} gameMessage
     */
     getNextMove(gameMessage) {
-        const myColony = gameMessage.colonies.find(c => c.id === gameMessage.colonyId);
+        const myCrew = gameMessage.crews.find(c => c.id === gameMessage.crewId);
         const mapSize = gameMessage.map.tiles.length;
 
         const randomPosition = {
@@ -26,7 +26,7 @@ class Bot {
             y: Math.round(Math.random() * mapSize)
         };
 
-        return myColony.units.map(unit => ({
+        return myCrew.units.map(unit => ({
             action: Game.UnitActionType.Move,
             target: randomPosition,
             type: Game.ActionType.Unit,

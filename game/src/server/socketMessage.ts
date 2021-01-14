@@ -4,7 +4,7 @@ export type SocketMessage = SocketRegisterNameMessage | SocketRegisterTokenMessa
 
 export type SocketRegisterNameMessage = {
     type: "REGISTER",
-    colonyName: string
+    crewName: string
 }
 
 export type SocketRegisterTokenMessage = {
@@ -24,23 +24,23 @@ export type SocketCommandMessage = {
 
 export type SocketRegisterAckMessage = {
     type: "REGISTER_ACK",
-    colonyName: string,
-    colonyId: string
+    crewName: string,
+    crewId: string
 }
 
 export type SocketTickMessage = Tick & {
     type: "TICK",
 }
 
-export const socketRegisterMessage = (colonyName: string): string =>
+export const socketRegisterMessage = (crewName: string): string =>
     JSON.stringify({
         type: "REGISTER",
-        colonyName
+        crewName
     });
 
-export const socketRegisterAckMessage = (colonyName: string, colonyId: string): string =>
+export const socketRegisterAckMessage = (crewName: string, crewId: string): string =>
     JSON.stringify({
         type: "REGISTER_ACK",
-        colonyId,
-        colonyName
+        crewId,
+        crewName
     });

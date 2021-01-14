@@ -1,8 +1,8 @@
 import { Position, isAdjacent, equal, toString } from "../position";
 import { v4 as uuid } from 'uuid';
 import { UnitError } from "../error";
-import { Colony } from "../colonies/colony";
-import { TickColonyUnit, UnitType } from "../types";
+import { Crew } from "../crews/crew";
+import { TickCrewUnit, UnitType } from "../types";
 import { UNIT } from "../config";
 
 export abstract class Unit {
@@ -12,15 +12,15 @@ export abstract class Unit {
     public maxBlitzium = 0;
     public path: Position[] = []
 
-    constructor(public colony: Colony, public position: Position, public type: UnitType) {
+    constructor(public crew: Crew, public position: Position, public type: UnitType) {
         this.id = uuid();
-        this.colony.units.push(this);
+        this.crew.units.push(this);
     }
 
     public kill() {
-        this.colony.units.splice(this.colony.units.indexOf(this), 1);
+        this.crew.units.splice(this.crew.units.indexOf(this), 1);
         if (this.blitzium !== 0) {
-            this.colony.game.map.depots.push({ position: this.position, blitzium: this.blitzium });
+            this.crew.game.map.depots.push({ position: this.position, blitzium: this.blitzium });
         }
     }
 
@@ -37,27 +37,27 @@ export abstract class Unit {
         if (this.path.length > 0 && equal(target, this.path[this.path.length - 1])) {
             let newPosition = this.path[0];
 
-            if (!this.colony.game.getUnitAtPosition(newPosition)) {
+            if (!this.crew.game.getUnitAtPosition(newPosition)) {
                 this.position = newPosition;
                 this.path = this.path.slice(1);
                 return;
             }
         }
 
-        const map = this.colony.game.map;
+        const map = this.crew.game.map;
         if (!map.isInBound(target) || map.getTile(target).type !== 'EMPTY') {
             throw new UnitError(this, `Target destination is not walkable: ${toString(target)}`);
         }
 
-        if (this.colony.game.isTooCloseToEnemyBase(target, this.colony.id)) {
+        if (this.crew.game.isTooCloseToEnemyBase(target, this.crew.id)) {
             throw new UnitError(this, `Target is too close to an enemy base: ${toString(target)}`);
         }
 
-        if (this.colony.game.getUnitAtPosition(target)) {
+        if (this.crew.game.getUnitAtPosition(target)) {
             throw new UnitError(this, `A unit is already on that location: ${toString(target)}`);
         }
 
-        const result = this.colony.game.computePathForUnitTo(this, target);
+        const result = this.crew.game.computePathForUnitTo(this, target);
         if (result.status === "noPath" || result.status === "timeout") {
             throw new UnitError(this, `No path to ${toString(target)}`);
         }
@@ -68,15 +68,15 @@ export abstract class Unit {
     }
 
     public attack(target: Position) {
-        const enemy = this.colony.game.getUnitAtPosition(target);
+        const enemy = this.crew.game.getUnitAtPosition(target);
 
-        if (isAdjacent(target, this.position) && enemy && enemy.colony !== this.colony) {
-            if (this.colony.blitzium < UNIT.OUTLAW_COST_OF_ATTACKING) {
+        if (isAdjacent(target, this.position) && enemy && enemy.crew !== this.crew) {
+            if (this.crew.blitzium < UNIT.OUTLAW_COST_OF_ATTACKING) {
                 throw new UnitError(this, `There's not enough Blitizum to pay the Outlaw to attack!`);
             }
 
             enemy.kill();
-            this.colony.blitzium = this.colony.blitzium - UNIT.OUTLAW_COST_OF_ATTACKING;
+            this.crew.blitzium = this.crew.blitzium - UNIT.OUTLAW_COST_OF_ATTACKING;
 
             let odds = enemy.type === "OUTLAW" ? UNIT.OUTLAW_SURVIVAL_X_OUTLAW : UNIT.OUTLAW_SURVICAL_X_OTHER;
             if (Math.random() >= odds) {
@@ -90,7 +90,7 @@ export abstract class Unit {
     }
 
     public mine(target: Position) {
-        const mine = this.colony.game.map.mines.find(m => equal(target, m.position));
+        const mine = this.crew.game.map.mines.find(m => equal(target, m.position));
 
         if (this.blitzium + 1 > this.maxBlitzium) {
             throw new UnitError(this, `This unit is full already and can't take more blitzium!`);
@@ -109,8 +109,8 @@ export abstract class Unit {
             throw new UnitError(this, `Target is not nearby`);
         }
 
-        const unit = this.colony.getUnitAtPosition(target);
-        const depot = this.colony.game.map.depots.find(d => equal(target, d.position));
+        const unit = this.crew.getUnitAtPosition(target);
+        const depot = this.crew.game.map.depots.find(d => equal(target, d.position));
 
         const targetObject = unit || depot;
 
@@ -125,7 +125,7 @@ export abstract class Unit {
         }
 
         if (depot && depot.blitzium <= 0) {
-            this.colony.game.map.depots.splice(this.colony.game.map.depots.indexOf(depot), 1);
+            this.crew.game.map.depots.splice(this.crew.game.map.depots.indexOf(depot), 1);
         }
     }
 
@@ -135,12 +135,12 @@ export abstract class Unit {
                 throw new UnitError(this, `Unit is empty, nothing to drop`);
             }
 
-            if (equal(target, this.colony.homeBase)) {
-                this.colony.dropBlitzium(this.blitzium);
+            if (equal(target, this.crew.homeBase)) {
+                this.crew.dropBlitzium(this.blitzium);
                 this.blitzium = 0;
             } else {
-                const unit = this.colony.getUnitAtPosition(target);
-                const existingDepot = this.colony.game.map.depots.find(d => equal(target, d.position));
+                const unit = this.crew.getUnitAtPosition(target);
+                const existingDepot = this.crew.game.map.depots.find(d => equal(target, d.position));
 
                 if (unit) {
                     const maxCargoSpace = unit.maxBlitzium - unit.blitzium;
@@ -151,8 +151,8 @@ export abstract class Unit {
                 } else if (existingDepot) {
                     existingDepot.blitzium = existingDepot.blitzium + this.blitzium;
                     this.blitzium = 0;
-                } else if (this.colony.game.map.getTile(target).type === 'EMPTY') {
-                    this.colony.game.map.depots.push({ position: target, blitzium: this.blitzium });
+                } else if (this.crew.game.map.getTile(target).type === 'EMPTY') {
+                    this.crew.game.map.depots.push({ position: target, blitzium: this.blitzium });
                     this.blitzium = 0;
                 } else {
                     throw new UnitError(this, `Invalid location for a depot ${target}`);
@@ -163,7 +163,7 @@ export abstract class Unit {
         }
     }
 
-    public serialize(): TickColonyUnit {
+    public serialize(): TickCrewUnit {
         return {
             id: this.id,
             type: this.type,

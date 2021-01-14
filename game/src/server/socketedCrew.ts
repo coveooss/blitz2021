@@ -1,9 +1,9 @@
-import { Colony } from "../game/colonies/colony";
+import { Crew } from "../game/crews/crew";
 
 import WebSocket from 'ws'
 import { SocketMessage } from "./socketMessage";
 import { Game } from "../game/game";
-import { ColonyError } from "../game/error";
+import { CrewError } from "../game/error";
 import { logger } from "../logger";
 import { PlayerTick } from '../game/types';
 import { SocketedViewer } from "./socketedViewer";
@@ -14,12 +14,12 @@ interface SocketTickCallack {
     reject: (err: any) => void
 }
 
-export class SocketedColony extends Colony {
+export class SocketedCrew extends Crew {
     private socketCallbacks: SocketTickCallack;
 
     public async getNextCommand(tick: PlayerTick): Promise<any> {
         if (this.socket.readyState === this.socket.CLOSED) {
-            throw new ColonyError(this, `Socket connection lost`);
+            throw new CrewError(this, `Socket connection lost`);
         }
 
         if (this.socketCallbacks) {
@@ -44,14 +44,14 @@ export class SocketedColony extends Colony {
                 switch (message.type) {
                     case 'COMMAND': {
                         if (message.tick !== this.socketCallbacks.tick) {
-                            throw new ColonyError(this, `Invalid tick number received: ${message.tick}`);
+                            throw new CrewError(this, `Invalid tick number received: ${message.tick}`);
                         }
 
                         this.socketCallbacks.resolve(message);
                         break;
                     }
                     default: {
-                        throw new ColonyError(this, `Unexpected message type received: ${message}`);
+                        throw new CrewError(this, `Unexpected message type received: ${message}`);
                     }
                 }
             } catch (ex) {
@@ -61,7 +61,7 @@ export class SocketedColony extends Colony {
                     return;
                 }
 
-                if (ex instanceof ColonyError) {
+                if (ex instanceof CrewError) {
                     logger.warn(`${this}. ${ex.message}`);
                     return;
                 }

@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import codes.blitz.game.message.game.Action;
-import codes.blitz.game.message.game.Colony;
+import codes.blitz.game.message.game.Crew;
 import codes.blitz.game.message.game.GameMessage;
 import codes.blitz.game.message.game.Position;
 import codes.blitz.game.message.game.UnitAction;
@@ -25,11 +25,11 @@ public class Bot {
     */
 	public List<Action> getNextActions(GameMessage gameMessage) {
 
-		Colony myColony = gameMessage.getColoniesMapById()
-				.get(gameMessage.getColonyId());
+		Crew myCrew = gameMessage.getCrewsMapById()
+				.get(gameMessage.getCrewId());
 		int mapSize = gameMessage.getGameMap().getMapSize();
 
-		List<Action> actions = myColony.getUnits().stream()
+		List<Action> actions = myCrew.getUnits().stream()
 				.map(unit -> new UnitAction(UnitActionType.MOVE, unit.getId(),
 						getRandomPosition(mapSize)))
 				.collect(Collectors.toList());

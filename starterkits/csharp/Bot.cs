@@ -25,11 +25,11 @@ namespace Blitz2020
         */
         public GameCommand nextMove(GameMessage gameMessage)
         {
-            Colony myColony = gameMessage.getColoniesMapById[gameMessage.colonyId];
+            Crew myCrew = gameMessage.getCrewsMapById[gameMessage.crewId];
             int mapSize = gameMessage.map.getMapSize();
 
 
-            List<GameCommand.Action> actions = myColony.units
+            List<GameCommand.Action> actions = myCrew.units
                 .Select(c => new UnitAction(UnitActionType.MOVE, c.id, this.getRandomPosition(mapSize)))
                 .ToList<GameCommand.Action>();
 

@@ -1,5 +1,5 @@
 import { Game } from "../src/game/game";
-import { NoopColony } from "../src/game/colonies/noopColony";
+import { NoopCrew } from "../src/game/crews/noopCrew";
 import { UNIT } from "../src/game/config";
 
 jest.useFakeTimers('legacy');
@@ -7,38 +7,38 @@ jest.useFakeTimers('legacy');
 describe("Game", () => {
     const NUMBER_OF_TICKS = 5;
     const MAX_WAIT_TIME_BEFORE_STARTING = 1000;
-    const EXPECTED_NUMBER_OF_COLONIES = 3;
+    const EXPECTED_NUMBER_OF_CREWS = 3;
 
     let game: Game;
 
     beforeEach(() => {
         game = new Game({
             numberOfTicks: NUMBER_OF_TICKS,
-            expectedNumberOfColonies: EXPECTED_NUMBER_OF_COLONIES,
+            expectedNumberOfCrews: EXPECTED_NUMBER_OF_CREWS,
             maxWaitTimeMsBeforeStartingGame: MAX_WAIT_TIME_BEFORE_STARTING
         });
     })
-    it.todo("should apply the received command to the proper colony");
-    it.todo("should not applied the received command if the colony was too slow");
+    it.todo("should apply the received command to the proper crew");
+    it.todo("should not applied the received command if the crew was too slow");
 
-    it("should ask the colonies for their commands on each tick", async () => {
-        const myFirstColony = new NoopColony(game);
-        const mySecondColony = new NoopColony(game);
+    it("should ask the crews for their commands on each tick", async () => {
+        const myFirstCrew = new NoopCrew(game);
+        const mySecondCrew = new NoopCrew(game);
 
-        myFirstColony.getNextCommand = jest.fn(() => Promise.resolve({}));
-        mySecondColony.getNextCommand = jest.fn(() => Promise.resolve({}));
+        myFirstCrew.getNextCommand = jest.fn(() => Promise.resolve({}));
+        mySecondCrew.getNextCommand = jest.fn(() => Promise.resolve({}));
 
         await game.play();
 
-        expect(myFirstColony.getNextCommand).toHaveBeenCalledTimes(NUMBER_OF_TICKS);
-        expect(mySecondColony.getNextCommand).toHaveBeenCalledTimes(NUMBER_OF_TICKS);
+        expect(myFirstCrew.getNextCommand).toHaveBeenCalledTimes(NUMBER_OF_TICKS);
+        expect(mySecondCrew.getNextCommand).toHaveBeenCalledTimes(NUMBER_OF_TICKS);
     });
     it('should start the game after the max wait time', async () => {
         expect(game.isRunning).toBe(false);
         expect(game.isCompleted).toBe(false);
 
-        new NoopColony(game);
-        new NoopColony(game);
+        new NoopCrew(game);
+        new NoopCrew(game);
 
         jest.advanceTimersByTime(MAX_WAIT_TIME_BEFORE_STARTING - 1);
 
@@ -51,7 +51,7 @@ describe("Game", () => {
         expect(game.isCompleted).toBe(false);
     });
 
-    it('should not start the game after the max wait time if there is no colonies', async () => {
+    it('should not start the game after the max wait time if there is no crews', async () => {
         expect(game.isRunning).toBe(false);
         expect(game.isCompleted).toBe(false);
 
@@ -66,19 +66,19 @@ describe("Game", () => {
         expect(game.isCompleted).toBe(false);
     });
 
-    it("should start the game when the expected numbers of colonies have joined", () => {
-        for (let i = 0; i < EXPECTED_NUMBER_OF_COLONIES - 1; i++) {
-            new NoopColony(game);
+    it("should start the game when the expected numbers of crews have joined", () => {
+        for (let i = 0; i < EXPECTED_NUMBER_OF_CREWS - 1; i++) {
+            new NoopCrew(game);
         }
 
         jest.runAllImmediates();
-        expect(game.colonies.length).toBe(EXPECTED_NUMBER_OF_COLONIES - 1);
+        expect(game.crews.length).toBe(EXPECTED_NUMBER_OF_CREWS - 1);
         expect(game.isRunning).toBe(false);
 
-        new NoopColony(game);
+        new NoopCrew(game);
 
         jest.runAllImmediates();
-        expect(game.colonies.length).toBe(EXPECTED_NUMBER_OF_COLONIES);
+        expect(game.crews.length).toBe(EXPECTED_NUMBER_OF_CREWS);
         expect(game.isRunning).toBe(true);
     });
 
@@ -94,7 +94,7 @@ describe("Game", () => {
         expect(firstOnGameCompleted).not.toHaveBeenCalled();
         expect(secondOnGameCompleted).not.toHaveBeenCalled();
 
-        new NoopColony(game);
+        new NoopCrew(game);
         await game.play();
 
         expect(firstOnGameCompleted).toHaveBeenCalledTimes(1);
@@ -112,7 +112,7 @@ describe("Game", () => {
         expect(firstOnTick).not.toHaveBeenCalled();
         expect(secondOnTick).not.toHaveBeenCalled();
 
-        new NoopColony(game);
+        new NoopCrew(game);
         await game.play();
 
         expect(firstOnTick).toHaveBeenCalledTimes(NUMBER_OF_TICKS);
@@ -130,9 +130,9 @@ describe("Game", () => {
         expect(firstOnCommand).not.toHaveBeenCalled();
         expect(secondOnCommand).not.toHaveBeenCalled();
 
-        new NoopColony(game);
-        new NoopColony(game);
-        new NoopColony(game);
+        new NoopCrew(game);
+        new NoopCrew(game);
+        new NoopCrew(game);
 
         await game.play();
 
@@ -143,7 +143,7 @@ describe("Game", () => {
     describe('serialize', () => {
         it('serialize its state', () => {
             expect(game.serialize()).toStrictEqual({
-                colonies: [],
+                crews: [],
                 tick: 0,
                 totalTick: NUMBER_OF_TICKS,
                 map: { tiles: expect.any(Array), depots: [] },
@@ -155,13 +155,13 @@ describe("Game", () => {
             });
         });
 
-        it('serialize its colonies', async () => {
-            new NoopColony(game);
-            new NoopColony(game);
-            new NoopColony(game);
+        it('serialize its crews', async () => {
+            new NoopCrew(game);
+            new NoopCrew(game);
+            new NoopCrew(game);
 
             expect(game.serialize()).toStrictEqual({
-                colonies: [expect.any(Object), expect.any(Object), expect.any(Object)],
+                crews: [expect.any(Object), expect.any(Object), expect.any(Object)],
                 tick: 0,
                 totalTick: NUMBER_OF_TICKS,
                 map: { tiles: expect.any(Array), depots: [] },
@@ -174,12 +174,12 @@ describe("Game", () => {
         });
 
         it('serialize its tick value', async () => {
-            new NoopColony(game);
+            new NoopCrew(game);
 
             await game.play();
 
             expect(game.serialize()).toStrictEqual({
-                colonies: [expect.any(Object)],
+                crews: [expect.any(Object)],
                 tick: NUMBER_OF_TICKS,
                 totalTick: NUMBER_OF_TICKS,
                 map: { tiles: expect.any(Array), depots: [] },

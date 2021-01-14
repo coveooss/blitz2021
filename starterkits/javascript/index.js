@@ -11,15 +11,15 @@ webSocket.onopen = function (event) {
       JSON.stringify({ type: "REGISTER", token: process.env.TOKEN })
     );
   } else {
-    webSocket.send(JSON.stringify({ type: "REGISTER", colonyName: "MyBot" }));
+    webSocket.send(JSON.stringify({ type: "REGISTER", crewName: "MyBot" }));
   }
 };
 
 webSocket.onmessage = function (message) {
   let data = JSON.parse(message.data.toString())
 
-  let myColony = data.colonies.find(c => c.id === data.colonyId);
-  myColony.errors.forEach(e => console.error(e));
+  let myCrew = data.crews.find(c => c.id === data.crewId);
+  myCrew.errors.forEach(e => console.error(e));
 
   webSocket.send(
     JSON.stringify({

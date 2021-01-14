@@ -15,13 +15,13 @@ export class Bot {
   */
   getNextMove(gameMessage: GameMessage): Action[] {
 
-    const myColony = gameMessage.getPlayerMapById().get(gameMessage.colonyId);
+    const myCrew = gameMessage.getPlayerMapById().get(gameMessage.crewId);
     const randomPosition: IPosition = {
       x: Math.round(Math.random() * gameMessage.getMapSize()),
       y: Math.round(Math.random() * gameMessage.getMapSize())
     };
 
-    return myColony.units.map(unit => ({
+    return myCrew.units.map(unit => ({
       action: 'MOVE',
       target: randomPosition,
       type: 'UNIT',
