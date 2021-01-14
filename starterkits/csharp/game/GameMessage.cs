@@ -16,16 +16,16 @@ namespace Blitz2020
 
         public int totalTick;
 
-        public string colonyId;
-        public List<Colony> colonies;
+        public string crewId;
+        public List<Crew> crews;
 
         public Map map;
 
         public Rules rules;
 
-        public Dictionary<string, Colony> getColoniesMapById
+        public Dictionary<string, Crew> getCrewsMapById
         {
-            get { return this.colonies.ToDictionary(p => p.id, p => p); }
+            get { return this.crews.ToDictionary(p => p.id, p => p); }
         }
     }
 }

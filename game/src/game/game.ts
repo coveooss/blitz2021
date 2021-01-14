@@ -1,13 +1,13 @@
-import { Colony } from "./colonies/colony";
+import { Crew } from "./crews/crew";
 import { logger } from "../logger";
 import { hny, timeoutAfter } from "../utils";
-import { ColonyError } from "./error";
+import { CrewError } from "./error";
 import { Command, Tick } from "./types";
 import { GameMap, Path } from "./map";
 import { distanceBetween, hash, Position } from './position'
 import { Miner } from "./units/miner";
 import { Viewer } from "./viewer";
-import { COLONY, UNIT } from "./config";
+import { CREW, UNIT } from "./config";
 import { Unit } from "./units/unit";
 import aStar from "a-star";
 
@@ -17,7 +17,7 @@ export interface GameOptions {
     timeMsAllowedPerTicks: number,
     delayMsBetweenTicks: number,
     maxWaitTimeMsBeforeStartingGame: number,
-    expectedNumberOfColonies: number
+    expectedNumberOfCrews: number
 }
 
 export interface GameResult {
@@ -26,7 +26,7 @@ export interface GameResult {
     score: number
 }
 
-export interface ColonyStats {
+export interface CrewStats {
     responseTimePerTicks: number[],
     processingTimePerTicks: number[],
     unitsPerTicks: number[],
@@ -39,7 +39,7 @@ export class Game {
         numberOfTicks: 5,
         timeMsAllowedPerTicks: 0,
         maxWaitTimeMsBeforeStartingGame: 0,
-        expectedNumberOfColonies: 3,
+        expectedNumberOfCrews: 3,
         delayMsBetweenTicks: 0
     }
 
@@ -53,10 +53,10 @@ export class Game {
     private _currentTick: number = 0;
     private maxWaitTimeInterval: NodeJS.Timeout;
 
-    public readonly colonies: Colony[] = [];
+    public readonly crews: Crew[] = [];
     public readonly viewers: Viewer[] = [];
 
-    public readonly responseTimePerColony: Map<Colony, ColonyStats>;
+    public readonly responseTimePerCrew: Map<Crew, CrewStats>;
 
     constructor(private options?: Partial<GameOptions>) {
 
@@ -65,7 +65,7 @@ export class Game {
             ...options
         }
 
-        this.responseTimePerColony = new Map<Colony, ColonyStats>();
+        this.responseTimePerCrew = new Map<Crew, CrewStats>();
 
         if (!this.options.gameMapFile || this.options.gameMapFile === "") {
             logger.info(`Using the default map`);
@@ -75,50 +75,50 @@ export class Game {
             this.map = GameMap.fromFile(this.options.gameMapFile);
         }
 
-        if (this.options.expectedNumberOfColonies === undefined) {
-            this.options.expectedNumberOfColonies = this.map.bases.length;
+        if (this.options.expectedNumberOfCrews === undefined) {
+            this.options.expectedNumberOfCrews = this.map.bases.length;
         }
 
-        if (this.options.expectedNumberOfColonies > this.map.bases.length) {
-            logger.error(`Number of colonies expected (${this.options.expectedNumberOfColonies}) is greater than the number of bases available (${this.map.bases.length})`);
-            this.options.expectedNumberOfColonies = this.map.bases.length;
+        if (this.options.expectedNumberOfCrews > this.map.bases.length) {
+            logger.error(`Number of crews expected (${this.options.expectedNumberOfCrews}) is greater than the number of bases available (${this.map.bases.length})`);
+            this.options.expectedNumberOfCrews = this.map.bases.length;
         }
 
         if (this.options.maxWaitTimeMsBeforeStartingGame !== 0) {
-            logger.info(`The game will start automatically after ${this.options.maxWaitTimeMsBeforeStartingGame} ms or when ${this.options.expectedNumberOfColonies} colonies will have joined, whichever come first.`);
+            logger.info(`The game will start automatically after ${this.options.maxWaitTimeMsBeforeStartingGame} ms or when ${this.options.expectedNumberOfCrews} crews will have joined, whichever come first.`);
 
             this.maxWaitTimeInterval = setTimeout(() => {
                 if (!this.isRunning && !this.isCompleted) {
-                    if (this.colonies.length === 0) {
-                        this.notifyGameCompleted([], new Error(`Max wait time for the game to start of ${this.options.maxWaitTimeMsBeforeStartingGame} ms exceeded but no colonies were registered.`));
+                    if (this.crews.length === 0) {
+                        this.notifyGameCompleted([], new Error(`Max wait time for the game to start of ${this.options.maxWaitTimeMsBeforeStartingGame} ms exceeded but no crews were registered.`));
                     } else {
-                        logger.info(`Starting the game automaticly after waiting for ${this.options.maxWaitTimeMsBeforeStartingGame} ms with ${this.colonies.length} colonies.`);
+                        logger.info(`Starting the game automaticly after waiting for ${this.options.maxWaitTimeMsBeforeStartingGame} ms with ${this.crews.length} crews.`);
 
                         this.play();
                     }
                 }
             }, this.options.maxWaitTimeMsBeforeStartingGame);
 
-        } else if (this.options.expectedNumberOfColonies) {
-            logger.info(`The game will start as soon as ${this.options.expectedNumberOfColonies} colony(ies) will join.`);
+        } else if (this.options.expectedNumberOfCrews) {
+            logger.info(`The game will start as soon as ${this.options.expectedNumberOfCrews} crew(ies) will join.`);
         }
     }
 
-    public registerColony(colony: Colony) {
+    public registerCrew(crew: Crew) {
         if (this.isRunning || this.isCompleted) {
-            throw new ColonyError(colony, `Game already running of completed, can't add Colony`);
+            throw new CrewError(crew, `Game already running of completed, can't add Crew`);
         }
 
-        if (this.colonies.indexOf(colony) !== -1) {
-            throw new ColonyError(colony, `Colony already registed.`);
+        if (this.crews.indexOf(crew) !== -1) {
+            throw new CrewError(crew, `Crew already registed.`);
         }
 
-        logger.info(`Registering new ${colony} to the game.`);
-        this.colonies.push(colony);
+        logger.info(`Registering new ${crew} to the game.`);
+        this.crews.push(crew);
 
-        if (this.colonies.length === this.options.expectedNumberOfColonies) {
+        if (this.crews.length === this.options.expectedNumberOfCrews) {
             setImmediate(() => {
-                logger.info(`Number of expected colonies (${this.options.expectedNumberOfColonies}) reached, starting the game.`);
+                logger.info(`Number of expected crews (${this.options.expectedNumberOfCrews}) reached, starting the game.`);
                 this.play();
             });
         }
@@ -145,16 +145,16 @@ export class Game {
         this.callbackOnTick.forEach(cb => cb());
     }
 
-    public getColony(colonyId: string) {
-        return this.colonies.find(c => c.id === colonyId);
+    public getCrew(crewId: string) {
+        return this.crews.find(c => c.id === crewId);
     }
 
     public getUnit(unitId: string) {
-        return this.colonies.flatMap(c => c.getUnit(unitId))[0];
+        return this.crews.flatMap(c => c.getUnit(unitId))[0];
     }
 
     public getUnitAtPosition(position: Position) {
-        return this.colonies.flatMap(c => c.getUnitAtPosition(position)).filter(c => c !== undefined)[0];
+        return this.crews.flatMap(c => c.getUnitAtPosition(position)).filter(c => c !== undefined)[0];
     }
 
     public onGameCompleted(cb: (gameResults: GameResult[], err?: Error) => any) {
@@ -177,12 +177,12 @@ export class Game {
         return this._isCompleted;
     }
 
-    public isTooCloseToEnemyBase(position: Position, colonyId: string) {
-        return this.colonies.some((c) => {
-            if (c.id === colonyId) return false;
+    public isTooCloseToEnemyBase(position: Position, crewId: string) {
+        return this.crews.some((c) => {
+            if (c.id === crewId) return false;
 
-            return (Math.abs(c.homeBase.x - position.x) <= COLONY.SAFE_ZONE_RADIUS) &&
-                (Math.abs(c.homeBase.y - position.y) <= COLONY.SAFE_ZONE_RADIUS);
+            return (Math.abs(c.homeBase.x - position.x) <= CREW.SAFE_ZONE_RADIUS) &&
+                (Math.abs(c.homeBase.y - position.y) <= CREW.SAFE_ZONE_RADIUS);
         });
     }
 
@@ -194,7 +194,7 @@ export class Game {
         const target = atPosition || unit.position;
 
         return this.map.getWalkableNeighbors(target)
-            .filter(tile => !this.isTooCloseToEnemyBase(tile.position, unit.colony.id))
+            .filter(tile => !this.isTooCloseToEnemyBase(tile.position, unit.crew.id))
             .filter(tile => !this.hasUnitOnPosition(tile.position));
     }
 
@@ -218,14 +218,14 @@ export class Game {
             throw new Error(`Game is already running.`);
         }
 
-        this.colonies.forEach((c, i) => {
+        this.crews.forEach((c, i) => {
             c.homeBase = this.map.bases[i].position;
-            c.blitzium = COLONY.START_BALANCE;
+            c.blitzium = CREW.START_BALANCE;
             c.totalBlitzium = c.blitzium;
 
             new Miner(c, c.homeBase);
 
-            this.responseTimePerColony.set(c, {
+            this.responseTimePerCrew.set(c, {
                 responseTimePerTicks: [],
                 processingTimePerTicks: [],
                 unitsPerTicks: [],
@@ -243,13 +243,13 @@ export class Game {
 
             logger.debug(`Sending Tick ${tick}: ${startingState}`);
 
-            const allTickCommandsWaiting = this.colonies.map(async c => {
+            const allTickCommandsWaiting = this.crews.map(async c => {
                 if (c.isDead) {
                     return;
                 }
 
                 try {
-                    const stat = this.responseTimePerColony.get(c);
+                    const stat = this.responseTimePerCrew.get(c);
                     let command: Command | void = null;
 
                     if (this.options.timeMsAllowedPerTicks !== 0) {
@@ -257,13 +257,13 @@ export class Game {
 
                         command = await Promise.race([
                             timeoutAfter(this.options.timeMsAllowedPerTicks),
-                            c.getNextCommand({ colonyId: c.id, ...startingState })
+                            c.getNextCommand({ crewId: c.id, ...startingState })
                         ]);
 
                         stat.responseTimePerTicks.push(new Date().getTime() - timeWhenStarted);
                         stat.unitsPerTicks.push(c.units.length);
                     } else {
-                        command = await c.getNextCommand({ colonyId: c.id, ...startingState });
+                        command = await c.getNextCommand({ crewId: c.id, ...startingState });
                     }
 
                     if (command) {
@@ -284,7 +284,7 @@ export class Game {
                         logger.info(`No command was received in time for ${c} on tick ${tick}`);
                     }
 
-                    this.responseTimePerColony.set(c, stat);
+                    this.responseTimePerCrew.set(c, stat);
                 } catch (ex) {
                     logger.warn(`Error while fetching ${c} command for tick ${tick}.`, ex);
                 }
@@ -306,8 +306,8 @@ export class Game {
             }
 
 
-            if (this.colonies.length === 0 || this.colonies.every(c => c.isDead)) {
-                logger.info('Closing game as no more colonies are responding');
+            if (this.crews.length === 0 || this.crews.every(c => c.isDead)) {
+                logger.info('Closing game as no more crews are responding');
                 break;
             }
         }
@@ -316,10 +316,10 @@ export class Game {
         this._isCompleted = true;
         this._isRunning = false;
 
-        this.colonies.forEach(c => {
+        this.crews.forEach(c => {
             logger.info(`Sending stats for ${c}`);
 
-            const stat = this.responseTimePerColony.get(c);
+            const stat = this.responseTimePerCrew.get(c);
             const event = hny.newEvent();
             event.addField('game.team_name', c.name);
             event.addField('game.total_blitzium', c.totalBlitzium);
@@ -335,7 +335,7 @@ export class Game {
         });
 
         this.notifyGameCompleted(
-            this.colonies
+            this.crews
                 .sort((a, b) => b.blitzium - a.blitzium)
                 .map((c, i) => ({
                     rank: i + 1,
@@ -346,7 +346,7 @@ export class Game {
 
     public serialize(): Tick {
         return {
-            colonies: this.colonies.map(c => c.serialize()),
+            crews: this.crews.map(c => c.serialize()),
             tick: this._currentTick,
             totalTick: this.options.numberOfTicks,
             map: this.map?.serialize?.() ?? { tiles: [], depots: [] },

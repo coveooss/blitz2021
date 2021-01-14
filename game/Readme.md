@@ -1,4 +1,4 @@
-# Blitz 2020 - The Colony Game Engine
+# Blitz 2020 - The Crew Game Engine
 
 ## Build, test and debug
 

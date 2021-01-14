@@ -25,12 +25,12 @@ describe("Server", () => {
 
     it.skip('should received a valid tick per turn', (done) => {
         const client = new WebSocket(SOCKET_ADDR);
-        const COLONY_NAME = "myColony";
+        const CREW_NAME = "myCrew";
 
         let currentTick = 0;
 
         client.on('open', () => {
-            client.send(JSON.stringify({ type: "REGISTER", colonyName: COLONY_NAME }), (err) => {
+            client.send(JSON.stringify({ type: "REGISTER", crewName: CREW_NAME }), (err) => {
                 if (err) {
                     throw err;
                 }
@@ -58,13 +58,13 @@ describe("Server", () => {
                 done();
             });
 
-            client.send(JSON.stringify({ type: "REGISTER", colonyName: COLONY_NAME }), (err) => {
+            client.send(JSON.stringify({ type: "REGISTER", crewName: CREW_NAME }), (err) => {
                 if (err) {
                     throw err;
                 }
             });
         });
 
-        expect(game.colonies).toHaveLength(0);
+        expect(game.crews).toHaveLength(0);
     });
 })

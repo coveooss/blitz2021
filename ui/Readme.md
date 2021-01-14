@@ -1,4 +1,4 @@
-# Blitz 2020 - The Colony UI
+# Blitz 2020 - The Crew UI
 
 ## Build, test and debug
 

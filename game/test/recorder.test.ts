@@ -1,25 +1,25 @@
 import fs from 'fs';
 import { Recorder, RecorderMode } from '../src/recorder/recorder';
 import { Game } from '../src/game/game';
-import { NoopColony } from '../src/game/colonies/noopColony';
+import { NoopCrew } from '../src/game/crews/noopCrew';
 import { Tick } from '../src/game/types';
 
 jest.mock('fs');
 jest.useFakeTimers('legacy');
 
 const NUMBER_OF_TICKS = 5;
-const NUMBER_OF_COLONIES = 2;
+const NUMBER_OF_CREWS = 2;
 
 describe("Recorder", () => {
     let game: Game;
 
-    const givenTwoColonies = () => {
+    const givenTwoCrews = () => {
         return new Promise((resolve) => {
-            const myFirstColony = new NoopColony(game);
-            const mySecondColony = new NoopColony(game);
+            const myFirstCrew = new NoopCrew(game);
+            const mySecondCrew = new NoopCrew(game);
 
-            myFirstColony.getNextCommand = jest.fn(() => Promise.resolve({}));
-            mySecondColony.getNextCommand = jest.fn(() => Promise.resolve({}));
+            myFirstCrew.getNextCommand = jest.fn(() => Promise.resolve({}));
+            mySecondCrew.getNextCommand = jest.fn(() => Promise.resolve({}));
 
             setImmediate(() => resolve());
         });
@@ -29,30 +29,30 @@ describe("Recorder", () => {
         it('should serialize the game for all received command', async () => {
             game = new Game({
                 numberOfTicks: NUMBER_OF_TICKS,
-                expectedNumberOfColonies: NUMBER_OF_COLONIES,
+                expectedNumberOfCrews: NUMBER_OF_CREWS,
                 maxWaitTimeMsBeforeStartingGame: 0
             });
             game.serialize = jest.fn();
             new Recorder(game, RecorderMode.Command);
 
-            await givenTwoColonies();
+            await givenTwoCrews();
 
             // The game serialize itself once per tick to send to all players
-            // The recorder serialize the game once per command (tick * colonies)
-            expect(game.serialize).toHaveBeenCalledTimes(NUMBER_OF_TICKS * NUMBER_OF_COLONIES + NUMBER_OF_TICKS);
+            // The recorder serialize the game once per command (tick * crews)
+            expect(game.serialize).toHaveBeenCalledTimes(NUMBER_OF_TICKS * NUMBER_OF_CREWS + NUMBER_OF_TICKS);
         });
 
         it('should append to the buffer for all received command', async () => {
             game = new Game({
                 numberOfTicks: NUMBER_OF_TICKS,
-                expectedNumberOfColonies: NUMBER_OF_COLONIES,
+                expectedNumberOfCrews: NUMBER_OF_CREWS,
                 maxWaitTimeMsBeforeStartingGame: 0
             });
             const recorder = new Recorder(game, RecorderMode.Command);
 
-            await givenTwoColonies();
+            await givenTwoCrews();
 
-            expect(recorder.buffer.length).toBe(NUMBER_OF_TICKS * NUMBER_OF_COLONIES);
+            expect(recorder.buffer.length).toBe(NUMBER_OF_TICKS * NUMBER_OF_CREWS);
         });
     });
 
@@ -61,12 +61,12 @@ describe("Recorder", () => {
             const serializeSpy = jest.spyOn(Game.prototype, 'serialize').mockReturnValue({} as Tick);
             game = new Game({
                 numberOfTicks: NUMBER_OF_TICKS,
-                expectedNumberOfColonies: NUMBER_OF_COLONIES,
+                expectedNumberOfCrews: NUMBER_OF_CREWS,
                 maxWaitTimeMsBeforeStartingGame: 0
             });
             new Recorder(game, RecorderMode.Tick);
 
-            await givenTwoColonies();
+            await givenTwoCrews();
 
             // The game serialize itself once per tick to send to all players
             // The recorder serialize the game once per tick
@@ -76,12 +76,12 @@ describe("Recorder", () => {
         it('should modify the buffer for every tick', async () => {
             game = new Game({
                 numberOfTicks: NUMBER_OF_TICKS,
-                expectedNumberOfColonies: NUMBER_OF_COLONIES,
+                expectedNumberOfCrews: NUMBER_OF_CREWS,
                 maxWaitTimeMsBeforeStartingGame: 0
             });
             const recorder = new Recorder(game, RecorderMode.Tick);
 
-            givenTwoColonies();
+            givenTwoCrews();
 
             await game.play();
 
@@ -109,7 +109,7 @@ describe("Recorder", () => {
         });
 
         it('should stringify the object', () => {
-            recorder.buffer = [{ colonies: [], map: { tiles: [[]], depots: [] }, tick: 0, totalTick: 10, rules: { MAX_MINER_CARGO: 0, MAX_MINER_MOVE_CARGO: 0, MAX_CART_CARGO: 0 } }];
+            recorder.buffer = [{ crews: [], map: { tiles: [[]], depots: [] }, tick: 0, totalTick: 10, rules: { MAX_MINER_CARGO: 0, MAX_MINER_MOVE_CARGO: 0, MAX_CART_CARGO: 0 } }];
             recorder.saveToFile('path/to/file');
 
             expect(fs.writeFileSync).toHaveBeenCalledWith('path/to/file', JSON.stringify(recorder.buffer, null, 2));

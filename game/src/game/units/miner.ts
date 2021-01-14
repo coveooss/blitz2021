@@ -1,4 +1,4 @@
-import { Colony } from "../colonies/colony";
+import { Crew } from "../crews/crew";
 import { Unit } from "./unit";
 import { Position } from "../position";
 import { UnitError } from "../error";
@@ -6,8 +6,8 @@ import { UNIT } from "../config";
 
 
 export class Miner extends Unit {
-    constructor(colony: Colony, position: Position) {
-        super(colony, position, "MINER");
+    constructor(crew: Crew, position: Position) {
+        super(crew, position, "MINER");
 
         this.maxBlitzium = UNIT.MAX_MINER_CARGO;
     }

@@ -30,7 +30,7 @@ public static class Application
 
             string? token = Environment.GetEnvironmentVariable("TOKEN");
             string registerPayload = token == null
-                ? registerPayload = JsonConvert.SerializeObject(new { type = "REGISTER", colonyName = Bot.NAME })
+                ? registerPayload = JsonConvert.SerializeObject(new { type = "REGISTER", crewName = Bot.NAME })
                 : registerPayload = JsonConvert.SerializeObject(new { type = "REGISTER", token = token });
 
 
@@ -58,7 +58,7 @@ public static class Application
 
                 if (message != null)
                 {
-                    List<string> errors = message.getColoniesMapById[message.colonyId].errors;
+                    List<string> errors = message.getCrewsMapById[message.crewId].errors;
                     errors.ForEach(e => Console.WriteLine("Command error: " + e));
 
                     GameCommand command = bot.nextMove(message);

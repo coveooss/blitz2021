@@ -3,11 +3,11 @@ import serveStatic from 'serve-static';
 import finalhandler from 'finalhandler';
 import { createServer, Server as HttpServer } from 'http';
 import { Game } from '../game/game';
-import { SocketedColony } from './socketedColony';
+import { SocketedCrew } from './socketedCrew';
 import { logger } from '../logger';
 import { SocketMessage } from './socketMessage';
 import { SocketedViewer } from './socketedViewer';
-import { ColonyError, SocketRegisteringError } from '../game/error';
+import { CrewError, SocketRegisteringError } from '../game/error';
 
 export class Server {
     private server: HttpServer;
@@ -75,36 +75,36 @@ export class Server {
                             }
 
                             if (message.type === 'REGISTER') {
-                                let colonyName;
+                                let crewName;
 
 
                                 if ("token" in message) {
                                     if (!this.teamNamesByToken && message.token !== "") {
-                                        throw new SocketRegisteringError('You need to register using a colonyName');
+                                        throw new SocketRegisteringError('You need to register using a crewName');
                                     }
 
-                                    colonyName = this.teamNamesByToken[message.token];
+                                    crewName = this.teamNamesByToken[message.token];
                                 }
 
-                                if ("colonyName" in message) {
-                                    if (this.teamNamesByToken && colonyName !== "") {
+                                if ("crewName" in message) {
+                                    if (this.teamNamesByToken && crewName !== "") {
                                         throw new SocketRegisteringError('You need to register using your secret token');
                                     }
 
-                                    colonyName = message.colonyName;
+                                    crewName = message.crewName;
                                 }
 
-                                if (!colonyName || colonyName === "") {
-                                    throw new SocketRegisteringError(`You need to specify a colony name`);
+                                if (!crewName || crewName === "") {
+                                    throw new SocketRegisteringError(`You need to specify a crew name`);
                                 }
 
-                                const colony = new SocketedColony(socket, this.game, colonyName);
-                                logger.debug(`New socket connection for ${colony}`, socket);
+                                const crew = new SocketedCrew(socket, this.game, crewName);
+                                logger.debug(`New socket connection for ${crew}`, socket);
 
                                 clearTimeout(registerTimeout);
                             }
                         } catch (ex) {
-                            if (ex instanceof SocketRegisteringError || ex instanceof SyntaxError || ex instanceof ColonyError) {
+                            if (ex instanceof SocketRegisteringError || ex instanceof SyntaxError || ex instanceof CrewError) {
                                 logger.warn(ex.message);
                             } else {
                                 throw ex;

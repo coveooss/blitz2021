@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 public class GameMessage {
 	private int tick;
 	private int totalTick;
-	private String colonyId;
-	private List<Colony> colonies;
+	private String crewId;
+	private List<Crew> crews;
 	private GameMap map;
-	private Map<String, Colony> coloniesMapById;
+	private Map<String, Crew> crewsMapById;
 	private Rules rules;
 
 	public int getTick() {
@@ -22,24 +22,24 @@ public class GameMessage {
 		return totalTick;
 	}
 
-	public String getColonyId() {
-		return colonyId;
+	public String getCrewId() {
+		return crewId;
 	}
 
-	public List<Colony> getColonies() {
-		return colonies;
+	public List<Crew> getCrews() {
+		return crews;
 	}
 
 	public GameMap getGameMap() {
 		return map;
 	}
 
-	public Map<String, Colony> getColoniesMapById() {
-		if (coloniesMapById == null) {
-			coloniesMapById = colonies.stream().collect(
-					Collectors.toMap(Colony::getId, Function.identity()));
+	public Map<String, Crew> getCrewsMapById() {
+		if (crewsMapById == null) {
+			crewsMapById = crews.stream().collect(
+					Collectors.toMap(Crew::getId, Function.identity()));
 		}
-		return coloniesMapById;
+		return crewsMapById;
 	}
 
 	public Rules getRules() {

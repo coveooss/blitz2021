@@ -20,7 +20,7 @@ export interface IUnit {
   path: IPosition[]
 }
 
-export interface IColony {
+export interface ICrew {
   id: string,
   name: string,
   homeBase: IPosition,
@@ -44,8 +44,8 @@ export interface IRules {
 export interface IGameTick {
   tick: number,
   totalTick: number,
-  colonyId: string,
-  colonies: IColony[],
+  crewId: string,
+  crews: ICrew[],
   map: {
     tiles: TileType[][],
     depots: IDepot[]
@@ -80,8 +80,8 @@ export class PointOutOfMapException extends Error {
 export class GameMessage implements IGameTick {
   public readonly tick: number;
   public readonly totalTick: number;
-  public readonly colonyId: string;
-  public readonly colonies: IColony[];
+  public readonly crewId: string;
+  public readonly crews: ICrew[];
   public readonly map: {
     tiles: TileType[][],
     depots: IDepot[]
@@ -108,6 +108,6 @@ export class GameMessage implements IGameTick {
   }
 
   public getPlayerMapById() {
-    return new Map<string, IColony>(this.colonies.map(c => [c.id, c]));
+    return new Map<string, ICrew>(this.crews.map(c => [c.id, c]));
   }
 }

@@ -1,8 +1,8 @@
-import { Colony } from "./colony";
+import { Crew } from "./crew";
 import { Game } from "../game";
 import { PlayerTick } from '../types';
 
-export class NoopColony extends Colony {
+export class NoopCrew extends Crew {
     constructor(game: Game) {
         super(game, 'Noop');
     }

@@ -1,5 +1,5 @@
-import { Colony } from "../src/game/colonies/colony";
-import { NoopColony } from "../src/game/colonies/noopColony";
+import { Crew } from "../src/game/crews/crew";
+import { NoopCrew } from "../src/game/crews/noopCrew";
 import { UNIT } from "../src/game/config";
 import { Game } from "../src/game/game";
 import { GameMap } from "../src/game/map";
@@ -8,7 +8,7 @@ import { Unit } from "../src/game/units/unit";
 
 describe("Miner", () => {
     let game: Game;
-    let myColony: Colony;
+    let myCrew: Crew;
     let unit: Unit;
     let map: GameMap;
 
@@ -18,8 +18,8 @@ describe("Miner", () => {
         game = new Game();
         game.map = map;
 
-        myColony = new NoopColony(game);
-        unit = new Miner(myColony, { x: 0, y: 0 });
+        myCrew = new NoopCrew(game);
+        unit = new Miner(myCrew, { x: 0, y: 0 });
     });
 
     describe('move', () => {

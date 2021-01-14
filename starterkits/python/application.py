@@ -7,7 +7,7 @@ import json
 
 from bot import Bot
 from bot_message import BotMessage, MessageType
-from game_message import GameMessage, Colony
+from game_message import GameMessage, Crew
 from game_command import UnitActionType
 
 
@@ -19,7 +19,7 @@ async def run():
         if "TOKEN" in os.environ:
             await websocket.send(json.dumps({"type": "REGISTER", "token": os.environ["TOKEN"]}))
         else:
-            await websocket.send(json.dumps({"type": "REGISTER", "colonyName": "MyBot"}))
+            await websocket.send(json.dumps({"type": "REGISTER", "crewName": "MyBot"}))
 
         await game_loop(websocket=websocket, bot=bot)
 
@@ -33,9 +33,9 @@ async def game_loop(websocket: websockets.WebSocketServerProtocol, bot: Bot):
             break
         game_message: GameMessage = GameMessage.from_json(message)
 
-        my_colony: Colony = game_message.get_colonies_by_id()[game_message.colonyId]
+        my_crew: Crew = game_message.get_crews_by_id()[game_message.crewId]
         print(f"\Tick {game_message.tick}")
-        print(f"\nError? {' '.join(my_colony.errors)}")
+        print(f"\nError? {' '.join(my_crew.errors)}")
 
         next_move: UnitActionType.MOVE = bot.get_next_move(game_message)
         await websocket.send(BotMessage(type=MessageType.COMMAND, actions=next_move, tick=game_message.tick).to_json())

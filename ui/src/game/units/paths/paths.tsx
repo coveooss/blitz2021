@@ -2,14 +2,14 @@ import * as React from 'react';
 import {Group, Rect} from 'react-konva';
 
 import {CAPTURED_GAP_RATIO, colors, Size, VisualizationContext} from '../../../constants';
-import {TickColony, TickColonyUnit} from 'blitz2021/dist/game/types';
+import {TickCrew, TickCrewUnit} from 'blitz2021/dist/game/types';
 import PathCorner from './pathCorner';
 
 const Paths: React.FunctionComponent = () => {
     const {currentTick} = React.useContext(VisualizationContext);
 
-    const units = currentTick?.colonies?.map((colony: TickColony, i) =>
-        colony.units.map((unit: TickColonyUnit, j) =>
+    const units = currentTick?.crews?.map((crew: TickCrew, i) =>
+        crew.units.map((unit: TickCrewUnit, j) =>
         <React.Fragment key={`player-tail-${unit.id}`}>
             {unit.path
                 .map(({x, y}, index: number) => {

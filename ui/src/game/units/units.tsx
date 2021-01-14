@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Group} from 'react-konva';
-import {TickColonyUnit, TickColony} from 'blitz2021/dist/game/types';
+import {TickCrewUnit, TickCrew} from 'blitz2021/dist/game/types';
 
 import {colors, darkenColors, Size, VisualizationContext} from '../../constants';
 import Cart from './cart';
@@ -11,8 +11,8 @@ import {UnitProps} from './unitProps';
 const Units: React.FunctionComponent = () => {
     const {currentTick} = React.useContext(VisualizationContext);
 
-    const units = currentTick?.colonies?.map((colony: TickColony, i) =>
-        colony.units.map((unit: TickColonyUnit, j) => {
+    const units = currentTick?.crews?.map((crew: TickCrew, i) =>
+        crew.units.map((unit: TickCrewUnit, j) => {
             const defaultProps: UnitProps & {key: string} = {
                 key: `unit-${i}-${j}`,
                 color: colors[i],
