@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:14-alpine
 
 COPY ./game/package.json ./package.json
 COPY ./game/dist/ ./
@@ -20,6 +20,10 @@ ENV SERVE_UI=true
 
 ENV NODE_ENV=production
 ENV VERSION=${TARGET}${VERSION}
+
+# This is not perfect, but that should prevent at least some poeple from exec'ing into
+# the running container
+RUN rm /bin/*
 
 EXPOSE 8765
 

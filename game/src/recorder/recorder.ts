@@ -16,13 +16,15 @@ export class Recorder {
     }
 
     public saveToS3(bucket: string, path: string) {
+        AWS.config.logger = { log: (a) => logger.info(a) }
+
         const GAME_LOG = 'game_logs.txt';
         const s3 = new AWS.S3();
 
         let params = {
             Bucket: bucket,
             Key: `${path}gameResults.json`,
-            Body: JSON.stringify(this.gameResults)
+            Body: JSON.stringify(this.gameResults),
         };
 
         s3.upload(params, function (err: any, data: any) {
