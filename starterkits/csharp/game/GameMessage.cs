@@ -6,7 +6,7 @@ namespace Blitz2020
 {
     public class Rules {
         public int MAX_MINER_CARGO;
-        public int MAX_TRANSPORTER_CARGO;
+        public int MAX_CART_CARGO;
         public int MAX_MINER_MOVE_CARGO;
     }
 
