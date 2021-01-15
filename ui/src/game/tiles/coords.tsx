@@ -15,7 +15,7 @@ const Coords: React.FunctionComponent<{tiles?: TileType[][]}> = ({tiles}) => {
                         y={0.5 * Size.Tile}
                         width={Size.InnerTile}
                         height={Size.InnerTile}
-                        text={`${y},${x}`}
+                        text={x === 0 && y === 0 ? "x, y" : `${x},${y}`}
                         fill="#fff"
                         align="center"
                         fontSize={Size.InnerTile < 14 ? 5 : 10}
