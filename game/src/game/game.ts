@@ -1,6 +1,6 @@
 import { Crew } from "./crews/crew";
 import { logger } from "../logger";
-import { hny, timeoutAfter } from "../utils";
+import { hny, roundRobin, shuffle, timeoutAfter } from "../utils";
 import { CrewError } from "./error";
 import { Command, Tick } from "./types";
 import { GameMap, Path } from "./map";
@@ -243,7 +243,7 @@ export class Game {
 
             logger.debug(`Sending Tick ${tick}: ${startingState}`);
 
-            const allTickCommandsWaiting = this.crews.map(async c => {
+            const allTickCommandsWaiting = shuffle(this.crews).map(async (c, i, a) => {
                 if (c.isDead) {
                     return;
                 }

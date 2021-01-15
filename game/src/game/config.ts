@@ -1,6 +1,6 @@
 export class UNIT {
     public static MINER_COST = 50;
-    public static OUTLAW_COST = 150;
+    public static OUTLAW_COST = 75;
     public static CART_COST = 25;
 
     public static MAX_MINER_CARGO = 50;
