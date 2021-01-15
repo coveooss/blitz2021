@@ -17,9 +17,13 @@ const TilesTextureCache: React.FC = () => {
     const images: React.ReactNode[] = Object
         .values(TexturedTiles)
         .map(tile => (
-            <img src={TilesTextureImageSrc[tile]} id={TilesTextureIds[tile]} />
+            <img
+                key={TilesTextureIds[tile]}
+                src={TilesTextureImageSrc[tile]}
+                id={TilesTextureIds[tile]}
+            />
         ));
 
     return <div style={{display: "none"}}>{images}</div>
-}
+};
 export default TilesTextureCache;

@@ -15,7 +15,6 @@ const Grid: React.FunctionComponent<{boardSize: number; size: {x: number; y: num
                 fill="#C2BCB0"
                 width={boardSize}
                 height={1}
-                perfectDrawEnabled={false}
             />
         )
     }
@@ -28,7 +27,6 @@ const Grid: React.FunctionComponent<{boardSize: number; size: {x: number; y: num
                 fill="#C2BCB0"
                 width={1}
                 height={boardSize}
-                perfectDrawEnabled={false}
             />
         )
     }
