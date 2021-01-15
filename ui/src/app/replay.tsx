@@ -3,6 +3,7 @@ import {Tick} from 'blitz2021/dist/game/types';
 import useWindowSize from '../hooks/useWindowSize';
 import ReplayViewer from '../replay/replayViewer';
 import ErrorBoundary from '../utils/ErrorBoundary';
+import Shortcuts from '../Shortcuts';
 
 const Replay: React.FC = () => {
     const [data, setData] = React.useState<Tick[] | null>(null);
@@ -28,6 +29,7 @@ const Replay: React.FC = () => {
         return (
             <ErrorBoundary>
                 <ReplayViewer width={width} height={height} ticks={data} />
+                <Shortcuts />
             </ErrorBoundary>
         );
     }
