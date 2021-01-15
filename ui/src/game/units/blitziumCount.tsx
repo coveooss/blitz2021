@@ -19,6 +19,7 @@ const BlitziumCount: React.FunctionComponent<Pick<UnitProps, 'position' | 'color
                 text={blitzium.toString()}
                 fill={color}
                 align="center"
+                fontSize={Size.InnerTile < 14 ? 8 : 12}
             />
         </Group>
     ) : null
