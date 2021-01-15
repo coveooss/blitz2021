@@ -78,13 +78,13 @@ const Viewer: React.FC = () => {
     return (
         <KeyHandler onKeyDown={onKeyDown} onKeyUp={onKeyUp}>
             <section style={mainStyle}>
-                <h1 style={titleStyle}>Blitz 2021 - Web Viewer</h1>
                 {!isConnected && <section>
+                <h1 style={titleStyle}>Blitz 2021 - Web Viewer</h1>
                     <span>Connecting to the local server ...</span>
                 </section>}
 
                 {currentTick !== null && (
-                    <section style={{ padding: "25px" }}>
+                    <section>
                         <Stage width={width} height={height}>
                             <StaticElements firstTick={currentTick} boardSize={boardSize} />
                             <KeyContext.Provider value={{ pressedKey: key }}>
@@ -100,9 +100,10 @@ const Viewer: React.FC = () => {
                 }
 
                 {
-                    isConnected && <section>
+                    (isConnected && currentTick === null) && <section>
+                       <h1 style={titleStyle}>Blitz 2021 - Web Viewer</h1>
                         <p>Connected! 🚀</p>
-                        {currentTick === null && <span>Waiting for the game to start, launch your bot locally and it should connect automatically and start the game!</span>}
+                        <span>Waiting for the game to start, launch your bot locally and it should connect automatically and start the game!</span>
                     </section>
                 }
             </section >
