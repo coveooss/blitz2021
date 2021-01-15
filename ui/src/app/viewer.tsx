@@ -9,6 +9,7 @@ import Infos from '../infos/infos';
 import StaticElements from '../game/staticElements';
 import TilesTextureCache from '../game/tiles/TileTextureCache';
 import KeyHandler from '../replay/controls/keyHandler';
+import Shortcuts from '../Shortcuts';
 
 const mainStyle: React.CSSProperties = {
     'backgroundColor': 'rgb(239, 228, 208',
@@ -95,6 +96,7 @@ const Viewer: React.FC = () => {
                             </KeyContext.Provider>
                         </Stage>
                         <TilesTextureCache />
+                        <Shortcuts />
                     </section>
                 )
                 }
