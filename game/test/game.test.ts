@@ -8,6 +8,7 @@ describe("Game", () => {
     const NUMBER_OF_TICKS = 5;
     const MAX_WAIT_TIME_BEFORE_STARTING = 1000;
     const EXPECTED_NUMBER_OF_CREWS = 3;
+    const TIMEOUT_TICK = 100;
 
     let game: Game;
 
@@ -15,11 +16,30 @@ describe("Game", () => {
         game = new Game({
             numberOfTicks: NUMBER_OF_TICKS,
             expectedNumberOfCrews: EXPECTED_NUMBER_OF_CREWS,
-            maxWaitTimeMsBeforeStartingGame: MAX_WAIT_TIME_BEFORE_STARTING
+            maxWaitTimeMsBeforeStartingGame: MAX_WAIT_TIME_BEFORE_STARTING,
+            timeMsAllowedPerTicks: TIMEOUT_TICK
         });
-    })
-    it.todo("should apply the received command to the proper crew");
-    it.todo("should not applied the received command if the crew was too slow");
+    });
+    it("should apply the received command to the proper crew", async () => {
+        const myFirstCrew = new NoopCrew(game);
+        const mySecondCrew = new NoopCrew(game);
+
+        let myFirstCommand = { command: 1 };
+        let mySecondCommand = { command: 2 };
+
+        myFirstCrew.getNextCommand = jest.fn(() => Promise.resolve(myFirstCommand));
+        mySecondCrew.getNextCommand = jest.fn(() => Promise.resolve(mySecondCommand));
+
+
+        myFirstCrew.applyCommand = jest.fn();
+        mySecondCrew.applyCommand = jest.fn();
+
+        await game.play();
+
+        expect(myFirstCrew.applyCommand).toHaveBeenNthCalledWith(NUMBER_OF_TICKS, myFirstCommand)
+        expect(mySecondCrew.applyCommand).toHaveBeenNthCalledWith(NUMBER_OF_TICKS, mySecondCommand)
+
+    });
 
     it("should ask the crews for their commands on each tick", async () => {
         const myFirstCrew = new NoopCrew(game);
