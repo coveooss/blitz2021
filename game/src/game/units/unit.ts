@@ -71,6 +71,10 @@ export abstract class Unit {
         const enemy = this.crew.game.getUnitAtPosition(target);
 
         if (isAdjacent(target, this.position) && enemy && enemy.crew !== this.crew) {
+            if (this.crew.game.isTooCloseToEnemyBase(target, this.crew.id)) {
+                throw new UnitError(this, `Target is too close to an enemy base: ${toString(target)}`);
+            }
+
             if (this.crew.blitzium < UNIT.OUTLAW_COST_OF_ATTACKING) {
                 throw new UnitError(this, `There's not enough Blitizum to pay the Outlaw to attack!`);
             }
@@ -109,6 +113,10 @@ export abstract class Unit {
             throw new UnitError(this, `Target is not nearby`);
         }
 
+        if (this.crew.game.isTooCloseToEnemyBase(target, this.crew.id)) {
+            throw new UnitError(this, `Target is too close to an enemy base: ${toString(target)}`);
+        }
+
         const unit = this.crew.getUnitAtPosition(target);
         const depot = this.crew.game.map.depots.find(d => equal(target, d.position));
 
@@ -131,6 +139,10 @@ export abstract class Unit {
 
     public drop(target: Position) {
         if (isAdjacent(target, this.position)) {
+            if (this.crew.game.isTooCloseToEnemyBase(target, this.crew.id)) {
+                throw new UnitError(this, `Target is too close to an enemy base: ${toString(target)}`);
+            }
+            
             if (this.blitzium === 0) {
                 throw new UnitError(this, `Unit is empty, nothing to drop`);
             }
