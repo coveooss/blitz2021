@@ -47,8 +47,8 @@ docker:
     - docker push $CI_REGISTRY/$CI_PROJECT_PATH/play:latest
     - docker push $CI_REGISTRY/$CI_PROJECT_PATH/play:$CI_PIPELINE_ID
     - docker push 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:local
-    #- docker push blitzmmxxi/play:latest
-    #- docker push blitzmmxxi/play:$CI_PIPELINE_ID
+    - docker push blitzmmxxi/play:latest
+    - docker push blitzmmxxi/play:$CI_PIPELINE_ID
     - docker build -t blitz2021/server -f server.Dockerfile .
     - docker tag blitz2021/server 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:latest
     - docker tag blitz2021/server 043612128888.dkr.ecr.us-east-1.amazonaws.com/blitz2021/blitz2021:$CI_PIPELINE_ID
