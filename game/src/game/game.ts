@@ -1,6 +1,6 @@
 import { Crew } from "./crews/crew";
 import { logger } from "../logger";
-import { hny, roundRobin, shuffle, timeoutAfter } from "../utils";
+import { average, hny, roundRobin, shuffle, timeoutAfter } from "../utils";
 import { CrewError } from "./error";
 import { Command, Tick } from "./types";
 import { GameMap, Path } from "./map";
@@ -336,12 +336,17 @@ export class Game {
 
         this.notifyGameCompleted(
             this.crews
-                .sort((a, b) => b.blitzium - a.blitzium)
-                .map((c, i) => ({
+                .sort((a, b) => {
+                    return b.blitzium - a.blitzium ||                                   // First check for Blitzium left
+                        b.totalBlitzium - a.totalBlitzium ||                            // Then check for total blitzium
+                        average(this.responseTimePerCrew.get(a).responseTimePerTicks) - // Then its down to response time,
+                        average(this.responseTimePerCrew.get(b).responseTimePerTicks)   // this should sort them out.
+                }).map((c, i) => ({
                     rank: i + 1,
                     teamName: c.name,
                     score: c.blitzium
                 })));
+
     };
 
     public serialize(): Tick {
