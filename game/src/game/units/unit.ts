@@ -90,7 +90,7 @@ export abstract class Unit {
             return;
         }
 
-        throw new UnitError(this, `There's no enemy near by to attack!`);
+        throw new UnitError(this, `There's no enemy nearby to attack!`);
     }
 
     public mine(target: Position) {
@@ -105,7 +105,7 @@ export abstract class Unit {
             return;
         }
 
-        throw new UnitError(this, `There's no mine near by to mine from!`);
+        throw new UnitError(this, `There's no mine nearby to mine from!`);
     }
 
     public pickup(target: Position) {
@@ -142,7 +142,7 @@ export abstract class Unit {
             if (this.crew.game.isTooCloseToEnemyBase(target, this.crew.id)) {
                 throw new UnitError(this, `Target is too close to an enemy base: ${toString(target)}`);
             }
-            
+
             if (this.blitzium === 0) {
                 throw new UnitError(this, `Unit is empty, nothing to drop`);
             }
