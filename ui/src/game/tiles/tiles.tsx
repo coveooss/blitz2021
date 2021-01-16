@@ -7,8 +7,8 @@ import Wall from './wall';
 import Blitzium from './blitzium';
 import useCachedRef from '../../hooks/useCachedRef';
 
-const Tiles: React.FunctionComponent<{tiles?: TileType[][]}> = ({tiles}) => {
-    const ref = useCachedRef();
+const Tiles: React.FunctionComponent<{tiles?: TileType[][]; boardSize: number}> = ({tiles, boardSize}) => {
+    const ref = useCachedRef(boardSize);
 
     const tilesShape = tiles?.map((row, x) =>
         row.map((tile: TileType, y) => {

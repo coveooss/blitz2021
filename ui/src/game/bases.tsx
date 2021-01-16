@@ -12,8 +12,8 @@ const floor = "M2.1 32.9h33.3v2.3H2.1z";
 const door = "M13.4 20.9h10.7v12H13.4z";
 const sign = "M8.1 18.8c0-1.4-.7-2-2.1-2v-6.1c1.4 0 2.1-.7 2.1-2h20.7c0 1.4.7 2 2.1 2v6.1c-1.4 0-2.1.7-2.1 2H8.1z";
 
-const Bases: React.FunctionComponent<{crews?: TickCrew[]}> = ({crews}) => {
-    const ref = useCachedRef();
+const Bases: React.FunctionComponent<{crews?: TickCrew[]; boardSize: number}> = ({crews, boardSize}) => {
+    const ref = useCachedRef(boardSize);
     const tileSizeInMockup = 38;
     const pathScale = Size.Tile / tileSizeInMockup;
 

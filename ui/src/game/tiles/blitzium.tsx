@@ -20,12 +20,10 @@ const shapes: Array<{path: string; fill: string;}> = [
 ];
 
 const Blitzium: React.FunctionComponent<TileProps & {scale?: number}> = ({x, y, scale = 1}) => {
-    const ref = useCachedRef();
-
     const tileSizeInMockup = 26;
     const pathScale = Size.Tile / tileSizeInMockup * scale;
     return (
-        <Group x={x * Size.Tile} y={y * Size.Tile} ref={ref}>
+        <Group x={x * Size.Tile} y={y * Size.Tile}>
             {shapes.map(({path, fill}, i: number) => (
                 <Path
                     key={`shape-${i}`}

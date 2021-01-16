@@ -12,7 +12,7 @@ const cartTopAngle = "M4 17.1h32l-1.4 1.4H5.4z";
 const cartBottomAngle = "M5.4 31.9L7.5 34h25l2.1-2.1z";
 
 const Cart: React.FunctionComponent<UnitProps> = ({position, color, darkColor, blitzium}) => {
-    const ref = useCachedRef();
+    const ref = useCachedRef(Size.Tile);
 
     const {x, y} = position;
     const tileSizeInMockup = 40;
