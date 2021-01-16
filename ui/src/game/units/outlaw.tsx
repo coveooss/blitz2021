@@ -13,7 +13,7 @@ const Outlaw: React.FunctionComponent<UnitProps> = ({position, color, darkColor}
     const {x, y} = position;
     const tileSizeInMockup = 40;
     const pathScale = Size.Tile / tileSizeInMockup;
-    const ref = useCachedRef();
+    const ref = useCachedRef(Size.Tile);
 
     return (
         <Group id="position" x={Size.Tile * x - Size.Gap / 2} y={Size.Tile * y - Size.Gap / 2} ref={ref}>

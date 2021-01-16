@@ -4,7 +4,7 @@ import useCachedRef from '../hooks/useCachedRef';
 import {Size} from '../constants';
 
 const Grid: React.FunctionComponent<{boardSize: number; size: {x: number; y: number;}}> = ({boardSize, size}) => {
-    const ref = useCachedRef();
+    const ref = useCachedRef(boardSize);
     const lines: React.ReactNode[] = [];
     for (let y = 1; y < size.y; y++) {
         lines.push(
