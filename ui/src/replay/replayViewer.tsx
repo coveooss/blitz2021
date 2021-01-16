@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {keyCodes, Size, speeds, VisualizationContext, KeyContext} from '../constants';
+import {keyCodes, Size, speeds, VisualizationContext, KeyContext, UI_MIN_SIZE, SCORES_SIZE} from '../constants';
 import KeyHandler from './controls/keyHandler';
 import {Tick} from 'blitz2021/dist/game/types';
 import {Stage} from 'react-konva';
@@ -23,7 +23,7 @@ const ReplayViewer: React.FunctionComponent<IReplayViewerProps> = ({width, heigh
 
     const currentTick = ticks[tick];
     const numberOfTile: number = ticks?.[0]?.map?.tiles?.[0]?.length ?? 0;
-    const boardSize = Math.min(height, Math.min(width - 250));
+    const boardSize = Math.max(UI_MIN_SIZE, Math.min(height, width - SCORES_SIZE));
 
     Size.Tile = boardSize / numberOfTile;
 

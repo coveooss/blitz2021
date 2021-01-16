@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Tick } from 'blitz2021/dist/game/types';
 import useWindowSize from '../hooks/useWindowSize';
-import { KeyContext, Size, VisualizationContext } from '../constants';
+import {KeyContext, SCORES_SIZE, Size, UI_MIN_SIZE, VisualizationContext} from '../constants';
 import { Stage } from 'react-konva';
 import Game from '../game/game';
 import Infos from '../infos/infos';
@@ -72,7 +72,7 @@ const Viewer: React.FC = () => {
     React.useEffect(start, []);
 
     const numberOfTile: number = currentTick?.map?.tiles?.[0]?.length ?? 0;
-    const boardSize = Math.min(height, Math.min(width - 250));
+    const boardSize = Math.max(UI_MIN_SIZE, Math.min(height, width - SCORES_SIZE));
 
     Size.Tile = boardSize / numberOfTile;
 
