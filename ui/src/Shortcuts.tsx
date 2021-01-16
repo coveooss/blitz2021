@@ -50,6 +50,10 @@ const Shortcuts: React.FC = () => {
                             <td>g</td>
                             <td>show the coordinates (x, y) of all tiles</td>
                         </tr>
+                        <tr>
+                            <td>t</td>
+                            <td>show the total Blitzium in the scores</td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

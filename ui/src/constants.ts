@@ -7,6 +7,9 @@ export const GAP_RATIO = 1 - TILE_RATIO;
 export const CAPTURED_TILE_RATIO = 0.8;
 export const CAPTURED_GAP_RATIO = 1 - CAPTURED_TILE_RATIO;
 
+export const UI_MIN_SIZE = 250;
+export const SCORES_SIZE = 250;
+
 export const font = 'rosewood-std-fill';
 export const fontSize = 24;
 export const smallFontSize = 16;
@@ -38,6 +41,7 @@ export const keyCodes = {
     Space: ' ',
     Seven: '7',
     Six: '6',
+    T: 't',
     Three: '3',
     Two: '2',
     P: 'p',
