@@ -48,6 +48,7 @@ In the case where an outlaw is adjacent to another unit, they can trigger a duel
 An attacked unit will disappear from the map leaving all the Blitziums it had on the ground forming a new depot. This depot could be picked up by any other unit, allied or not, in respect to the amount of Blitziums they can carry. In the event the last miner of a crew dies, a new one will be provided at no cost, at the end of the next turn.
 
 ## Safe Zones
+
 Zones surrounding crews starting points are considered safe; units from other crews can’t enter. The safe zone is 7 squares by 7 squares around your home base.
 
 ## Square Types
@@ -70,7 +71,9 @@ Zones surrounding crews starting points are considered safe; units from other cr
 Every unit has a starting recruitment cost associated with it. Also, the more units you recruit, the more expensive recruiting units will be. Be smart with the buying order of your units. Only one unit can be added to your crew per turn. 
 
 ## Scoring
+
 Your score is calculated based on the Blitzium you brought back to the crew, minus all expenses. In other words, how many Blitziums contain your reserve at the end of the last turn.
 
 ## End of the Game
+
 Each game has a predetermined number of turns. After what, the team with the highest score wins.
