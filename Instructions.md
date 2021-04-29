@@ -7,11 +7,11 @@ To meet your ends, recruit employees in the local saloon who will help you achie
 By recruiting a **miner**, you will be able to mine rocks and extract the **Blitzium** they contained. The miners are unfortunately ill-equipped to efficiently carry this resource. To solve this issue, **carts** are units meant to transport it to your **crew**. That being said, don’t expect all others to play fair and square! These two units, as helpful as they are, will need defense! This is why you might have to hire some **outlaws** to guarantee the protection of your resources and maybe, you know, get some more from opponents that are less protected.
 
 ## Turns
-For each turn, colonies must respond with the list of all their actions for each of their units and potentially one (1) recruitment order for one (1) new unit. In the case where a crew would take too much time to answer (100 ms), an off day will be declared for all its units.
+For each turn, crews must respond with the list of all their actions for each of their units and potentially one (1) recruitment order for one (1) new unit. In the case where a crew would take too much time to answer (100 ms), an off day will be declared for all its units.
 
 ## Moving
 
-It is possible for a unit to move toward any destination. They follow a “known path” on the territory toward the desired destination. Be aware that “known paths” are known by all colonies, so they will be able to figure out your objective. If a path is blocked, the unit will try to find an alternate route.
+It is possible for a unit to move toward any destination. They follow a “known path” on the territory toward the desired destination. Be aware that “known paths” are known by all crews, so they will be able to figure out your objective. If a path is blocked, the unit will try to find an alternate route.
 
 ## Acquiring Blitzium
 
@@ -29,7 +29,7 @@ It is possible for miners to carry Blitzium, but they are limited to 5 Blitziums
 
 There are many ways to transfer Blitzium from one unit to another:
 
-1. A unit can drop Blitzium on the floor, creating a depot that can be picked up by another unit. Be aware that units from other colonies can be picked up as well.
+1. A unit can drop Blitzium on the floor, creating a depot that can be picked up by another unit. Be aware that units from other crews can be picked up as well.
 2. It is possible to pick up Blitzium carried by an adjacent unit. E.g., a cart can pick up Blitzium from a miner to bring it back to the home base.
 3. It is possible to drop Blitzium on an adjacent unit. E.g., a cart can drop its Blitzium in another cart.
 4. It is possible to drop Blitzium directly in your home base. This is how Blitzium will get added to your reserve.
@@ -48,7 +48,7 @@ In the case where an outlaw is adjacent to another unit, they can trigger a duel
 An attacked unit will disappear from the map leaving all the Blitziums it had on the ground forming a new depot. This depot could be picked up by any other unit, allied or not, in respect to the amount of Blitziums they can carry. In the event the last miner of a crew dies, a new one will be provided at no cost, at the end of the next turn.
 
 ## Safe Zones
-Zones surrounding colonies’ starting points are considered safe; units from other colonies can’t enter. The safe zone is 7 squares by 7 squares around your home base.
+Zones surrounding crews starting points are considered safe; units from other crews can’t enter. The safe zone is 7 squares by 7 squares around your home base.
 
 ## Square Types
 
