@@ -1,0 +1,37 @@
+{
+  "name": "@germainbergeron/blitz-ui",
+  "version": "2021.0.18",
+  "description": "Blitz2021 Game UI",
+  "main": "dist/index.js",
+  "types": "dist/declaration/index.d.ts",
+  "author": "Coveo",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --collect-coverage",
+    "test-watch": "jest --watchAll --collect-coverage",
+    "start": "parcel src/*.html",
+    "dev": "yarn start",
+    "build": "copyfiles -u 1 \"./src/**/*.png\" dist && parcel build src/*.html && tsc"
+  },
+  "dependencies": {
+    "konva": "^7.2.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-konva": "^17.0.0-0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^11.2.2",
+    "@types/jest": "^26.0.9",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "blitz2021": "^1.0.0",
+    "copyfiles": "^2.4.1",
+    "jest": "^26.2.2",
+    "parcel-bundler": "^1.12.4",
+    "ts-jest": "^26.1.4",
+    "typescript": "^3.9.7"
+  },
+  "files": [
+    "dist"
+  ]
+}

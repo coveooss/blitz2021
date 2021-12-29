@@ -1,0 +1,52 @@
+import * as React from 'react';
+import {Group, Path} from 'react-konva';
+import {Position} from 'blitz2021/dist/game/types';
+
+import {CAPTURED_GAP_RATIO, Size} from '../../../constants';
+
+export interface PathCornerProps extends Position {
+    previous: Position;
+    next: Position;
+    color: string;
+    lineSize: number;
+}
+
+const PathCorner: React.FunctionComponent<PathCornerProps> = ({x, y, previous, next, lineSize, color}) => {
+    const long = Size.Tile / 2 + lineSize;
+
+    let angle: number;
+
+    if (previous.x === x - 1 && next.y === y - 1) {
+        angle = 180;
+    } else if (previous.x === x - 1 && next.y === y + 1) {
+        angle = 90;
+    } else if (previous.x === x + 1 && next.y === y - 1) {
+        angle = -90;
+    } else if (previous.x === x + 1 && next.y === y + 1) {
+        angle = 0;
+    } else if (previous.y === y - 1 && next.x === x - 1) {
+        angle = 180;
+    } else if (previous.y === y - 1 && next.x === x + 1) {
+        angle = -90;
+    } else if (previous.y === y + 1 && next.x === x - 1) {
+        angle = 90;
+    } else {
+        angle = 0;
+    }
+
+    return (
+        <Group x={Size.Tile * x - Size.Gap / 2} y={Size.Tile * y - Size.Gap / 2}>
+            <Group rotation={angle} x={Size.Tile / 2} y={Size.Tile / 2}>
+                <Path
+                    fill={color}
+                    data={`M${long} 0 L0 0 L0 ${long} L${lineSize} ${long} L${lineSize} ${lineSize} L${long} ${lineSize} Z`}
+                    width={lineSize}
+                    height={Size.Tile / 2}
+                    offset={{x: lineSize / 2, y: lineSize / 2}}
+                    perfectDrawEnabled={false}
+                />
+            </Group>
+        </Group>
+    );
+};
+export default PathCorner;

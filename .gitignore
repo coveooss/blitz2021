@@ -1,0 +1,12 @@
+node_modules
+yarn-error.log
+error.log
+coverage
+dist
+replays
+.idea
+.cache
+.classpath
+.project
+.settings
+*.iml

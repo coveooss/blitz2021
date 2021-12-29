@@ -1,0 +1,22 @@
+{
+  "name": "blitz-2021",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Blitz 2021 - The Crew",
+  "main": "",
+  "author": "Coveo",
+  "license": "MIT",
+  "scripts": {
+    "start": "lerna run start --parallel",
+    "test": "lerna run test --stream",
+    "dev": "lerna run dev --parallel",
+    "build": "lerna run build --stream"
+  },
+  "workspaces": [
+    "game",
+    "ui"
+  ],
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  }
+}
