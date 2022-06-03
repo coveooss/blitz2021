@@ -1,5 +1,5 @@
 {
-  "name": "@coveo/blitz2021",
+  "name": "@germainbergeron/blitz2021",
   "version": "1.0.0",
   "description": "Blitz2021 Game Server",
   "main": "index.js",
